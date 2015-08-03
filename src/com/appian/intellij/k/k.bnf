@@ -1,0 +1,20 @@
+{
+  parserClass="com.appian.intellij.k.parser.KParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="K"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.appian.intellij.k.psi"
+  psiImplPackage="com.appian.intellij.k.psi.impl"
+
+  elementTypeHolderClass="com.appian.intellij.k.psi.KTypes"
+  elementTypeClass="com.appian.intellij.k.psi.KElementType"
+  tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY

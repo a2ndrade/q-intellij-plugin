@@ -11,10 +11,120 @@
   elementTypeHolderClass="com.appian.intellij.k.psi.KTypes"
   elementTypeClass="com.appian.intellij.k.psi.KElementType"
   tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
+
+  /*  http://kparc.com/parse.txt
+
+  TOKEN ;a0`"+
+
+  a:[a-zA-Z]                         / alpha
+  d:[0-9]                            / digit
+  p:[;()[]{}]                        / punctuation
+  o:[:+-*%!&|<>=~,^#_$?@.'/\]        / operator
+
+  n:(![]})ad]-)?(d*.)?d+(e-?d+)?        / number, e.g. -2
+  i:a[ad]*                              / identifier
+  s:`[ad]*                              / symbol
+  t:p|i(.i)*|n( n)*|s+|"_*"|o:?| (/_*)? / token
+
+  (+:;a.b;2 -.3;`a`bc) / nine tokens and comment
+
+  lexical analysis is fairly simple. punctuation is normal. operators have optional':'.
+  characters("ab"), numbers(2 -3) and symbols(`a`bc) are atom or vector(more than one).
+  "2-3" is three tokens and "2 -3" is one token. end-of-line comment with [space]/ .
+
+  PARSE Noun(x) Verb(+) Adverb(/)
+
+  e:nve|te| t:n|v v:tA|V n:t[E]|(E)|[E]|{E}|N E:;e
+
+  (+/x)%#x  is  (%;((/;+);x);(#:;x))
+
+  SCRIPTS have nested multi-line comments with / and \ .
+  multi-line functions(and data) with indentation. newlines are treated like ;'s .  */
+
+  tokens=[
+
+  /*
+  whitespace='regexp:\s+'
+      bang='!'
+      quote='"'
+      hash='#'
+      dollar='$'
+      percent='%'
+      ampersand='&'
+      tick="'"
+      open_paren='('
+      close_paren=')'
+      asterisk='*'
+      plus='+'
+      comma=','
+      dash='-'
+      period='.'
+      slash='/'
+      digit='regexp:[0-9]'
+      colon=':'
+      semicolon=';'
+      less_than='<'
+      equals='='
+      greater_than='>'
+      question_mark='?'
+      alpha='regexp:[a-zA-Z]'
+      at='@'
+      open_bracket='['
+      back_slash='\'
+      close_bracet=']'
+      caret='^'
+      underscore='_'
+      back_tick='`'
+      open_brace='{'
+      pipe='|'
+      close_brace='}'
+      tilde='~'
+   */
+
+    // Printable ASCII characters:
+    // !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+    bang='!'
+    quote='"'
+    hash='#'
+    dollar='$'
+    percent='%'
+    ampersand='&'
+    tick="'"
+    open_paren='('
+    close_paren=')'
+    asterisk='*'
+    plus='+'
+    comma=','
+    dash='-'
+    period='.'
+    slash='/'
+    digit='regexp:[0-9]'
+    colon=':'
+    semicolon=';'
+    less_than='<'
+    equals='='
+    greater_than='>'
+    question_mark='?'
+    alpha='regexp:[a-zA-Z]'
+    at='@'
+    open_bracket='['
+    back_slash='\'
+    close_bracet=']'
+    caret='^'
+    underscore='_'
+    back_tick='`'
+    open_brace='{'
+    pipe='|'
+    close_brace='}'
+    tilde='~'
+
+    //p='regexp:[;()\[\]{}]'                  // punctuation
+    //o="regexp:[-:+*%!&|<>=~,^#_$?@.'\/]"    // operator
+    //n='regexp:-?[0-9]*.?[0-9]+'             // number
+    //i='regexp:\\a[\\a\\d]*'                // identifier
+  ]
 }
 
-simpleFile ::= item_*
 
-private item_ ::= (property|COMMENT|CRLF)
-
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+empty ::= empty_
+empty_ ::= COMMENT

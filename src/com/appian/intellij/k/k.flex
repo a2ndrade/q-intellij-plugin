@@ -1,9 +1,9 @@
 package com.appian.intellij.k;
 
+import static com.appian.intellij.k.psi.KTypes.*;
+
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.appian.intellij.k.psi.KTypes;
-import com.intellij.psi.TokenType;
 
 %%
 
@@ -15,32 +15,59 @@ import com.intellij.psi.TokenType;
 %eof{  return;
 %eof}
 
-CRLF= \n|\r|\r\n
-WHITE_SPACE=[\ \t\f]
-FIRST_VALUE_CHARACTER=[^ \n\r\f\\] | "\\"{CRLF} | "\\".
-VALUE_CHARACTER=[^\n\r\f\\] | "\\"{CRLF} | "\\".
-END_OF_LINE_COMMENT=("#"|"!")[^\r\n]*
-SEPARATOR=[:=]
-KEY_CHARACTER=[^:=\ \n\r\t\f\\] | "\\"{CRLF} | "\\".
+eol="\r"|"\n"|"\r\n"
+lineWhitespace=[\ \t\f]
+whitespace=({lineWhitespace}|{eol})+
+inputCharacter=[^\r\n]
 
-%state WAITING_VALUE
+digit=[0-9]
+alpha=[a-zA-Z]
+
+lineComment="/" {inputCharacter}* {eol}?
+endOfLineComment={whitespace}+ {lineComment}
 
 %%
+<YYINITIAL> {
 
-<YYINITIAL> {END_OF_LINE_COMMENT}                           { yybegin(YYINITIAL); return KTypes.COMMENT; }
+  {whitespace}       { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  ^{lineComment}     { System.out.println("lineComment"); }
+  {endOfLineComment} { System.out.println("endOfLineComment"); }
 
-<YYINITIAL> {KEY_CHARACTER}+                                { yybegin(YYINITIAL); return KTypes.KEY; }
+  "!"                { return BANG; }
+  "\""               { return QUOTE; }
+  "#"                { return HASH; }
+  "$"                { return DOLLAR; }
+  "%"                { return PERCENT; }
+  "&"                { return AMPERSAND; }
+  "'"                { return TICK; }
+  "("                { return OPEN_PAREN; }
+  ")"                { return CLOSE_PAREN; }
+  "*"                { return ASTERISK; }
+  "+"                { return PLUS; }
+  ","                { return COMMA; }
+  "-"                { return DASH; }
+  "."                { return PERIOD; }
+  "/"                { return SLASH; }
+  ":"                { return COLON; }
+  ";"                { return SEMICOLON; }
+  "<"                { return LESS_THAN; }
+  "="                { return EQUALS; }
+  ">"                { return GREATER_THAN; }
+  "?"                { return QUESTION_MARK; }
+  "@"                { return AT; }
+  "["                { return OPEN_BRACKET; }
+  "\\"               { return BACK_SLASH; }
+  "]"                { return CLOSE_BRACET; }
+  "^"                { return CARET; }
+  "_"                { return UNDERSCORE; }
+  "`"                { return BACK_TICK; }
+  "{"                { return OPEN_BRACE; }
+  "|"                { return PIPE; }
+  "}"                { return CLOSE_BRACE; }
+  "~"                { return TILDE; }
 
-<YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_VALUE); return KTypes.SEPARATOR; }
+  {digit}            { return DIGIT; }
+  {alpha}            { return ALPHA; }
 
-<WAITING_VALUE> {CRLF}                                     { yybegin(YYINITIAL); return KTypes.CRLF; }
-
-<WAITING_VALUE> {WHITE_SPACE}+                              { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
-
-<WAITING_VALUE> {FIRST_VALUE_CHARACTER}{VALUE_CHARACTER}*   { yybegin(YYINITIAL); return KTypes.VALUE; }
-
-{CRLF}                                                     { yybegin(YYINITIAL); return KTypes.CRLF; }
-
-{WHITE_SPACE}+                                              { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
-
-.                                                           { return TokenType.BAD_CHARACTER; }
+  [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
+}

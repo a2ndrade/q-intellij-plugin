@@ -39,13 +39,13 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
 
   @Override
   public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-    if (tokenType.equals(KTypes.SEPARATOR)) {
+    /*if (tokenType.equals(KTypes.SEPARATOR)) {
       return SEPARATOR_KEYS;
     } else if (tokenType.equals(KTypes.KEY)) {
       return KEY_KEYS;
     } else if (tokenType.equals(KTypes.VALUE)) {
       return VALUE_KEYS;
-    } else if (tokenType.equals(KTypes.COMMENT)) {
+    } else */if (tokenType.equals(KTypes.COMMENT)) {
       return COMMENT_KEYS;
     } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
       return BAD_CHAR_KEYS;

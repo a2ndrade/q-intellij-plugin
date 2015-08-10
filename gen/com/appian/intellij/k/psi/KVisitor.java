@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public class KVisitor extends PsiElementVisitor {
 
-  public void visitProperty(@NotNull KProperty o) {
+  public void visitEmpty(@NotNull KEmpty o) {
     visitPsiElement(o);
   }
 

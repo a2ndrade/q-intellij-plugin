@@ -11,14 +11,14 @@ import static com.appian.intellij.k.psi.KTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.appian.intellij.k.psi.*;
 
-public class KPropertyImpl extends ASTWrapperPsiElement implements KProperty {
+public class KEmptyImpl extends ASTWrapperPsiElement implements KEmpty {
 
-  public KPropertyImpl(ASTNode node) {
+  public KEmptyImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof KVisitor) ((KVisitor)visitor).visitProperty(this);
+    if (visitor instanceof KVisitor) ((KVisitor)visitor).visitEmpty(this);
     else super.accept(visitor);
   }
 

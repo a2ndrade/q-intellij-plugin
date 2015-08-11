@@ -23,8 +23,8 @@ public class KParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == EMPTY) {
-      r = empty_(b, 0);
+    if (t == ROOT) {
+      r = root_(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -33,24 +33,24 @@ public class KParser implements PsiParser, LightPsiParser {
   }
 
   protected boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return empty(b, l + 1);
+    return root(b, l + 1);
   }
 
   /* ********************************************************** */
-  // empty_
-  static boolean empty(PsiBuilder b, int l) {
-    return empty_(b, l + 1);
+  // root_
+  static boolean root(PsiBuilder b, int l) {
+    return root_(b, l + 1);
   }
 
   /* ********************************************************** */
   // COMMENT
-  public static boolean empty_(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "empty_")) return false;
+  public static boolean root_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_")) return false;
     if (!nextTokenIs(b, COMMENT)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMENT);
-    exit_section_(b, m, EMPTY, r);
+    exit_section_(b, m, ROOT, r);
     return r;
   }
 

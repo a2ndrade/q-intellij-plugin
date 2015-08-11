@@ -81,8 +81,7 @@
       tilde='~'
    */
 
-    // Printable ASCII characters:
-    // !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+    // verbs
     bang='!'
     quote='"'
     hash='#'
@@ -98,14 +97,12 @@
     dash='-'
     period='.'
     slash='/'
-    digit='regexp:[0-9]'
     colon=':'
     semicolon=';'
     less_than='<'
     equals='='
     greater_than='>'
     question_mark='?'
-    alpha='regexp:[a-zA-Z]'
     at='@'
     open_bracket='['
     back_slash='\'
@@ -118,13 +115,51 @@
     close_brace='}'
     tilde='~'
 
+    // adverbs
+    slash_colon='/:'
+    back_slash_colon='\:'
+    tick_colon="':"
+
+    // nouns
+    digit='regexp:[0-9]'
+    alpha='regexp:[a-zA-Z]'
+    nil='_n'
+    intInfinity='0I'
+    intNan='0N'
+    floatInfinity='0i'
+    floatNan='0n'
+    charVector='""'
+    string="`\"\""
+
+    // names
+    identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
+
+    // system verbs and nouns
+    system='regexp:_[._a-zA-Z0-9]*'
+
+    // i/o, dynamic load and client/server
+    zeroColon='0:'
+    oneColon='1:'
+    twoColon='2:'
+    threeColon='3:'
+    fourColon='4:'
+    fiveColon='5:'
+    sixColon='6:'
+
+    // assign, define, control and debug
+    if="if"
+    do="do"
+    while="while"
+
+    // punctuation
+    newline='\n'
+
     //p='regexp:[;()\[\]{}]'                  // punctuation
     //o="regexp:[-:+*%!&|<>=~,^#_$?@.'\/]"    // operator
     //n='regexp:-?[0-9]*.?[0-9]+'             // number
-    //i='regexp:\\a[\\a\\d]*'                // identifier
   ]
 }
 
 
-empty ::= empty_
-empty_ ::= COMMENT
+root ::= root_
+root_ ::= COMMENT

@@ -1,6 +1,5 @@
 {
   parserClass="com.appian.intellij.k.parser.KParser"
-
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="K"
@@ -120,22 +119,15 @@
     back_slash_colon='\:'
     tick_colon="':"
 
-    // nouns
-    digit='regexp:[0-9]'
-    alpha='regexp:[a-zA-Z]'
-    nil='_n'
-    intInfinity='0I'
-    intNan='0N'
-    floatInfinity='0i'
-    floatNan='0n'
-    charVector='""'
-    string="`\"\""
-
     // names
     identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
 
+    // nouns
+    nil='_n'
+    number='regexp:-?((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
+    string='regexp:"(\\"|[^"])*"'
+
     // system verbs and nouns
-    system='regexp:_[._a-zA-Z0-9]*'
 
     // i/o, dynamic load and client/server
     zeroColon='0:'
@@ -150,9 +142,7 @@
     if="if"
     do="do"
     while="while"
-
     // punctuation
-    newline='\n'
 
     //p='regexp:[;()\[\]{}]'                  // punctuation
     //o="regexp:[-:+*%!&|<>=~,^#_$?@.'\/]"    // operator
@@ -161,5 +151,18 @@
 }
 
 
-root ::= root_
-root_ ::= COMMENT
+root ::= E+ <<eof>>
+private E ::= comment
+            | symbol
+            | vector
+            | string
+            | number
+            | identifier
+            | sysFunction
+            | '[' E ']'
+            | '{' E '}'
+            | '(' E ')'
+            | ';' E
+
+vector ::= ',' number | number number+
+

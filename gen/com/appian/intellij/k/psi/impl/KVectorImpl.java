@@ -11,14 +11,14 @@ import static com.appian.intellij.k.psi.KTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.appian.intellij.k.psi.*;
 
-public class KRootImpl extends ASTWrapperPsiElement implements KRoot {
+public class KVectorImpl extends ASTWrapperPsiElement implements KVector {
 
-  public KRootImpl(ASTNode node) {
+  public KVectorImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof KVisitor) ((KVisitor)visitor).visitRoot(this);
+    if (visitor instanceof KVisitor) ((KVisitor)visitor).visitVector(this);
     else super.accept(visitor);
   }
 

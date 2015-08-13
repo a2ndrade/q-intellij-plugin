@@ -8,9 +8,8 @@ import com.appian.intellij.k.psi.impl.*;
 
 public interface KTypes {
 
-  IElementType ROOT = new KElementType("ROOT");
+  IElementType VECTOR = new KElementType("VECTOR");
 
-  IElementType ALPHA = new KTokenType("alpha");
   IElementType AMPERSAND = new KTokenType("&");
   IElementType ASTERISK = new KTokenType("*");
   IElementType AT = new KTokenType("@");
@@ -19,31 +18,25 @@ public interface KTypes {
   IElementType BACK_TICK = new KTokenType("`");
   IElementType BANG = new KTokenType("!");
   IElementType CARET = new KTokenType("^");
-  IElementType CHARVECTOR = new KTokenType("\"\"");
   IElementType CLOSE_BRACE = new KTokenType("}");
   IElementType CLOSE_BRACET = new KTokenType("]");
   IElementType CLOSE_PAREN = new KTokenType(")");
   IElementType COLON = new KTokenType(":");
   IElementType COMMA = new KTokenType(",");
-  IElementType COMMENT = new KTokenType("COMMENT");
+  IElementType COMMENT = new KTokenType("comment");
   IElementType DASH = new KTokenType("-");
-  IElementType DIGIT = new KTokenType("digit");
   IElementType DO = new KTokenType("do");
   IElementType DOLLAR = new KTokenType("$");
   IElementType EQUALS = new KTokenType("=");
   IElementType FIVECOLON = new KTokenType("5:");
-  IElementType FLOATINFINITY = new KTokenType("0i");
-  IElementType FLOATNAN = new KTokenType("0n");
   IElementType FOURCOLON = new KTokenType("4:");
   IElementType GREATER_THAN = new KTokenType(">");
   IElementType HASH = new KTokenType("#");
   IElementType IDENTIFIER = new KTokenType("identifier");
   IElementType IF = new KTokenType("if");
-  IElementType INTINFINITY = new KTokenType("0I");
-  IElementType INTNAN = new KTokenType("0N");
   IElementType LESS_THAN = new KTokenType("<");
-  IElementType NEWLINE = new KTokenType("\\n");
   IElementType NIL = new KTokenType("_n");
+  IElementType NUMBER = new KTokenType("number");
   IElementType ONECOLON = new KTokenType("1:");
   IElementType OPEN_BRACE = new KTokenType("{");
   IElementType OPEN_BRACKET = new KTokenType("[");
@@ -58,8 +51,9 @@ public interface KTypes {
   IElementType SIXCOLON = new KTokenType("6:");
   IElementType SLASH = new KTokenType("/");
   IElementType SLASH_COLON = new KTokenType("/:");
-  IElementType STRING = new KTokenType("`\"\"");
-  IElementType SYSTEM = new KTokenType("system");
+  IElementType STRING = new KTokenType("string");
+  IElementType SYMBOL = new KTokenType("symbol");
+  IElementType SYSFUNCTION = new KTokenType("sysFunction");
   IElementType THREECOLON = new KTokenType("3:");
   IElementType TICK = new KTokenType("'");
   IElementType TICK_COLON = new KTokenType("':");
@@ -72,8 +66,8 @@ public interface KTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ROOT) {
-        return new KRootImpl(node);
+       if (type == VECTOR) {
+        return new KVectorImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

@@ -15,43 +15,27 @@ import com.intellij.psi.tree.IElementType;
 %eof{  return;
 %eof}
 
-eol="\r"|"\n"|"\r\n"
-lineWhitespace=[\ \t\f]
-whitespace=({lineWhitespace}|{eol})+
-inputCharacter=[^\r\n]
+EOL="\r"|"\n"|"\r\n"
+LINE_WS=[\ \t\f]
+WHITE_SPACE=({LINE_WS}|{EOL})+
 
-digit=[0-9]
-alpha=[a-zA-Z]
-idRest=[._] | {alpha} | {digit}
-identifier={alpha} {idRest}*
-system=[_] {idRest}*
+COMMENT1="/" [^\r\n]* {EOL}?
+COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
-lineComment="/" {inputCharacter}* {eol}?
-endOfLineComment={whitespace}+ {lineComment}
-
-integer={digit}+ | "-" {digit}+ | "0N" | "0I"
-integerVector="!0" | "," {integer} | {integer} ({lineWhitespace}+ {integer})+
-
-float=({digit}+ | "-" {digit}+) "." {digit}*
-floatVector="0#0.0" | "," {float} | {float} ({lineWhitespace}+ {float})+
-
-charVector=\" (\\\" | [^\"])* \"
-string=\` {charVector}
+IDENTIFIER=[a-zA-Z][._a-zA-Z0-9]*
+SYSFUNCTION="_" {IDENTIFIER}
+NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
+STRING=\"(\\\"|[^\"])*\"
+SYMBOL="`"([._a-zA-Z0-9]+|{STRING}|{WHITE_SPACE}+)
 
 %%
 <YYINITIAL> {
 
-  {whitespace}       { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  {WHITE_SPACE}      { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  ^{COMMENT1}        { return COMMENT; }
+  {COMMENT2}         { return COMMENT; }
+  {SYMBOL}           { return SYMBOL; }
 
-  // comments
-  ^{lineComment}     { System.out.println("c: " + yytext()); }
-  {endOfLineComment} { System.out.println("c: " + yytext()); }
-
-  {charVector}       { System.out.println("cv: " + yytext()); }
-
-  {string}           { System.out.println("s: " + yytext()); }
-
-  // verbs
   "!"                { return BANG; }
   "\""               { return QUOTE; }
   "#"                { return HASH; }
@@ -84,22 +68,10 @@ string=\` {charVector}
   "|"                { return PIPE; }
   "}"                { return CLOSE_BRACE; }
   "~"                { return TILDE; }
-
-  // adverbs
   "/:"               { return SLASH_COLON; }
   "\\:"              { return BACK_SLASH_COLON; }
   "':"               { return TICK_COLON; }
-
-  // data
   "_n"               { return NIL; }
-  "0I"               { return INTINFINITY; }
-  "0N"               { return INTNAN; }
-  "0i"               { return FLOATINFINITY; }
-  "0n"               { return FLOATNAN; }
-  {integer}          { System.out.println("i: " + yytext());}
-  {float}            { System.out.println("f: " + yytext());}
-
-  // i/o, dynamic load and client/server
   "0:"               { return ZEROCOLON; }
   "1:"               { return ONECOLON; }
   "2:"               { return TWOCOLON; }
@@ -107,24 +79,14 @@ string=\` {charVector}
   "4:"               { return FOURCOLON; }
   "5:"               { return FIVECOLON; }
   "6:"               { return SIXCOLON; }
-
-  // assign, define, control and debug
   "if"               { return IF; }
   "do"               { return DO; }
   "while"            { return WHILE; }
 
-  // names
-  {identifier}       { return IDENTIFIER; }
+  {SYSFUNCTION}      { return SYSFUNCTION; }
+  {IDENTIFIER}       { return IDENTIFIER; }
+  {NUMBER}           { return NUMBER; }
+  {STRING}           { return STRING; }
 
-  // system verbs and nouns
-  {system}           { return SYSTEM; }
-
-  // vectors
-  {integerVector}    { System.out.println("iv: " + yytext()); }
-  {floatVector}      { System.out.println("fv: " + yytext()); }
-
-  // punctuation
-  \\n                { return NEWLINE; }
+  [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }
-
-  [^]                { return com.intellij.psi.TokenType.BAD_CHARACTER; }

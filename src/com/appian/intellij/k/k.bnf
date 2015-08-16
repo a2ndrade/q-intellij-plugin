@@ -13,6 +13,33 @@
 
   /*  http://kparc.com/parse.txt
 
+  / comment
+
+  1 2 2.4 0N 3 43 0i / numbers
+
+  19
+
+  1 + 44
+
+  3
+
+  ( 3 )
+
+  12.5 + 33 + 1
+
+   1 33
+
+  "string"
+
+  {`"symbol"}
+
+  `a `b
+
+  `b`s`d
+
+  (identifier)
+
+
   TOKEN ;a0`"+
 
   a:[a-zA-Z]                         / alpha
@@ -80,7 +107,7 @@
       tilde='~'
    */
 
-    // verbs
+    // ascii chars
     bang='!'
     quote='"'
     hash='#'
@@ -105,7 +132,7 @@
     at='@'
     open_bracket='['
     back_slash='\'
-    close_bracet=']'
+    close_bracket=']'
     caret='^'
     underscore='_'
     back_tick='`'
@@ -121,10 +148,12 @@
 
     // names
     identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
+    identifier_sys='regexp:_[._a-zA-Z0-9]*'
 
     // nouns
     nil='_n'
-    number='regexp:-?((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
+    number='regexp:((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
+    char='regexp:"(\\"|[^"])"'
     string='regexp:"(\\"|[^"])*"'
 
     // system verbs and nouns
@@ -142,27 +171,79 @@
     if="if"
     do="do"
     while="while"
-    // punctuation
 
-    //p='regexp:[;()\[\]{}]'                  // punctuation
-    //o="regexp:[-:+*%!&|<>=~,^#_$?@.'\/]"    // operator
-    //n='regexp:-?[0-9]*.?[0-9]+'             // number
+    // punctuation
+    newline='regexp:\r|\n|\r\n'
   ]
 }
 
+root ::= E0+ <<eof>>
+private E0 ::= separator
+             | E1
+private E1 ::= control
+             | comment
+             | E2
+private E2 ::= assignment
+             | conditional
+             | result
+             | indexing
+             | value
+             | group
 
-root ::= E+ <<eof>>
-private E ::= comment
-            | symbol
-            | vector
-            | string
-            | number
-            | identifier
-            | sysFunction
-            | '[' E ']'
-            | '{' E '}'
-            | '(' E ')'
-            | ';' E
+private separator ::= semicolon | newline
 
-vector ::= ',' number | number number+
+private group ::= open_paren E1 close_paren
 
+private id ::= identifier | identifier_sys
+
+value ::= monad op value | monad
+private monad ::= op monad | noun
+
+private noun ::= list | atom | id
+
+list ::= homogeneousList | heterogeneousList
+private homogeneousList ::= symbolVector | numberVector | string
+numberVector ::= number number+
+symbolVector ::= symbol symbol+
+private heterogeneousList ::= open_paren ([E1] separator [E1])* close_paren
+
+private atom ::= symbol | number | char | nil | function
+function ::= open_brace [index] E0* close_brace
+
+indexing ::= id index
+private index ::= open_bracket E0* close_bracket | open_bracket period? close_bracket
+control ::= (if | do | while) index
+
+private op ::= verb | adverb | id | function// | heterogeneousList .e.g list indexing (1;2) 0
+private verb ::= bang
+              |  hash
+              |  dollar
+              |  percent
+              |  ampersand
+              |  asterisk
+              |  plus
+              |  comma
+              |  dash
+              |  period
+              |  less_than
+              |  equals
+              |  greater_than
+              |  question_mark
+              |  at
+              |  caret
+              |  underscore
+              |  pipe
+              |  tilde
+private adverb ::= slash
+                |  slash_colon
+                |  back_slash
+                |  back_slash_colon
+                |  tick
+                |  tick_colon
+
+assignment ::= id [index] [verb] colon E2
+             | id colon colon E2
+
+conditional ::= colon index
+
+result ::= colon E2

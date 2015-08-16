@@ -17,20 +17,23 @@ import com.intellij.psi.tree.IElementType;
 
 EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
-WHITE_SPACE=({LINE_WS}|{EOL})+
+WHITE_SPACE={LINE_WS}+
 
 COMMENT1="/" [^\r\n]* {EOL}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
 IDENTIFIER=[a-zA-Z][._a-zA-Z0-9]*
-SYSFUNCTION="_" {IDENTIFIER}
-NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
+IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
+NUMBER=((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
+CHAR=\"(\\\"|[^\"])\"
 STRING=\"(\\\"|[^\"])*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{STRING}|{WHITE_SPACE}+)
+NEWLINE=\r|\n|\r\n
 
 %%
 <YYINITIAL> {
 
+  {NEWLINE}+         { return NEWLINE; }
   {WHITE_SPACE}      { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}        { return COMMENT; }
   {COMMENT2}         { return COMMENT; }
@@ -60,7 +63,7 @@ SYMBOL="`"([._a-zA-Z0-9]+|{STRING}|{WHITE_SPACE}+)
   "@"                { return AT; }
   "["                { return OPEN_BRACKET; }
   "\\"               { return BACK_SLASH; }
-  "]"                { return CLOSE_BRACET; }
+  "]"                { return CLOSE_BRACKET; }
   "^"                { return CARET; }
   "_"                { return UNDERSCORE; }
   "`"                { return BACK_TICK; }
@@ -83,9 +86,10 @@ SYMBOL="`"([._a-zA-Z0-9]+|{STRING}|{WHITE_SPACE}+)
   "do"               { return DO; }
   "while"            { return WHILE; }
 
-  {SYSFUNCTION}      { return SYSFUNCTION; }
+  {IDENTIFIER_SYS}      { return IDENTIFIER_SYS; }
   {IDENTIFIER}       { return IDENTIFIER; }
   {NUMBER}           { return NUMBER; }
+  {CHAR}             { return CHAR; }
   {STRING}           { return STRING; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

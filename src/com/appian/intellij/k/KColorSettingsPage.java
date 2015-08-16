@@ -14,8 +14,9 @@ public final class KColorSettingsPage implements ColorSettingsPage {
 
   private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
     new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
-    new AttributesDescriptor("SysFunction", KSyntaxHighlighter.SYSFUNCTION),
-    new AttributesDescriptor("Operator", KSyntaxHighlighter.OPERATOR),
+    new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
+    new AttributesDescriptor("Operator", KSyntaxHighlighter.VERB),
+    new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
     new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
     new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
     new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),

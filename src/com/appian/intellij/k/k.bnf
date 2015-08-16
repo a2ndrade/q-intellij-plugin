@@ -13,31 +13,116 @@
 
   /*  http://kparc.com/parse.txt
 
-  / comment
+(-;3)
+/(3 +) 4
+(-:)3
+(%-)[a;b]
 
-  1 2 2.4 0N 3 43 0i / numbers
+%(a - b)
+
+d[%-;23;-:]
+
+-3 --4
+
+-3 (--:)4
+
+
+1 /: 2
+
+/ comment
+
+  1 2 2.4 (3) 0N 3 43 0i / numbers
 
   19
 
-  1 + 44
+  1 +/:\: 44 / asdfadsf
 
-  3
+  3 (2 4;)
 
-  ( 3 )
+  (1; 3
+  5 (;);;; 3)
 
-  12.5 + 33 + 1
+  :r
+
+  d[.]
+
+  a _bin b
+
+  _bin[a;b]
+
+  ifd [1;3;4]
+
+  {[x;(y);z]
+    1
+    2
+    (1 2
+      3 4)
+  }
+
+  (1;2) 3
+
+{}3
+
+if[1;3;4]
+
+  :x:::[1;2;3] / something
+
+  (;)
+
+  if[1;3;(3);3]
+
+  sdfdf[1;(1;3;(3
+  );{});3]
+
+  a[;;
+  3;a;(4
+  4)]
+
+  x:[1;4]
+
+  x[i]:y
+
+  10 +\:/:? 12 / something here
+
+  12.5 + -*33 + --+----41
+
+  f:{a : 10; : x + a; a : 20}
+  f[5] 15
 
    1 33
 
   "string"
 
+  (1 2 3 4)
+
+
+x: 10
+     (x + 5; x: 20; x - 5)
+   25 20 5
+
+  (1;2;3;4)
+
+  `"asdfadsf"
+
   {`"symbol"}
+
+  {x - 2} 5
+
+  (1; "a"; 3.5; `xyz) 2
+
+  _bin[a;b] / todo: invocation
+
+  {x - 2} 5 6
+
+a + b
 
   `a `b
 
   `b`s`d
 
   (identifier)
+
+  1 +/10 3 4 5
 
 
   TOKEN ;a0`"+
@@ -179,61 +264,52 @@
 
 root ::= E0+ <<eof>>
 private E0 ::= separator
-             | E1
-private E1 ::= control
-             | comment
+             | E3
+private E1 ::= separator
              | E2
-private E2 ::= assignment
+private E2 ::= verb
+             | composed_verb
+             | composed_monad
+             | E3
+private E3 ::= control
+             | comment
+             | E4
+private E4 ::= assignment
              | conditional
              | result
              | indexing
              | value
              | group
 
+// todo: support (-;3) & (3 +) 4 & (%-:)3 & (%-)[a;b] & %(a - b)
+
 private separator ::= semicolon | newline
 
-private group ::= open_paren E1 close_paren
+group ::= open_paren E2 close_paren
 
 private id ::= identifier | identifier_sys
 
-value ::= monad op value | monad
-private monad ::= op monad | noun
+private value ::= dyad | monad_value
+dyad ::= monad_value infix value // todo: break on-3 --:4
+private monad_value ::= monad | noun
+monad ::= op monad_value
+noun ::= abstract_list | atom | id | group
 
-private noun ::= list | atom | id
+private abstract_list ::= vector | list
+private vector ::= symbol_vector | number_vector | string
+list ::= open_paren ([E2] separator [E2])* close_paren
 
-list ::= homogeneousList | heterogeneousList
-private homogeneousList ::= symbolVector | numberVector | string
-numberVector ::= number number+
-symbolVector ::= symbol symbol+
-private heterogeneousList ::= open_paren ([E1] separator [E1])* close_paren
+private atom ::= symbol | number | char | nil | lambda
+lambda ::= open_brace [index] E0* close_brace
 
-private atom ::= symbol | number | char | nil | function
-function ::= open_brace [index] E0* close_brace
-
-indexing ::= id index
-private index ::= open_bracket E0* close_bracket | open_bracket period? close_bracket
+indexing ::= (id | group | lambda) index
+private index ::= open_bracket E1* close_bracket
 control ::= (if | do | while) index
 
-private op ::= verb | adverb | id | function// | heterogeneousList .e.g list indexing (1;2) 0
-private verb ::= bang
-              |  hash
-              |  dollar
-              |  percent
-              |  ampersand
-              |  asterisk
-              |  plus
-              |  comma
-              |  dash
-              |  period
-              |  less_than
-              |  equals
-              |  greater_than
-              |  question_mark
-              |  at
-              |  caret
-              |  underscore
-              |  pipe
-              |  tilde
+infix ::= verb | identifier_sys
+
+private op ::= verb | composed_verb | adverb | id | lambda | group | list
+
 private adverb ::= slash
                 |  slash_colon
                 |  back_slash
@@ -241,9 +317,9 @@ private adverb ::= slash
                 |  tick
                 |  tick_colon
 
-assignment ::= id [index] [verb] colon E2
-             | id colon colon E2
+assignment ::= id [index] [verb] colon E4
+             | id colon colon E4
 
 conditional ::= colon index
 
-result ::= colon E2
+result ::= colon E4

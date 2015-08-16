@@ -67,32 +67,18 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
 
     .put(KTypes.SYMBOL, SYMBOL_KEYS)
 
-    .put(KTypes.BANG, VERB_KEYS)
-    .put(KTypes.HASH, VERB_KEYS)
-    .put(KTypes.DOLLAR, VERB_KEYS)
-    .put(KTypes.PERCENT, VERB_KEYS)
-    .put(KTypes.AMPERSAND, VERB_KEYS)
-    .put(KTypes.ASTERISK, VERB_KEYS)
-    .put(KTypes.PLUS, VERB_KEYS)
-    .put(KTypes.COMMA, VERB_KEYS)
-    .put(KTypes.DASH, VERB_KEYS)
-    .put(KTypes.PERIOD, VERB_KEYS)
-    .put(KTypes.LESS_THAN, VERB_KEYS)
-    .put(KTypes.EQUALS, VERB_KEYS)
-    .put(KTypes.GREATER_THAN, VERB_KEYS)
-    .put(KTypes.QUESTION_MARK, VERB_KEYS)
-    .put(KTypes.AT, VERB_KEYS)
-    .put(KTypes.CARET, VERB_KEYS)
-    .put(KTypes.UNDERSCORE, VERB_KEYS)
-    .put(KTypes.PIPE, VERB_KEYS)
-    .put(KTypes.TILDE, VERB_KEYS)
+    .put(KTypes.VERB, VERB_KEYS)
+    .put(KTypes.COMPOSED_VERB, VERB_KEYS)
+    .put(KTypes.COMPOSED_MONAD, ADVERB_KEYS)
 
+/*
     .put(KTypes.SLASH, ADVERB_KEYS)
     .put(KTypes.SLASH_COLON, ADVERB_KEYS)
     .put(KTypes.BACK_SLASH, ADVERB_KEYS)
     .put(KTypes.BACK_SLASH_COLON, ADVERB_KEYS)
     .put(KTypes.TICK, ADVERB_KEYS)
     .put(KTypes.TICK_COLON, ADVERB_KEYS)
+*/
 
     .put(KTypes.COLON, KEYWORD_KEYS)
     .put(KTypes.IF, KEYWORD_KEYS)

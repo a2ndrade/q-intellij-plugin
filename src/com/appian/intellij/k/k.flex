@@ -18,59 +18,73 @@ import com.intellij.psi.tree.IElementType;
 EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WHITE_SPACE={LINE_WS}+
+NEWLINE=\r|\n|\r\n
 
 COMMENT1="/" [^\r\n]* {EOL}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
 IDENTIFIER=[a-zA-Z][._a-zA-Z0-9]*
 IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
+
 NUMBER=((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
+NUMBER_VECTOR={NUMBER}({WHITE_SPACE}{NUMBER})+
 CHAR=\"(\\\"|[^\"])\"
-STRING=\"(\\\"|[^\"])*\"
-SYMBOL="`"([._a-zA-Z0-9]+|{STRING}|{WHITE_SPACE}+)
-NEWLINE=\r|\n|\r\n
+CHAR_VECTOR=\"(\\\"|[^\"])*\"
+SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE})+)
+SYMBOL_VECTOR={SYMBOL} {SYMBOL}+
+VERB=[!#$%&*+,-.<=>?@\^_|~]
+ADVERB="/" | "//:" | "\\" | "\\:" | "'" | "':"
+
+// function composition
+COMPOSED_VERB={VERB} {VERB}+
+COMPOSED_MONAD={VERB}+ ":"
 
 %%
 <YYINITIAL> {
 
   {NEWLINE}+         { return NEWLINE; }
+  {NUMBER_VECTOR}    { return NUMBER_VECTOR; }
+  {COMPOSED_MONAD}   { return COMPOSED_MONAD; }
+  {COMPOSED_VERB}    { return COMPOSED_VERB; }
   {WHITE_SPACE}      { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}        { return COMMENT; }
   {COMMENT2}         { return COMMENT; }
+  {SYMBOL_VECTOR}    { return SYMBOL_VECTOR; }
   {SYMBOL}           { return SYMBOL; }
+  {VERB}             { return VERB;}
 
-  "!"                { return BANG; }
+//  "!"                { return BANG; }
   "\""               { return QUOTE; }
-  "#"                { return HASH; }
-  "$"                { return DOLLAR; }
-  "%"                { return PERCENT; }
-  "&"                { return AMPERSAND; }
+//  "#"                { return HASH; }
+//  "$"                { return DOLLAR; }
+//  "%"                { return PERCENT; }
+//  "&"                { return AMPERSAND; }
   "'"                { return TICK; }
   "("                { return OPEN_PAREN; }
   ")"                { return CLOSE_PAREN; }
-  "*"                { return ASTERISK; }
-  "+"                { return PLUS; }
-  ","                { return COMMA; }
-  "-"                { return DASH; }
-  "."                { return PERIOD; }
+//  "*"                { return ASTERISK; }
+//  "+"                { return PLUS; }
+//  ","                { return COMMA; }
+//  "-"                { return DASH; }
+//  "."                { return PERIOD; }
   "/"                { return SLASH; }
   ":"                { return COLON; }
   ";"                { return SEMICOLON; }
-  "<"                { return LESS_THAN; }
-  "="                { return EQUALS; }
-  ">"                { return GREATER_THAN; }
-  "?"                { return QUESTION_MARK; }
-  "@"                { return AT; }
+//  "<"                { return LESS_THAN; }
+//  "="                { return EQUALS; }
+//  ">"                { return GREATER_THAN; }
+//  "?"                { return QUESTION_MARK; }
+//  "@"                { return AT; }
   "["                { return OPEN_BRACKET; }
   "\\"               { return BACK_SLASH; }
   "]"                { return CLOSE_BRACKET; }
-  "^"                { return CARET; }
-  "_"                { return UNDERSCORE; }
+//  "^"                { return CARET; }
+//  "_"                { return UNDERSCORE; }
   "`"                { return BACK_TICK; }
   "{"                { return OPEN_BRACE; }
-  "|"                { return PIPE; }
+//  "|"                { return PIPE; }
   "}"                { return CLOSE_BRACE; }
-  "~"                { return TILDE; }
+//  "~"                { return TILDE; }
   "/:"               { return SLASH_COLON; }
   "\\:"              { return BACK_SLASH_COLON; }
   "':"               { return TICK_COLON; }
@@ -86,11 +100,11 @@ NEWLINE=\r|\n|\r\n
   "do"               { return DO; }
   "while"            { return WHILE; }
 
-  {IDENTIFIER_SYS}      { return IDENTIFIER_SYS; }
+  {IDENTIFIER_SYS}   { return IDENTIFIER_SYS; }
   {IDENTIFIER}       { return IDENTIFIER; }
   {NUMBER}           { return NUMBER; }
   {CHAR}             { return CHAR; }
-  {STRING}           { return STRING; }
+  {CHAR_VECTOR}      { return STRING; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }

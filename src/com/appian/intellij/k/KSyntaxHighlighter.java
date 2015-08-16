@@ -62,14 +62,18 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.IDENTIFIER_SYS, IDENTIFIER_SYS_KEYS)
 
     .put(KTypes.NUMBER, NUMBER_KEYS)
+    .put(KTypes.NUMBER_VECTOR, NUMBER_KEYS)
 
+    .put(KTypes.CHAR, STRING_KEYS)
     .put(KTypes.STRING, STRING_KEYS)
 
     .put(KTypes.SYMBOL, SYMBOL_KEYS)
+    .put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS)
 
     .put(KTypes.VERB, VERB_KEYS)
     .put(KTypes.COMPOSED_VERB, VERB_KEYS)
     .put(KTypes.COMPOSED_MONAD, ADVERB_KEYS)
+    .put(KTypes.DERIVED_VERB, KEYWORD_KEYS)
 
 /*
     .put(KTypes.SLASH, ADVERB_KEYS)

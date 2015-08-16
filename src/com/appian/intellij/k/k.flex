@@ -25,19 +25,23 @@ COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
 IDENTIFIER=[a-zA-Z][._a-zA-Z0-9]*
 IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
+ID={IDENTIFIER}|{IDENTIFIER_SYS}
 
-NUMBER=((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
+NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
 NUMBER_VECTOR={NUMBER}({WHITE_SPACE}{NUMBER})+
 CHAR=\"(\\\"|[^\"])\"
 CHAR_VECTOR=\"(\\\"|[^\"])*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE})+)
 SYMBOL_VECTOR={SYMBOL} {SYMBOL}+
 VERB=[!#$%&*+,-.<=>?@\^_|~]
-ADVERB="/" | "//:" | "\\" | "\\:" | "'" | "':"
+ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 
 // function composition
 COMPOSED_VERB={VERB} {VERB}+
 COMPOSED_MONAD={VERB}+ ":"
+
+// higher-order functions
+DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
 
 %%
 <YYINITIAL> {
@@ -46,6 +50,7 @@ COMPOSED_MONAD={VERB}+ ":"
   {NUMBER_VECTOR}    { return NUMBER_VECTOR; }
   {COMPOSED_MONAD}   { return COMPOSED_MONAD; }
   {COMPOSED_VERB}    { return COMPOSED_VERB; }
+  {DERIVED_VERB}     { return DERIVED_VERB; }
   {WHITE_SPACE}      { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}        { return COMMENT; }
   {COMMENT2}         { return COMMENT; }
@@ -59,7 +64,7 @@ COMPOSED_MONAD={VERB}+ ":"
 //  "$"                { return DOLLAR; }
 //  "%"                { return PERCENT; }
 //  "&"                { return AMPERSAND; }
-  "'"                { return TICK; }
+//  "'"                { return TICK; }
   "("                { return OPEN_PAREN; }
   ")"                { return CLOSE_PAREN; }
 //  "*"                { return ASTERISK; }
@@ -67,7 +72,7 @@ COMPOSED_MONAD={VERB}+ ":"
 //  ","                { return COMMA; }
 //  "-"                { return DASH; }
 //  "."                { return PERIOD; }
-  "/"                { return SLASH; }
+//  "/"                { return SLASH; }
   ":"                { return COLON; }
   ";"                { return SEMICOLON; }
 //  "<"                { return LESS_THAN; }
@@ -76,18 +81,18 @@ COMPOSED_MONAD={VERB}+ ":"
 //  "?"                { return QUESTION_MARK; }
 //  "@"                { return AT; }
   "["                { return OPEN_BRACKET; }
-  "\\"               { return BACK_SLASH; }
+//  "\\"               { return BACK_SLASH; }
   "]"                { return CLOSE_BRACKET; }
 //  "^"                { return CARET; }
 //  "_"                { return UNDERSCORE; }
-  "`"                { return BACK_TICK; }
+//  "`"                { return BACK_TICK; }
   "{"                { return OPEN_BRACE; }
 //  "|"                { return PIPE; }
   "}"                { return CLOSE_BRACE; }
 //  "~"                { return TILDE; }
-  "/:"               { return SLASH_COLON; }
-  "\\:"              { return BACK_SLASH_COLON; }
-  "':"               { return TICK_COLON; }
+//  "/:"               { return SLASH_COLON; }
+//  "\\:"              { return BACK_SLASH_COLON; }
+//  "':"               { return TICK_COLON; }
   "_n"               { return NIL; }
   "0:"               { return ZEROCOLON; }
   "1:"               { return ONECOLON; }

@@ -243,11 +243,11 @@ private E4 ::= control
              | comment
              | E5
 private E5 ::= assignment
-             | conditional
+//             | conditional
              | result
-             | indexing
+//             | indexing
              | value
-             | group
+//             | group
 
 private separator ::= semicolon | newline
 
@@ -261,7 +261,7 @@ private monad_value ::= monad | noun
 monad ::= op monad_value | projection
 
 noun ::= noun_only | noun_and_op
-private noun_only ::= vector | atom
+private noun_only ::= vector | atom | conditional | indexing | group
 private noun_and_op ::= id | lambda | group | list | nil
 
 private vector ::= symbol_vector | number_vector | string

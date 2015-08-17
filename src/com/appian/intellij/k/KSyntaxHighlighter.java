@@ -71,7 +71,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS)
 
     .put(KTypes.VERB, VERB_KEYS)
-    .put(KTypes.COMPOSED_VERB, VERB_KEYS)
+    //.put(KTypes.COMPOSED_VERB, VERB_KEYS)
     .put(KTypes.COMPOSED_MONAD, ADVERB_KEYS)
     .put(KTypes.DERIVED_VERB, KEYWORD_KEYS)
 

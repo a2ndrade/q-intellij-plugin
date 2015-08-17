@@ -15,6 +15,11 @@
 
 %(a - b)
 
+/``"."
+/("\\mkdir -p \"";"\\mkdir \"")
+/`$r
+/rf:|f$:
+
 *-1#x
 
 x-:1
@@ -214,7 +219,7 @@ a + b
 
     // names
     identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
-    identifier_sys='regexp:_[._a-zA-Z0-9]*'
+    identifier_sys='regexp:_[._a-zA-Z0-9]*|[0-6]:'
 
     // nouns
     number='regexp:((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
@@ -250,8 +255,8 @@ private E1 ::= separator
 private E2 ::= separator
              | E3
 private E3 ::= E4
-             | verb
-             | composed_verb
+             | verb+
+            // | composed_verb
              | composed_monad
 private E4 ::= control
              | comment
@@ -292,7 +297,7 @@ infix ::= verb | identifier_sys | derived_verb
 
 projection ::= noun infix !noun
 
-private op ::= verb | composed_verb | derived_verb | noun_and_op
+private op ::= verb /*| composed_verb*/ | derived_verb | noun_and_op
 
 assignment ::= id [index] [verb] colon E5
              | id colon colon E5

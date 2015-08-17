@@ -25,7 +25,7 @@ COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
 DIRECTORY={WHITE_SPACE}* "\\d" {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{EOL})+
 IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
-IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
+IDENTIFIER_SYS="_" [._a-zA-Z0-9]*|[0-6] ":"
 ID={IDENTIFIER}|{IDENTIFIER_SYS}
 ID_START=[_.][a-zA-Z]
 
@@ -60,9 +60,9 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   ^{DIRECTORY}                 { return DIRECTORY; }
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
   {COMPOSED_MONAD}             { return COMPOSED_MONAD; }
-  {COMPOSED_VERB}/{ID_START}   { return COMPOSED_VERB; }
-  {COMPOSED_VERB}/-[0-9]       { return COMPOSED_VERB; }
-  {COMPOSED_VERB}              { return COMPOSED_VERB; }
+//  {COMPOSED_VERB}/{ID_START}   { return COMPOSED_VERB; }
+//  {COMPOSED_VERB}/-[0-9]       { return COMPOSED_VERB; }
+//  {COMPOSED_VERB}              { return COMPOSED_VERB; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
@@ -76,23 +76,22 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   "("                          { return OPEN_PAREN; }
   ")"/-                        { yybegin(INMTD); return CLOSE_PAREN; }
   ")"                          { return CLOSE_PAREN; }
-  ":"                          { return COLON; }
   ";"                          { return SEMICOLON; }
   "["                          { return OPEN_BRACKET; }
   "]"/-                        { yybegin(INMTD); return CLOSE_BRACKET; }
   "]"                          { return CLOSE_BRACKET; }
   "{"                          { return OPEN_BRACE; }
   "}"                          { return CLOSE_BRACE; }
-  "0:"                         { return ZEROCOLON; }
+  /*"0:"                         { return ZEROCOLON; }
   "1:"                         { return ONECOLON; }
   "2:"                         { return TWOCOLON; }
   "3:"                         { return THREECOLON; }
   "4:"                         { return FOURCOLON; }
   "5:"                         { return FIVECOLON; }
-  "6:"                         { return SIXCOLON; }
-  "if"                         { return IF; }
-  "do"                         { return DO; }
-  "while"                      { return WHILE; }
+  "6:"                         { return SIXCOLON; }*/
+  "if"/"["                     { return IF; }
+  "do"/"["                     { return DO; }
+  "while"/"["                  { return WHILE; }
 
   {IDENTIFIER_SYS}/-           { yybegin(INMTD); return IDENTIFIER_SYS; }
   {IDENTIFIER_SYS}             { return IDENTIFIER_SYS; }
@@ -102,6 +101,8 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {NUMBER}                     { return NUMBER; }
   {CHAR}                       { return CHAR; }
   {CHAR_VECTOR}                { return STRING; }
+
+  ":"                          { return COLON; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }

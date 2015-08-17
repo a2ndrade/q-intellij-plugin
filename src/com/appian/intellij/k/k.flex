@@ -61,6 +61,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
   {COMPOSED_MONAD}             { return COMPOSED_MONAD; }
   {COMPOSED_VERB}/{ID_START}   { return COMPOSED_VERB; }
+  {COMPOSED_VERB}/-[0-9]       { return COMPOSED_VERB; }
   {COMPOSED_VERB}              { return COMPOSED_VERB; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
@@ -69,6 +70,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
   {SYMBOL}                     { return SYMBOL; }
   {VERB}/{ID_START}            { return VERB;}
+  {VERB}/-[0-9]                { return VERB;}
   {VERB}                       { return VERB;}
 
   "("                          { return OPEN_PAREN; }

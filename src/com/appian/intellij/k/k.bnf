@@ -13,7 +13,20 @@
 
   /*  http://kparc.com/parse.txt
 
-.a.c[x]
+x-:1
+
+x-1
+/(*-1#x)
+*-1#x
+
+    x-1
+    x -1
+    3.5-1
+    3.5 -1
+    x[1] -1
+    (a+b)- 1
+
+/.a.c[x]
 
 %(a - b)
 (x + 5; x: 20; x - 5)
@@ -202,7 +215,6 @@ a + b
     identifier_sys='regexp:_[._a-zA-Z0-9]*'
 
     // nouns
-    nil='_n'
     number='regexp:((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
     char='regexp:"(\\"|[^"])"'
     string='regexp:"(\\"|[^"])*"'
@@ -261,8 +273,8 @@ private monad_value ::= monad | noun
 monad ::= op monad_value | projection
 
 noun ::= noun_only | noun_and_op
-private noun_only ::= vector | atom | conditional | indexing | group
-private noun_and_op ::= id | lambda | group | list | nil
+private noun_only ::= vector | atom
+private noun_and_op ::= conditional | indexing | group | id | lambda | list
 
 private vector ::= symbol_vector | number_vector | string
 list ::= open_paren ([E3] separator [E3])* close_paren

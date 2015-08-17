@@ -23,11 +23,13 @@ NEWLINE=\r|\n|\r\n
 COMMENT1="/" [^\r\n]* {EOL}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
-IDENTIFIER=[a-zA-Z][._a-zA-Z0-9]*
+DIRECTORY={WHITE_SPACE}* "\\d" {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{EOL})+
+IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
 IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
 ID={IDENTIFIER}|{IDENTIFIER_SYS}
 
-NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
+MINUS_OVERRIDE=[)\]]//{ID}|[0-9]|
+NUMBER=((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
 NUMBER_VECTOR={NUMBER}({WHITE_SPACE}{NUMBER})+
 CHAR=\"(\\\"|[^\"])\"
 CHAR_VECTOR=\"(\\\"|[^\"])*\"
@@ -47,6 +49,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
 <YYINITIAL> {
 
   {NEWLINE}+         { return NEWLINE; }
+  ^{DIRECTORY}       { return DIRECTORY; }
   {NUMBER_VECTOR}    { return NUMBER_VECTOR; }
   {COMPOSED_MONAD}   { return COMPOSED_MONAD; }
   {COMPOSED_VERB}    { return COMPOSED_VERB; }

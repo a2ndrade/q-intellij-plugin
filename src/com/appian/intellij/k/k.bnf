@@ -13,6 +13,8 @@
 
   /*  http://kparc.com/parse.txt
 
+.a.c[x]
+
 %(a - b)
 (x + 5; x: 20; x - 5)
 
@@ -227,19 +229,20 @@ a + b
 }
 
 root ::= E0+ <<eof>>
-private E0 ::= separator
-             //| E2
-             | E3
+private E0 ::= directory
+             | E1
 private E1 ::= separator
-             | E2
-private E2 ::= verb
+             | E4
+private E2 ::= separator
+             | E3
+private E3 ::= E4
+             | verb
              | composed_verb
              | composed_monad
-             | E3
-private E3 ::= control
+private E4 ::= control
              | comment
-             | E4
-private E4 ::= assignment
+             | E5
+private E5 ::= assignment
              | conditional
              | result
              | indexing
@@ -248,7 +251,7 @@ private E4 ::= assignment
 
 private separator ::= semicolon | newline
 
-group ::= open_paren E2 close_paren
+group ::= open_paren E3 close_paren
 
 private id ::= identifier | identifier_sys
 
@@ -262,13 +265,13 @@ private noun_only ::= vector | atom
 private noun_and_op ::= id | lambda | group | list | nil
 
 private vector ::= symbol_vector | number_vector | string
-list ::= open_paren ([E2] separator [E2])* close_paren
+list ::= open_paren ([E3] separator [E3])* close_paren
 
 private atom ::= symbol | number | char
-lambda ::= open_brace [index] E0* close_brace
+lambda ::= open_brace [index] E1* close_brace
 
 indexing ::= (id | group | lambda) index
-private index ::= open_bracket E1* close_bracket
+private index ::= open_bracket E2* close_bracket
 control ::= (if | do | while) index
 
 infix ::= verb | identifier_sys | derived_verb
@@ -277,9 +280,9 @@ projection ::= noun infix !noun
 
 private op ::= verb | composed_verb | derived_verb | noun_and_op
 
-assignment ::= id [index] [verb] colon E4
-             | id colon colon E4
+assignment ::= id [index] [verb] colon E5
+             | id colon colon E5
 
 conditional ::= colon index
 
-result ::= colon E4
+result ::= colon E5

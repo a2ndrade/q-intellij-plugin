@@ -13,11 +13,15 @@
 
   /*  http://kparc.com/parse.txt
 
+%(a - b)
+
+*-1#x
+
 x-:1
 
 x-1
-/(*-1#x)
-*-1#x
+(*-1#x)
+
 
     x-1
     x -1
@@ -28,7 +32,6 @@ x-1
 
 /.a.c[x]
 
-%(a - b)
 (x + 5; x: 20; x - 5)
 
 (-;3)
@@ -140,7 +143,6 @@ a + b
   (identifier)
 
   1 +/10 3 4 5
-
 
   TOKEN ;a0`"+
 
@@ -270,7 +272,7 @@ private id ::= identifier | identifier_sys
 private value ::= dyad | monad_value
 dyad ::= noun infix value
 private monad_value ::= monad | noun
-monad ::= op monad_value | projection
+monad ::= op value | projection
 
 noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom

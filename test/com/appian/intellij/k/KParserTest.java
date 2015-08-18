@@ -1,10 +1,14 @@
 package com.appian.intellij.k;
 
+import junit.framework.Assert;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,9 +30,12 @@ public final class KParserTest extends ParsingTestCase {
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);
 
+  private static final String S0 = "=============";
+  private static final String S1 = "-------------";
+
   public KParserTest(String dataPath) {
     super("", "k", SPEC);
-    setName("testNewLine");
+    setName("testParser");
   }
 
   @Override
@@ -36,11 +43,15 @@ public final class KParserTest extends ParsingTestCase {
     return "test-data";
   }
 
-  public void testNewLine() {
-    final String expression = "a~=b";
-    final ASTNode tree = parse(expression);
-    final String asString = toString(tree);
-    System.out.print(asString);
+  public void testParser() throws Exception {
+    final File f = new File("test-data/test-cases.txt");
+    final String[] testCases = readFileIntoSections(f, S0);
+    for(String testCase : testCases) {
+      final String[] inOut = readFileIntoSections(testCase, S1);
+      final String actual = toString(parse(inOut[0]));
+      final String expected = inOut[1];
+      Assert.assertEquals(expected, actual);
+    }
   }
 
   @NotNull
@@ -62,9 +73,9 @@ public final class KParserTest extends ParsingTestCase {
     return factory.createBuilder(SPEC, lexer, expression);
   }
 
-  static String[] readFileIntoSections(File f, String sectionsSeparator)
+  static String[] readFileIntoSections(Object source, String sectionsSeparator)
     throws IOException {
-    final List<String> linesList = readLinesIncludingLineTerminators(f);
+    final List<String> linesList = readLinesIncludingLineTerminators(source);
     final List<String> sectionsList = new ArrayList<String>();
     StringBuffer currentSection = null;
     final Iterator<String> it = linesList.iterator();
@@ -88,10 +99,12 @@ public final class KParserTest extends ParsingTestCase {
     return sectionsList.toArray(new String[0]);
   }
 
-  static List<String> readLinesIncludingLineTerminators(File f)
+  static List<String> readLinesIncludingLineTerminators(Object o)
     throws IOException {
     try(
-      FileReader fr = new FileReader(f);
+      Reader fr = o instanceof File
+        ? new FileReader((File)o)
+        : new StringReader((String)o);
       BufferedReader br = new BufferedReader(fr);
       PushbackReader pr = new PushbackReader(br)) {
       List<String> linesList = new ArrayList<String>();

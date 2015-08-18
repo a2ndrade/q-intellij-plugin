@@ -51,7 +51,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
 %%
 
 <INMTD> {
-  "-"                         { yybegin(YYINITIAL); return VERB;}
+  "-"                          { yybegin(YYINITIAL); return VERB;}
 }
 
 <YYINITIAL> {

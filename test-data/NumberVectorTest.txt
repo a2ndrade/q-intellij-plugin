@@ -1,10 +1,3 @@
-1
------------->
-Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.number)('1')
-  PsiElement(KTokenType.newline)('\n')
-============|
 1 2
 ------------>
 Element(FILE)

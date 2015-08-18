@@ -1,0 +1,55 @@
+1
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.newline)('\n')
+============|
+-2
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('-2')
+  PsiElement(KTokenType.newline)('\n')
+============|
+-1.5
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('-1.5')
+  PsiElement(KTokenType.newline)('\n')
+============|
+2.1
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('2.1')
+  PsiElement(KTokenType.newline)('\n')
+============|
+0i
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0i')
+  PsiElement(KTokenType.newline)('\n')
+============|
+0n
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0n')
+  PsiElement(KTokenType.newline)('\n')
+============|
+0N
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0N')
+  PsiElement(KTokenType.newline)('\n')
+============|
+0I
+------------>
+Element(FILE)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0I')
+  PsiElement(KTokenType.newline)('\n')

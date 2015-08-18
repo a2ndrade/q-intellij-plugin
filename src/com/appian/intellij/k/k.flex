@@ -31,8 +31,9 @@ ID_START=[_.][a-zA-Z]
 
 NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
 NUMBER_VECTOR={NUMBER}({WHITE_SPACE}{NUMBER})+
-CHAR=\"(\\\"|[^\"])\"
-CHAR_VECTOR=\"[^\"]*~\"
+C=([^\\\"]|\\[^\ \t])
+CHAR=\"{C}\"
+CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE})+)
 SYMBOL_VECTOR={SYMBOL} {SYMBOL}+
 VERB=[!#$%&*+,-.<=>?@\^_|~]

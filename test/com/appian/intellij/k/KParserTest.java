@@ -1,6 +1,8 @@
 package com.appian.intellij.k;
 
 import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +14,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -30,50 +30,60 @@ public final class KParserTest extends ParsingTestCase {
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);
 
-  private static final String S0 = "=============";
-  private static final String S1 = "-------------";
+  private static final String TEST_DATA_FOLDER_NAME = "test-data";
+  private static final String TEST_CASE_SEPARATOR = "============|";
+  private static final String INPUT_OUTPUT_SEPARATOR = "------------>";
 
-  public KParserTest(String dataPath) {
+  public static Test suite() {
+    final TestSuite suite = new TestSuite();
+    final File folder = new File(TEST_DATA_FOLDER_NAME);
+    for(String fileName : folder.list()) {
+      suite.addTest(new KParserTest(fileName));
+    }
+    return suite;
+  }
+
+  private final String testFileName;
+
+  KParserTest(String testFileName) {
     super("", "k", SPEC);
     setName("testParser");
+    this.testFileName = testFileName;
   }
 
   @Override
-  protected String getTestDataPath() {
-    return "test-data";
+  public String getName() {
+    return testFileName;
   }
 
   public void testParser() throws Exception {
-    final File f = new File("test-data/test-cases.txt");
-    final String[] testCases = readFileIntoSections(f, S0);
+    final File input = new File(getTestDataPath() + "/" + testFileName);
+    final String[] testCases = readFileIntoSections(input, TEST_CASE_SEPARATOR);
     for(String testCase : testCases) {
-      final String[] inOut = readFileIntoSections(testCase, S1);
+      final String[] inOut = readFileIntoSections(testCase, INPUT_OUTPUT_SEPARATOR);
       final String actual = toString(parse(inOut[0]));
       final String expected = inOut[1];
       Assert.assertEquals(expected, actual);
     }
   }
 
-  @NotNull
   private String toString(ASTNode tree) {
     return DebugUtil.nodeTreeToString(tree, true);
   }
 
-  @NotNull
   private ASTNode parse(String expression) {
     final IFileElementType fileType = KParserDefinition.FILE;
     final PsiBuilder builder = newPsiBuilder(expression);
     return PARSER.parse(fileType, builder);
   }
 
-  @NotNull
   private PsiBuilder newPsiBuilder(String expression) {
     final Lexer lexer = SPEC.createLexer(null);
     final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
     return factory.createBuilder(SPEC, lexer, expression);
   }
 
-  static String[] readFileIntoSections(Object source, String sectionsSeparator)
+  private static String[] readFileIntoSections(Object source, String sectionsSeparator)
     throws IOException {
     final List<String> linesList = readLinesIncludingLineTerminators(source);
     final List<String> sectionsList = new ArrayList<String>();
@@ -99,7 +109,7 @@ public final class KParserTest extends ParsingTestCase {
     return sectionsList.toArray(new String[0]);
   }
 
-  static List<String> readLinesIncludingLineTerminators(Object o)
+  private static List<String> readLinesIncludingLineTerminators(Object o)
     throws IOException {
     try(
       Reader fr = o instanceof File
@@ -129,6 +139,11 @@ public final class KParserTest extends ParsingTestCase {
       } while (c != -1);
       return linesList;
     }
+  }
+
+  @Override
+  protected String getTestDataPath() {
+    return TEST_DATA_FOLDER_NAME;
   }
 
 }

@@ -1,71 +1,62 @@
 "a"
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"a"')
+  PsiElement(KTokenType.char)('"a"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 " "
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('" "')
+  PsiElement(KTokenType.char)('" "')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\""
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\""')
+  PsiElement(KTokenType.char)('"\""')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\t"
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\t"')
+  PsiElement(KTokenType.char)('"\t"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\n"
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\n"')
+  PsiElement(KTokenType.char)('"\n"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\r"
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\r"')
+  PsiElement(KTokenType.char)('"\r"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\b"
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\b"')
+  PsiElement(KTokenType.char)('"\b"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\\"
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\\"')
+  PsiElement(KTokenType.char)('"\\"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "
 "
 ------------>
 Element(FILE)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\n"')
+  PsiElement(KTokenType.char)('"\n"')
   PsiElement(KTokenType.newline)('\n')
 ============|
 "\"
 ------------>
 Element(FILE)
-  PsiErrorElement:<assignment>, <control>, <monad>, <noun>, KTokenType.:, KTokenType.;, KTokenType.comment, KTokenType.directory or KTokenType.newline expected, got '"'
+  PsiErrorElement:<assignment>, <control>, <dyad>, <indexing>, <monad>, <projection>, KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.char, KTokenType.comment, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector or KTokenType.{ expected, got '"'
     PsiElement(BAD_CHARACTER)('"')
   PsiElement(BAD_CHARACTER)('\')
   PsiElement(BAD_CHARACTER)('"')
@@ -75,6 +66,6 @@ Element(FILE)
 ------------>
 Element(FILE)
   PsiElement(KTokenType.string)('""')
-  PsiErrorElement:<assignment>, <control>, <infix>, <monad>, <noun>, KTokenType.:, KTokenType.;, KTokenType.comment, KTokenType.directory or KTokenType.newline expected, got '"'
+  PsiErrorElement:<assignment>, <control>, <dyad>, <indexing>, <monad>, <projection>, KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.char, KTokenType.comment, KTokenType.derived_verb, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.verb or KTokenType.{ expected, got '"'
     PsiElement(BAD_CHARACTER)('"')
   PsiElement(KTokenType.newline)('\n')

@@ -276,10 +276,12 @@ private id ::= identifier | identifier_sys
 
 private value ::= dyad | monad_value
 dyad ::= noun infix value
-private monad_value ::= monad | noun
-monad ::= op value | projection
+private monad_value ::= monad_or_projection | noun
+private monad_or_projection ::= monad | projection
+monad ::= monad_op value
+private monad_op ::= verb /*| composed_verb*/ | derived_verb | noun_and_op
 
-noun ::= noun_only | noun_and_op
+private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
 private noun_and_op ::= conditional | indexing | group | id | lambda | list
 
@@ -290,14 +292,13 @@ private atom ::= symbol | number | char
 lambda ::= open_brace [index] E1* close_brace
 
 indexing ::= (id | group | lambda) index
-private index ::= open_bracket E2* close_bracket
+index ::= open_bracket E2* close_bracket
 control ::= (if | do | while) index
 
-infix ::= verb | identifier_sys | derived_verb
+private infix ::= verb | identifier_sys | derived_verb
 
 projection ::= noun infix !noun
 
-private op ::= verb /*| composed_verb*/ | derived_verb | noun_and_op
 
 assignment ::= id [index] [verb] colon E5
              | id colon colon E5

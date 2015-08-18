@@ -1,35 +1,35 @@
 ""
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.string)('""')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.string)('""')
 ============|
+
+
 "ab"
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.string)('"ab"')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.string)('"ab"')
 ============|
+
+
 "\" \t \n \r \b \\ \a"
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
 ============|
+
+
 "
  "
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.string)('"\n "')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.string)('"\n "')
 ============|
+
+
 " \"multi\"-
  line"
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.string)('" \"multi\"-\n line"')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.string)('" \"multi\"-\n line"')
 ============|
+
+
 " \ "
 ------------>
 Element(FILE)
@@ -37,13 +37,13 @@ Element(FILE)
     PsiElement(BAD_CHARACTER)('"')
   PsiElement(BAD_CHARACTER)('\')
   PsiElement(BAD_CHARACTER)('"')
-  PsiElement(KTokenType.newline)('\n')
 ============|
+
+
 " " "
 ------------>
 Element(FILE)
   PsiElement(KTokenType.char)('" "')
   PsiElement(BAD_CHARACTER)('"')
-  PsiErrorElement:'
-' unexpected
-    PsiElement(KTokenType.newline)('\n')
+  PsiErrorElement:unexpected end of file
+    <empty list>

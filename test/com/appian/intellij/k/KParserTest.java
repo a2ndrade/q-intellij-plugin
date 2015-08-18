@@ -1,6 +1,5 @@
 package com.appian.intellij.k;
 
-import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -14,6 +13,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.junit.Assert;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -31,8 +32,8 @@ public final class KParserTest extends ParsingTestCase {
   private static final PsiParser PARSER = SPEC.createParser(null);
 
   private static final String TEST_DATA_FOLDER_NAME = "test-data";
-  private static final String TEST_CASE_SEPARATOR = "============|";
   private static final String INPUT_OUTPUT_SEPARATOR = "------------>";
+  private static final String TEST_CASE_SEPARATOR = "============|";
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
@@ -61,14 +62,22 @@ public final class KParserTest extends ParsingTestCase {
     final String[] testCases = readFileIntoSections(input, TEST_CASE_SEPARATOR);
     for(String testCase : testCases) {
       final String[] inOut = readFileIntoSections(testCase, INPUT_OUTPUT_SEPARATOR);
-      final String actual = toString(parse(inOut[0]));
-      final String expected = inOut[1];
+      final String expression = inOut[0].trim();
+      final String actual = parseAsString(expression).trim();
+      final String expected = inOut[1].trim();
       Assert.assertEquals(expected, actual);
     }
   }
 
-  private String toString(ASTNode tree) {
-    return DebugUtil.nodeTreeToString(tree, true);
+  private String parseAsString(String expression) {
+    final ASTNode tree = parse(expression);
+    final ASTNode root;
+    if (tree.getFirstChildNode() == tree.getLastChildNode()) {
+      root = tree.getFirstChildNode();
+    } else {
+      root = tree;
+    }
+    return DebugUtil.nodeTreeToString(root, true);
   }
 
   private ASTNode parse(String expression) {

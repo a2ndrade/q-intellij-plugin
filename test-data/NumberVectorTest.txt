@@ -1,37 +1,35 @@
-1 2
+1 -2
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number_vector)('1 2')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number_vector)('1 -2')
 ============|
+
+
 1 2.0 3
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number_vector)('1 2.0 3')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number_vector)('1 2.0 3')
 ============|
+
+
 ,1
 ------------>
-Element(FILE)
-  Element(MONAD)
-    PsiElement(KTokenType.verb)(',')
-    PsiElement(KTokenType.number)('1')
-  PsiElement(KTokenType.newline)('\n')
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.number)('1')
 ============|
--1 -2
+
+
+-1.0 2
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number_vector)('-1 -2')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number_vector)('-1.0 2')
 ============|
+
+
 0i -0I 0n -0N 0
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number_vector)('0i -0I 0n -0N 0')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number_vector)('0i -0I 0n -0N 0')
 ============|
+
+
 -0i 0I -0n 0N -0
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number_vector)('-0i 0I -0n 0N -0')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number_vector)('-0i 0I -0n 0N -0')

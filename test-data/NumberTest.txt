@@ -1,47 +1,45 @@
 1
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('1')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('1')
 ============|
+
+
 -2
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('-2')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('-2')
 ============|
+
+
 -1.5
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('-1.5')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('-1.5')
 ============|
+
+
 2.1
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('2.1')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('2.1')
 ============|
+
+
 0i
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('0i')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('0i')
 ============|
+
+
 0n
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('0n')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('0n')
 ============|
+
+
 0N
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('0N')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('0N')
 ============|
+
+
 0I
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('0I')
-  PsiElement(KTokenType.newline)('\n')
+PsiElement(KTokenType.number)('0I')

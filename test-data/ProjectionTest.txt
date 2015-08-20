@@ -1,0 +1,89 @@
+3 +
+------------>
+Element(PROJECTION)
+  PsiElement(KTokenType.number)('3')
+  PsiElement(KTokenType.verb)('+')
+============|
+
+
+(3 +) 4
+------------>
+Element(MONAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(PROJECTION)
+      PsiElement(KTokenType.number)('3')
+      PsiElement(KTokenType.verb)('+')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.number)('4')
+============|
+
+
+4 _div
+------------>
+Element(PROJECTION)
+  PsiElement(KTokenType.number)('4')
+  PsiElement(KTokenType.identifier_sys)('_div')
+============|
+
+
+4_div
+------------>
+Element(PROJECTION)
+  PsiElement(KTokenType.number)('4')
+  PsiElement(KTokenType.identifier_sys)('_div')
+============|
+
+
+(4 _div) 2
+------------>
+Element(MONAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(PROJECTION)
+      PsiElement(KTokenType.number)('4')
+      PsiElement(KTokenType.identifier_sys)('_div')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.number)('2')
+============|
+
+
+1+/
+------------>
+Element(PROJECTION)
+  PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.derived_verb)('+/')
+============|
+
+
+1+/:
+------------>
+Element(PROJECTION)
+  PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.derived_verb)('+/:')
+============|
+
+
+(1+/) 1 2 3
+------------>
+Element(MONAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(PROJECTION)
+      PsiElement(KTokenType.number)('1')
+      PsiElement(KTokenType.derived_verb)('+/')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.number_vector)('1 2 3')
+============|
+
+
+(1+/:) 1 2 3
+------------>
+Element(MONAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(PROJECTION)
+      PsiElement(KTokenType.number)('1')
+      PsiElement(KTokenType.derived_verb)('+/:')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.number_vector)('1 2 3')

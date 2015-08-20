@@ -279,7 +279,7 @@ private monad_op ::= verb | derived_verb | noun_and_op
 
 private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
-private noun_and_op ::= conditional | group | indexing | id | lambda | list
+private noun_and_op ::= conditional | indexing | group | id | lambda | list
 private compound_expr ::= lambda | indexing | list
 
 private vector ::= symbol_vector | number_vector | string

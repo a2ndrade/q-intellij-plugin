@@ -15,17 +15,9 @@ Element(DYAD)
 ============|
 
 
-+/: 1 2 3 4
------------->
-Element(MONAD)
-  PsiElement(KTokenType.derived_verb)('+/:')
-  PsiElement(KTokenType.number_vector)('1 2 3 4')
-============|
-
-
-16 +/: 1 2 3 4
+a +/\/:\:':' b
 ------------>
 Element(DYAD)
-  PsiElement(KTokenType.number)('16')
-  PsiElement(KTokenType.derived_verb)('+/:')
-  PsiElement(KTokenType.number_vector)('1 2 3 4')
+  PsiElement(KTokenType.identifier)('a')
+  PsiElement(KTokenType.derived_verb)('+/\/:\:':'')
+  PsiElement(KTokenType.identifier)('b')

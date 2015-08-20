@@ -1,0 +1,76 @@
+{}
+------------>
+Element(LAMBDA)
+  PsiElement(KTokenType.{)('{')
+  PsiElement(KTokenType.})('}')
+============|
+
+
+{x}
+------------>
+Element(LAMBDA)
+  PsiElement(KTokenType.{)('{')
+  PsiElement(KTokenType.identifier)('x')
+  PsiElement(KTokenType.})('}')
+============|
+
+
+{[] 1}
+------------>
+Element(LAMBDA)
+  PsiElement(KTokenType.{)('{')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.})('}')
+============|
+
+
+{[a;b] :a+b}
+------------>
+Element(LAMBDA)
+  PsiElement(KTokenType.{)('{')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.identifier)('b')
+    PsiElement(KTokenType.])(']')
+  Element(RESULT)
+    PsiElement(KTokenType.:)(':')
+    Element(DYAD)
+      PsiElement(KTokenType.identifier)('a')
+      PsiElement(KTokenType.verb)('+')
+      PsiElement(KTokenType.identifier)('b')
+  PsiElement(KTokenType.})('}')
+============|
+
+
+{  []
+ :1}
+------------>
+Element(LAMBDA)
+  PsiElement(KTokenType.{)('{')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(RESULT)
+    PsiElement(KTokenType.:)(':')
+    PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.})('}')
+============|
+
+
+{
+ [] 1}
+------------>
+Element(FILE)
+  PsiElement(KTokenType.{)('{')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.[)('[')
+  PsiErrorElement:']' unexpected
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.})('}')

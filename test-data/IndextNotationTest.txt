@@ -1,0 +1,51 @@
+a[]
+------------>
+Element(INDEXING)
+  PsiElement(KTokenType.identifier)('a')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.])(']')
+============|
+
+
+m[0;0]
+------------>
+Element(INDEXING)
+  PsiElement(KTokenType.identifier)('m')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.number)('0')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.number)('0')
+    PsiElement(KTokenType.])(']')
+============|
+
+
+f[a;b;c]
+------------>
+Element(INDEXING)
+  PsiElement(KTokenType.identifier)('f')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.identifier)('b')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.identifier)('c')
+    PsiElement(KTokenType.])(']')
+============|
+
+
++[a;b]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.char)('"a"')
+============|
+
+
+d[.]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.number)('3.1416')

@@ -1,0 +1,37 @@
+(a+b;;c-d;)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.verb)('+')
+    PsiElement(KTokenType.identifier)('b')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.;)(';')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier)('c')
+    PsiElement(KTokenType.verb)('-')
+    PsiElement(KTokenType.identifier)('d')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+(a+b;
+c-d
+)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.verb)('+')
+    PsiElement(KTokenType.identifier)('b')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.newline)('\n')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier)('c')
+    PsiElement(KTokenType.verb)('-')
+    PsiElement(KTokenType.identifier)('d')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.))(')')

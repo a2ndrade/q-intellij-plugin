@@ -1,0 +1,74 @@
+{x - 2} 5
+------------>
+Element(MONAD)
+  Element(LAMBDA)
+    PsiElement(KTokenType.{)('{')
+    Element(DYAD)
+      PsiElement(KTokenType.identifier)('x')
+      PsiElement(KTokenType.verb)('-')
+      PsiElement(KTokenType.number)('2')
+    PsiElement(KTokenType.})('}')
+  PsiElement(KTokenType.number)('5')
+============|
+
+
+{x - 2} 5 6
+------------>
+Element(MONAD)
+  Element(LAMBDA)
+    PsiElement(KTokenType.{)('{')
+    Element(DYAD)
+      PsiElement(KTokenType.identifier)('x')
+      PsiElement(KTokenType.verb)('-')
+      PsiElement(KTokenType.number)('2')
+    PsiElement(KTokenType.})('}')
+  PsiElement(KTokenType.number_vector)('5 6')
+============|
+
+
+(4; "a") 1
+------------>
+Element(MONAD)
+  Element(LIST)
+    PsiElement(KTokenType.()('(')
+    PsiElement(KTokenType.number)('4')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.char)('"a"')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.number)('1')
+============|
+
+
+:[1;1 2;0] 0 1
+------------>
+Element(MONAD)
+  Element(CONDITIONAL)
+    PsiElement(KTokenType.:)(':')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.number)('1')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.number_vector)('1 2')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.number)('0')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.number_vector)('0 1')
+============|
+
+
+(1 2) 0 1
+------------>
+Element(MONAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    PsiElement(KTokenType.number_vector)('1 2')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.number_vector)('0 1')
+============|
+
+
+a 1
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.identifier)('a')
+  PsiElement(KTokenType.number)('1')

@@ -1,0 +1,58 @@
+:[a;b;c]
+------------>
+Element(CONDITIONAL)
+  PsiElement(KTokenType.:)(':')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.identifier)('b')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.identifier)('c')
+    PsiElement(KTokenType.])(']')
+============|
+
+
+x:y
+------------>
+Element(ASSIGNMENT)
+  PsiElement(KTokenType.identifier)('x')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.identifier)('y')
+============|
+
+
+x[i]:y
+------------>
+Element(ASSIGNMENT)
+  PsiElement(KTokenType.identifier)('x')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('i')
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.identifier)('y')
+============|
+
+
+x+:y
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.char)('"a"')
+============|
+
+
+x[i],:y
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.number)('3.1416')
+============|
+
+
+x::3
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.number)('3.1416')

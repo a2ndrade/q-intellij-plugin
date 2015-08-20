@@ -70,6 +70,9 @@ public final class KParserTest extends ParsingTestCase {
   }
 
   private String parseAsString(String expression) {
+    if (expression.isEmpty()) {
+      return expression;
+    }
     final ASTNode tree = parse(expression);
     final ASTNode root;
     if (tree.getFirstChildNode() == tree.getLastChildNode()) {

@@ -1,0 +1,60 @@
+:[]
+do[]
+if[]
+while[]
+------------>
+Element(FILE)
+  Element(CONDITIONAL)
+    PsiElement(KTokenType.:)(':')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(CONTROL)
+    PsiElement(KTokenType.do)('do')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(CONTROL)
+    PsiElement(KTokenType.if)('if')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(CONTROL)
+    PsiElement(KTokenType.while)('while')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+============|
+
+: []
+do []
+if []
+while []
+------------>
+Element(FILE)
+  Element(CONDITIONAL)
+    PsiElement(KTokenType.:)(':')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(INDEXING)
+    PsiElement(KTokenType.identifier)('do')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(INDEXING)
+    PsiElement(KTokenType.identifier)('if')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.newline)('\n')
+  Element(INDEXING)
+    PsiElement(KTokenType.identifier)('while')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')

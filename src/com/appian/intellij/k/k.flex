@@ -40,7 +40,6 @@ VERB=[!#$%&*+,-.<=>?@\^_|~]
 ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 
 // function composition
-COMPOSED_VERB={VERB} {VERB}+
 COMPOSED_MONAD={VERB}+ ":"
 
 // higher-order functions
@@ -61,9 +60,6 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   ^{DIRECTORY}                 { return DIRECTORY; }
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
   {COMPOSED_MONAD}             { return COMPOSED_MONAD; }
-//  {COMPOSED_VERB}/{ID_START}   { return COMPOSED_VERB; }
-//  {COMPOSED_VERB}/-[0-9]       { return COMPOSED_VERB; }
-//  {COMPOSED_VERB}              { return COMPOSED_VERB; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
@@ -83,13 +79,6 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   "]"                          { return CLOSE_BRACKET; }
   "{"                          { return OPEN_BRACE; }
   "}"                          { return CLOSE_BRACE; }
-  /*"0:"                         { return ZEROCOLON; }
-  "1:"                         { return ONECOLON; }
-  "2:"                         { return TWOCOLON; }
-  "3:"                         { return THREECOLON; }
-  "4:"                         { return FOURCOLON; }
-  "5:"                         { return FIVECOLON; }
-  "6:"                         { return SIXCOLON; }*/
   "if"/"["                     { return IF; }
   "do"/"["                     { return DO; }
   "while"/"["                  { return WHILE; }

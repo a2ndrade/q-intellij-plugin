@@ -1,0 +1,31 @@
++/ 1 2 3 4
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.derived_verb)('+/')
+  PsiElement(KTokenType.number_vector)('1 2 3 4')
+============|
+
+
+16 +/ 1 2 3 4
+------------>
+Element(DYAD)
+  PsiElement(KTokenType.number)('16')
+  PsiElement(KTokenType.derived_verb)('+/')
+  PsiElement(KTokenType.number_vector)('1 2 3 4')
+============|
+
+
++/: 1 2 3 4
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.derived_verb)('+/:')
+  PsiElement(KTokenType.number_vector)('1 2 3 4')
+============|
+
+
+16 +/: 1 2 3 4
+------------>
+Element(DYAD)
+  PsiElement(KTokenType.number)('16')
+  PsiElement(KTokenType.derived_verb)('+/:')
+  PsiElement(KTokenType.number_vector)('1 2 3 4')

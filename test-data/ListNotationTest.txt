@@ -1,0 +1,55 @@
+()
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+(3 + 4; a _ b; -20.45)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  Element(DYAD)
+    PsiElement(KTokenType.number)('3')
+    PsiElement(KTokenType.verb)('+')
+    PsiElement(KTokenType.number)('4')
+  PsiElement(KTokenType.;)(';')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.verb)('_')
+    PsiElement(KTokenType.identifier)('b')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.number)('-20.45')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+(a * b) + c
+------------>
+Element(DYAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(DYAD)
+      PsiElement(KTokenType.identifier)('a')
+      PsiElement(KTokenType.verb)('*')
+      PsiElement(KTokenType.identifier)('b')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.verb)('+')
+  PsiElement(KTokenType.identifier)('c')
+============|
+
+
+,"a"
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.char)('"a"')
+============|
+
+
+,3.1416
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.number)('3.1416')

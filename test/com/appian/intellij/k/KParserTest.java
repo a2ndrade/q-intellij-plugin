@@ -61,6 +61,9 @@ public class KParserTest extends ParsingTestCase {
     final File input = new File(getTestDataPath() + "/" + testFileName);
     final String[] testCases = readFileIntoSections(input, TEST_CASE_SEPARATOR);
     for(String testCase : testCases) {
+      if (testCase.isEmpty()) {
+        continue;
+      }
       final String[] inOut = readFileIntoSections(testCase, INPUT_OUTPUT_SEPARATOR);
       final String expression = inOut[0].trim();
       final String actual = parseAsString(expression).trim();

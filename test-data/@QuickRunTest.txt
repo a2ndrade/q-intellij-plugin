@@ -1,6 +1,16 @@
-(%-)[a;b]
+(+:;a.b;2 -.3;`a`bc)
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)(',')
-  PsiElement(KTokenType.char)('"a"')
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.identifier)('a.b')
+  PsiElement(KTokenType.;)(';')
+  Element(DYAD)
+    PsiElement(KTokenType.number)('2')
+    PsiElement(KTokenType.verb)('-')
+    PsiElement(KTokenType.identifier)('.3')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.symbol_vector)('`a`bc')
+  PsiElement(KTokenType.))(')')
 ============|

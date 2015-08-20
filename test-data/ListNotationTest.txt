@@ -6,6 +6,24 @@ Element(LIST)
 ============|
 
 
+(;)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+(1 2 3)
+------------>
+Element(GROUP)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.number_vector)('1 2 3')
+  PsiElement(KTokenType.))(')')
+============|
+
+
 (3 + 4; a _ b; -20.45)
 ------------>
 Element(LIST)
@@ -21,6 +39,24 @@ Element(LIST)
     PsiElement(KTokenType.identifier)('b')
   PsiElement(KTokenType.;)(';')
   PsiElement(KTokenType.number)('-20.45')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+(3 + 4
+ a _ b)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  Element(DYAD)
+    PsiElement(KTokenType.number)('3')
+    PsiElement(KTokenType.verb)('+')
+    PsiElement(KTokenType.number)('4')
+  PsiElement(KTokenType.newline)('\n')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier)('a')
+    PsiElement(KTokenType.verb)('_')
+    PsiElement(KTokenType.identifier)('b')
   PsiElement(KTokenType.))(')')
 ============|
 

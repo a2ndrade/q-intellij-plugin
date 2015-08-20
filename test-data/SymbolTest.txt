@@ -1,0 +1,47 @@
+`
+------------>
+PsiElement(KTokenType.symbol)('`')
+============|
+
+
+`abc
+------------>
+PsiElement(KTokenType.symbol)('`abc')
+============|
+
+
+`"ab"
+------------>
+PsiElement(KTokenType.symbol)('`"ab"')
+============|
+
+
+`" "
+------------>
+PsiElement(KTokenType.symbol)('`" "')
+============|
+
+
+`"
+"
+------------>
+PsiElement(KTokenType.symbol)('`"\n"')
+============|
+
+
+`a..b_2
+------------>
+PsiElement(KTokenType.symbol)('`a..b_2')
+============|
+
+
+`" \"multi\"-
+ line"
+------------>
+PsiElement(KTokenType.symbol)('`" \"multi\"-\n line"')
+============|
+
+
+`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"
+------------>
+PsiElement(KTokenType.symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')

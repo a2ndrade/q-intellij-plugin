@@ -1,0 +1,62 @@
+*-1#
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('*')
+  Element(PROJECTION)
+    PsiElement(KTokenType.number)('-1')
+    PsiElement(KTokenType.verb)('#')
+============|
+
+
+*-1#x
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('*')
+  Element(DYAD)
+    PsiElement(KTokenType.number)('-1')
+    PsiElement(KTokenType.verb)('#')
+    PsiElement(KTokenType.identifier)('x')
+============|
+
+
+* -1 # x
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('*')
+  Element(DYAD)
+    PsiElement(KTokenType.number)('-1')
+    PsiElement(KTokenType.verb)('#')
+    PsiElement(KTokenType.identifier)('x')
+============|
+
+
+(*-1#)x
+------------>
+Element(MONAD)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(MONAD)
+      PsiElement(KTokenType.verb)('*')
+      Element(PROJECTION)
+        PsiElement(KTokenType.number)('-1')
+        PsiElement(KTokenType.verb)('#')
+    PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.identifier)('x')
+============|
+
+
+(+:;a.b;2 -.3;`a`bc)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.identifier)('a.b')
+  PsiElement(KTokenType.;)(';')
+  Element(DYAD)
+    PsiElement(KTokenType.number)('2')
+    PsiElement(KTokenType.verb)('-')
+    PsiElement(KTokenType.identifier)('.3')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.symbol_vector)('`a`bc')
+  PsiElement(KTokenType.))(')')

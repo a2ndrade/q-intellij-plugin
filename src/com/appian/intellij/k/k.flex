@@ -34,8 +34,8 @@ NUMBER_VECTOR={NUMBER}({WHITE_SPACE}{NUMBER})+
 C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
-SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE})+)
-SYMBOL_VECTOR={SYMBOL} {SYMBOL}+
+SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE}*)+)
+SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}?{SYMBOL})+
 VERB=[!#$%&*+,-.<=>?@\^_|~]
 ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 
@@ -61,11 +61,12 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
   {COMPOSED_MONAD}             { return COMPOSED_MONAD; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
+  {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
+  {SYMBOL}                     { return SYMBOL; }
+//  "`"$                         { return SYMBOL; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
   {COMMENT2}                   { return COMMENT; }
-  {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
-  {SYMBOL}                     { return SYMBOL; }
   {VERB}/{ID_START}            { return VERB;}
   {VERB}/-[0-9]                { return VERB;}
   {VERB}                       { return VERB;}
@@ -93,6 +94,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {CHAR_VECTOR}                { return STRING; }
 
   ":"                          { return COLON; }
+  "`"                          { return SYMBOL; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }

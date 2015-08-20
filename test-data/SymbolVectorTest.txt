@@ -1,3 +1,12 @@
+0#`
+------------>
+Element(DYAD)
+  PsiElement(KTokenType.number)('0')
+  PsiElement(KTokenType.verb)('#')
+  PsiElement(KTokenType.symbol)('`')
+============|
+
+
 ``
 ------------>
 PsiElement(KTokenType.symbol_vector)('``')

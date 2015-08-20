@@ -1,3 +1,20 @@
+!0
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('!')
+  PsiElement(KTokenType.number)('0')
+============|
+
+
+0#0.0
+------------>
+Element(DYAD)
+  PsiElement(KTokenType.number)('0')
+  PsiElement(KTokenType.verb)('#')
+  PsiElement(KTokenType.number)('0.0')
+============|
+
+
 1 -2
 ------------>
 PsiElement(KTokenType.number_vector)('1 -2')

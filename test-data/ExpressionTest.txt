@@ -60,3 +60,46 @@ Element(LIST)
   PsiElement(KTokenType.;)(';')
   PsiElement(KTokenType.symbol_vector)('`a`bc')
   PsiElement(KTokenType.))(')')
+============|
+
+
+~*@[!:;$x;:]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('~')
+  Element(MONAD)
+    PsiElement(KTokenType.verb)('*')
+    Element(TRAP)
+      PsiElement(KTokenType.@)('@')
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.composed_monad)('!:')
+      PsiElement(KTokenType.;)(';')
+      Element(MONAD)
+        PsiElement(KTokenType.verb)('$')
+        PsiElement(KTokenType.identifier)('x')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.:)(':')
+      PsiElement(KTokenType.])(']')
+============|
+
+
+~*.[!:;($x);:]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('~')
+  Element(MONAD)
+    PsiElement(KTokenType.verb)('*')
+    Element(TRAP)
+      PsiElement(KTokenType..)('.')
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.composed_monad)('!:')
+      PsiElement(KTokenType.;)(';')
+      Element(GROUP)
+        PsiElement(KTokenType.()('(')
+        Element(MONAD)
+          PsiElement(KTokenType.verb)('$')
+          PsiElement(KTokenType.identifier)('x')
+        PsiElement(KTokenType.))(')')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.:)(':')
+      PsiElement(KTokenType.])(']')

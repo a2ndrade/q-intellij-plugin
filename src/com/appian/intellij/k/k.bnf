@@ -62,7 +62,7 @@
     plus='+'
     comma=','
     dash='-'
-    period='.'
+    dot='.'
     colon=':'
     semicolon=';'
     less_than='<'
@@ -133,6 +133,9 @@ private E4 ::= control
              | E5
 private E5 ::= value
              | result
+private E6 ::= E5
+             | verb+
+             | composed_monad
 
 private separator ::= semicolon | newline
 
@@ -149,7 +152,7 @@ private monad_op ::= verb | derived_verb | noun_and_op
 
 private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
-private noun_and_op ::= conditional | indexing | group | id | lambda | list
+private noun_and_op ::= trap | conditional | indexing | group | id | lambda | list
 //private compound_expr ::= lambda | indexing | list
 
 private vector ::= symbol_vector | number_vector | string
@@ -158,7 +161,7 @@ list ::= open_paren ([E3] separator [E3])* close_paren
 private atom ::= symbol | number | char
 lambda ::= open_brace [index] E1* close_brace
 
-indexing ::= (verb | conditional | group | id | lambda | list) index+
+indexing ::= (verb | dot | at | trap | conditional | group | id | lambda | list) index+
 //indexing ::= (verb | noun_and_op) index
 index ::= open_bracket E2* close_bracket
 control ::= (if | do | while) index
@@ -176,3 +179,5 @@ conditional ::= colon index
 result ::= colon E5
 
 private verb_or_colon ::= verb | colon
+
+trap ::= (dot | at) open_bracket E6 separator E3 separator colon close_bracket

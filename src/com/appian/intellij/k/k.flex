@@ -67,6 +67,10 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
   {COMMENT2}                   { return COMMENT; }
+
+  "."/"["                      { return DOT; }
+  "@"/"["                      { return AT; }
+
   {VERB}/{ID_START}            { return VERB;}
   {VERB}/-[0-9]                { return VERB;}
   {VERB}                       { return VERB;}

@@ -11,7 +11,7 @@ Element(INDEXING)
 .[;]
 ------------>
 Element(INDEXING)
-  PsiElement(KTokenType.verb)('.')
+  PsiElement(KTokenType..)('.')
   Element(INDEX)
     PsiElement(KTokenType.[)('[')
     PsiElement(KTokenType.;)(';')
@@ -118,3 +118,9 @@ Element(INDEXING)
     PsiElement(KTokenType.;)(';')
     PsiElement(KTokenType.verb)('+')
     PsiElement(KTokenType.])(']')
+============|
+
+
+.[{{x}};1;:][1][0]
+------------>
+d

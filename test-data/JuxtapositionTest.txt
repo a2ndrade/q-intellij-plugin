@@ -72,3 +72,25 @@ a 1
 Element(MONAD)
   PsiElement(KTokenType.identifier)('a')
   PsiElement(KTokenType.number)('1')
+============|
+
+
+.[{{x}};1;:] 2
+------------>
+Element(MONAD)
+  Element(TRAP)
+    PsiElement(KTokenType..)('.')
+    PsiElement(KTokenType.[)('[')
+    Element(LAMBDA)
+      PsiElement(KTokenType.{)('{')
+      Element(LAMBDA)
+        PsiElement(KTokenType.{)('{')
+        PsiElement(KTokenType.identifier)('x')
+        PsiElement(KTokenType.})('}')
+      PsiElement(KTokenType.})('}')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.number)('1')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.:)(':')
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.number)('2')

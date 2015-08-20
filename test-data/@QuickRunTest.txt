@@ -1,0 +1,6 @@
+("\\mkdir -p \"";"\\mkdir \"")
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(',')
+  PsiElement(KTokenType.char)('"a"')
+============|

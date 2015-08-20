@@ -56,7 +56,7 @@ PsiElement(KTokenType.char)('"\n"')
 "\"
 ------------>
 Element(FILE)
-  PsiErrorElement:<assignment>, <control>, <dyad>, <indexing>, <monad>, <projection>, KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.char, KTokenType.comment, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector or KTokenType.{ expected, got '"'
+  PsiErrorElement:<control>, <dyad>, <indexing>, <monad>, <projection>, KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.char, KTokenType.comment, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector or KTokenType.{ expected, got '"'
     PsiElement(BAD_CHARACTER)('"')
   PsiElement(BAD_CHARACTER)('\')
   PsiElement(BAD_CHARACTER)('"')
@@ -67,5 +67,5 @@ Element(FILE)
 ------------>
 Element(FILE)
   PsiElement(KTokenType.string)('""')
-  PsiErrorElement:<assignment>, <control>, <dyad>, <indexing>, <monad>, <projection>, KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.char, KTokenType.comment, KTokenType.derived_verb, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.verb or KTokenType.{ expected, got '"'
+  PsiErrorElement:<control>, <dyad>, <indexing>, <monad>, <projection>, KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.char, KTokenType.comment, KTokenType.derived_verb, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.verb or KTokenType.{ expected, got '"'
     PsiElement(BAD_CHARACTER)('"')

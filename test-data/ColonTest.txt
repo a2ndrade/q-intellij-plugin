@@ -37,22 +37,90 @@ Element(ASSIGNMENT)
 
 x+:y
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)(',')
-  PsiElement(KTokenType.char)('"a"')
+Element(ASSIGNMENT)
+  PsiElement(KTokenType.identifier)('x')
+  PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.identifier)('y')
 ============|
 
 
 x[i],:y
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)(',')
-  PsiElement(KTokenType.number)('3.1416')
+Element(ASSIGNMENT)
+  PsiElement(KTokenType.identifier)('x')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('i')
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.composed_monad)(',:')
+  PsiElement(KTokenType.identifier)('y')
 ============|
 
 
 x::3
 ------------>
+Element(GLOBAL_ASSIGNMENT)
+  PsiElement(KTokenType.identifier)('x')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.number)('3')
+============|
+
+
+:x:::[1;2;3]
+------------>
+Element(RESULT)
+  PsiElement(KTokenType.:)(':')
+  Element(GLOBAL_ASSIGNMENT)
+    PsiElement(KTokenType.identifier)('x')
+    PsiElement(KTokenType.:)(':')
+    PsiElement(KTokenType.:)(':')
+    Element(CONDITIONAL)
+      PsiElement(KTokenType.:)(':')
+      Element(INDEX)
+        PsiElement(KTokenType.[)('[')
+        PsiElement(KTokenType.number)('1')
+        PsiElement(KTokenType.;)(';')
+        PsiElement(KTokenType.number)('2')
+        PsiElement(KTokenType.;)(';')
+        PsiElement(KTokenType.number)('3')
+        PsiElement(KTokenType.])(']')
+============|
+
+
+0:f
+------------>
 Element(MONAD)
-  PsiElement(KTokenType.verb)(',')
-  PsiElement(KTokenType.number)('3.1416')
+  PsiElement(KTokenType.identifier_sys)('0:')
+  PsiElement(KTokenType.identifier)('f')
+============|
+
+
+"a" 1:f
+------------>
+Element(DYAD)
+  PsiElement(KTokenType.char)('"a"')
+  PsiElement(KTokenType.identifier_sys)('1:')
+  PsiElement(KTokenType.identifier)('f')
+============|
+
+
+(-;3)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.verb)('-')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.number)('3')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+(-:;3)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.composed_monad)('-:')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.number)('3')
+  PsiElement(KTokenType.))(')')

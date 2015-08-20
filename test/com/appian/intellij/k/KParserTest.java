@@ -26,7 +26,7 @@ import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.testFramework.ParsingTestCase;
 
-public final class KParserTest extends ParsingTestCase {
+public class KParserTest extends ParsingTestCase {
 
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);

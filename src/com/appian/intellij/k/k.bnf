@@ -260,7 +260,7 @@ private E3 ::= E4
 private E4 ::= control
              | comment
              | E5
-private E5 ::= assignment
+private E5 ::= assignment_op
              | result
              | value
 
@@ -297,8 +297,9 @@ private infix ::= verb | identifier_sys | derived_verb
 
 projection ::= noun infix !noun
 
-assignment ::= id [index] [verb] colon E5
-             | id colon colon E5
+private assignment_op ::= global_assignment | assignment
+global_assignment ::= id colon colon E5
+assignment ::= id [index] (colon | composed_monad) E5
 
 conditional ::= colon index
 

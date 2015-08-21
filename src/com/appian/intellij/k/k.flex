@@ -46,12 +46,17 @@ COMPOSED_MONAD=({VERB}{WHITE_SPACE}*)+ ":"
 DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
 
 // Is Next Minus Token a Dyad
-%state INMTD
+%state MINUS
+%state DERIVED_LAMBDA
 
 %%
 
-<INMTD> {
+<MINUS> {
   "-"                          { yybegin(YYINITIAL); return VERB;}
+}
+
+<DERIVED_LAMBDA> {
+  {ADVERB}                     { yybegin(YYINITIAL); return ADVERB;}
 }
 
 <YYINITIAL> {
@@ -84,20 +89,21 @@ DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
   {VERB}                       { return VERB;}
 
   "("                          { return OPEN_PAREN; }
-  ")"/-                        { yybegin(INMTD); return CLOSE_PAREN; }
+  ")"/-                        { yybegin(MINUS); return CLOSE_PAREN; }
   ")"                          { return CLOSE_PAREN; }
   ";"                          { return SEMICOLON; }
   "["                          { return OPEN_BRACKET; }
-  "]"/-                        { yybegin(INMTD); return CLOSE_BRACKET; }
+  "]"/-                        { yybegin(MINUS); return CLOSE_BRACKET; }
   "]"                          { return CLOSE_BRACKET; }
   "{"                          { return OPEN_BRACE; }
+  "}"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACE; }
   "}"                          { return CLOSE_BRACE; }
 
-  {IDENTIFIER_SYS}/-           { yybegin(INMTD); return IDENTIFIER_SYS; }
+  {IDENTIFIER_SYS}/-           { yybegin(MINUS); return IDENTIFIER_SYS; }
   {IDENTIFIER_SYS}             { return IDENTIFIER_SYS; }
-  {IDENTIFIER}/-               { yybegin(INMTD); return IDENTIFIER; }
+  {IDENTIFIER}/-               { yybegin(MINUS); return IDENTIFIER; }
   {IDENTIFIER}                 { return IDENTIFIER; }
-  {NUMBER}/-                   { yybegin(INMTD); return NUMBER; }
+  {NUMBER}/-                   { yybegin(MINUS); return NUMBER; }
   {NUMBER}                     { return NUMBER; }
   {CHAR}                       { return CHAR; }
   {CHAR_VECTOR}                { return STRING; }

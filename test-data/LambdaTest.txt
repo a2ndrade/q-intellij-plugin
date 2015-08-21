@@ -74,3 +74,18 @@ Element(FILE)
     PsiElement(KTokenType.])(']')
   PsiElement(KTokenType.number)('1')
   PsiElement(KTokenType.})('}')
+============|
+
+
+{exec y}/LOG
+------------>
+Element(MONAD)
+  Element(LAMBDA)
+    PsiElement(KTokenType.{)('{')
+    Element(MONAD)
+      PsiElement(KTokenType.identifier)('exec')
+      PsiElement(KTokenType.identifier)('y')
+    PsiElement(KTokenType.})('}')
+    PsiElement(KTokenType.adverb)('/')
+  PsiElement(KTokenType.identifier)('LOG')
+

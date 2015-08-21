@@ -87,6 +87,7 @@
     back_slash_colon='\:'
     tick="'"
     tick_colon="':"
+    adverb="adverb"
 
     // names
     identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
@@ -159,7 +160,7 @@ private vector ::= symbol_vector | number_vector | string
 list ::= open_paren ([E3] separator [E3])* close_paren
 
 private atom ::= number | char // string is not atomic b/c it can be indexed and evaluated
-lambda ::= open_brace [index] E1* close_brace
+lambda ::= open_brace [index] E1* close_brace [adverb]
 
 indexing ::= (symbol |verb | conditional | group | id | lambda | list) index+
 index ::= open_bracket E2* close_bracket

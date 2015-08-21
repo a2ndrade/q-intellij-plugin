@@ -1,5 +1,4 @@
-` / after back tick
-1
+~#r:@'[.d.tum;tl;:]
 ------------>
 Element(FILE)
   PsiElement(KTokenType.symbol)('`')

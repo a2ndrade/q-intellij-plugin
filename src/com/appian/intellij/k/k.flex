@@ -12,7 +12,7 @@ import com.intellij.psi.tree.IElementType;
 %unicode
 %function advance
 %type IElementType
-%eof{  return;
+%eof{  return NEWLINE;
 %eof}
 
 EOL="\r"|"\n"|"\r\n"
@@ -72,7 +72,7 @@ DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
 //  "`"$                         { return SYMBOL; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
-  {COMMENT2}                   { return COMMENT; }
+  {COMMENT2}/{EOL}             { return COMMENT; }
 
 //  "."/"["                      { return DOT; }
 //  "@"/"["                      { return AT; }
@@ -101,6 +101,7 @@ DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
   {CHAR_VECTOR}                { return STRING; }
 
   ":"                          { return COLON; }
+  "'"                          { return TICK; }
   "`"                          { return SYMBOL; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

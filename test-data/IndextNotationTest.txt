@@ -169,3 +169,13 @@ Element(INDEXING)
     PsiElement(KTokenType.;)(';')
     PsiElement(KTokenType.:)(':')
     PsiElement(KTokenType.])(']')
+============|
+
+
+`.a.load[]
+------------>
+Element(INDEXING)
+  PsiElement(KTokenType.symbol)('`.a.load')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.])(']')

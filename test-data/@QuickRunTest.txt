@@ -1,9 +1,8 @@
-`.a.load[]
+- / after verb
 1
 ------------>
 Element(FILE)
-  Element(LOCAL_ASSIGNMENT)
-    PsiElement(KTokenType.identifier)('f')
-    PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.verb)('-')
+  PsiComment(KTokenType.comment)(' / after verb')
   PsiElement(KTokenType.newline)('\n')
   PsiElement(KTokenType.number)('1')

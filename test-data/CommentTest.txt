@@ -15,6 +15,28 @@ Element(FILE)
 ============|
 
 
+` / after symbol
+1
+------------>
+Element(FILE)
+  PsiElement(KTokenType.symbol)('`')
+  PsiComment(KTokenType.comment)(' / after symbol')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.number)('1')
+============|
+
+
+` ` ` ` / after symbol vector
+1
+------------>
+Element(FILE)
+  PsiElement(KTokenType.symbol_vector)('` ` ` `')
+  PsiComment(KTokenType.comment)(' / after symbol vector')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.number)('1')
+============|
+
+
 - / after verb
 1
 ------------>

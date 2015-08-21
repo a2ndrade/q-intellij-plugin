@@ -1,8 +1,8 @@
-- / after verb
+` / after back tick
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.verb)('-')
-  PsiComment(KTokenType.comment)(' / after verb')
+  PsiElement(KTokenType.symbol)('`')
+  PsiComment(KTokenType.comment)(' / after back tick')
   PsiElement(KTokenType.newline)('\n')
   PsiElement(KTokenType.number)('1')

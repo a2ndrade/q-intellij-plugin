@@ -144,12 +144,12 @@ group ::= open_paren E3 close_paren
 
 private id ::= identifier | identifier_sys
 
-private value ::= assignment | dyad | monad_value
+private value ::= signal | assignment | dyad | monad_value
 dyad ::= noun infix value
 private monad_value ::= monad_or_projection | noun
 private monad_or_projection ::= monad | projection
 monad ::= monad_op value
-private monad_op ::= noun_and_op | symbol | verb | derived_verb | colon
+private monad_op ::= noun_and_op | verb | derived_verb | colon
 
 private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
@@ -172,5 +172,7 @@ projection ::= noun infix// !noun
 private assignment ::= global_assignment | local_assignment
 global_assignment ::= id colon colon E5
 local_assignment ::= id [index] (colon E5 | composed_monad [E5])
+
+signal ::= tick E5
 
 conditional ::= colon index

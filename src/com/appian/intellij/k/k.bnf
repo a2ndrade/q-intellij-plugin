@@ -62,7 +62,7 @@
     plus='+'
     comma=','
     dash='-'
-    dot='.'
+    period='.'
     colon=':'
     semicolon=';'
     less_than='<'
@@ -109,6 +109,7 @@
     sixColon='6:'
 
     // assign, define, control and debug
+//    conditional=":"
     if="if"
     do="do"
     while="while"
@@ -130,12 +131,7 @@ private E3 ::= E4
              | composed_monad
 private E4 ::= control
              | comment
-             | E5
-private E5 ::= value
-             | result
-private E6 ::= E5
-             | verb+
-             | composed_monad
+             | value
 
 private separator ::= semicolon | newline
 
@@ -143,16 +139,16 @@ group ::= open_paren E3 close_paren
 
 private id ::= identifier | identifier_sys
 
-private value ::= dyad | assignment | monad_value
+private value ::= assignment | dyad | monad_value
 dyad ::= noun infix value
 private monad_value ::= monad_or_projection | noun
 private monad_or_projection ::= monad | projection
 monad ::= monad_op value
-private monad_op ::= verb | derived_verb | noun_and_op
+private monad_op ::= noun_and_op | verb | derived_verb
 
 private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
-private noun_and_op ::= trap | conditional | indexing | group | id | lambda | list
+private noun_and_op ::= conditional | indexing | group | id | lambda | list
 //private compound_expr ::= lambda | indexing | list
 
 private vector ::= symbol_vector | number_vector | string
@@ -161,7 +157,7 @@ list ::= open_paren ([E3] separator [E3])* close_paren
 private atom ::= symbol | number | char
 lambda ::= open_brace [index] E1* close_brace
 
-indexing ::= (verb | dot | at | trap | conditional | group | id | lambda | list) index+
+indexing ::= (verb | conditional | group | id | lambda | list) index+
 //indexing ::= (verb | noun_and_op) index
 index ::= open_bracket E2* close_bracket
 control ::= (if | do | while) index
@@ -171,13 +167,11 @@ private infix ::= verb | identifier_sys | derived_verb
 projection ::= noun infix !noun
 
 private assignment ::= global_assignment | local_assignment
-global_assignment ::= id colon colon E5
-local_assignment ::= id [index] (colon | composed_monad) E5
+global_assignment ::= id '::' value
+local_assignment ::= id [index] (colon | composed_monad) [value]
 
 conditional ::= colon index
 
-result ::= colon E5
+//result ::= ':' E5
 
-private verb_or_colon ::= verb | colon
-
-trap ::= (dot | at) open_bracket E6 separator E3 separator colon close_bracket
+//private verb_or_colon ::= verb | colon

@@ -35,12 +35,12 @@ C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE}*)+)
-SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}?{SYMBOL})+
-VERB=[!#$%&*+,-.<=>?@\^_|~]
+SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
+VERB=[:!#$%&*+,-.<=>?@\^_|~]
 ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 
 // function composition
-COMPOSED_MONAD={VERB}+ ":"
+COMPOSED_MONAD=({VERB}{WHITE_SPACE}*)+ ":"
 
 // higher-order functions
 DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
@@ -59,7 +59,13 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {NEWLINE}+                   { return NEWLINE; }
   ^{DIRECTORY}                 { return DIRECTORY; }
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
-  {COMPOSED_MONAD}             { return COMPOSED_MONAD; }
+  ":"/"["                      { return COLON; }
+  "if"/"["                     { return IF; }
+  "do"/"["                     { return DO; }
+  "while"/"["                  { return WHILE; }
+//  "::"/":"                     { return VERB; }
+//  "::"                         { return VERB; }
+  {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
   {SYMBOL}                     { return SYMBOL; }
@@ -68,8 +74,8 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   ^{COMMENT1}                  { return COMMENT; }
   {COMMENT2}                   { return COMMENT; }
 
-  "."/"["                      { return DOT; }
-  "@"/"["                      { return AT; }
+//  "."/"["                      { return DOT; }
+//  "@"/"["                      { return AT; }
 
   {VERB}/{ID_START}            { return VERB;}
   {VERB}/-[0-9]                { return VERB;}
@@ -84,9 +90,6 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   "]"                          { return CLOSE_BRACKET; }
   "{"                          { return OPEN_BRACE; }
   "}"                          { return CLOSE_BRACE; }
-  "if"/"["                     { return IF; }
-  "do"/"["                     { return DO; }
-  "while"/"["                  { return WHILE; }
 
   {IDENTIFIER_SYS}/-           { yybegin(INMTD); return IDENTIFIER_SYS; }
   {IDENTIFIER_SYS}             { return IDENTIFIER_SYS; }
@@ -97,7 +100,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {CHAR}                       { return CHAR; }
   {CHAR_VECTOR}                { return STRING; }
 
-  ":"                          { return COLON; }
+//  ":"                          { return COLON; }
   "`"                          { return SYMBOL; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

@@ -15,22 +15,23 @@ Element(CONDITIONAL)
 
 x:y
 ------------>
-Element(LOCAL_ASSIGNMENT)
+Element(DYAD)
   PsiElement(KTokenType.identifier)('x')
-  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.verb)(':')
   PsiElement(KTokenType.identifier)('y')
 ============|
 
 
 x[i]:y
 ------------>
-Element(LOCAL_ASSIGNMENT)
-  PsiElement(KTokenType.identifier)('x')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
-    PsiElement(KTokenType.identifier)('i')
-    PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.:)(':')
+Element(DYAD)
+  Element(INDEXING)
+    PsiElement(KTokenType.identifier)('x')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.identifier)('i')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.verb)(':')
   PsiElement(KTokenType.identifier)('y')
 ============|
 
@@ -66,30 +67,8 @@ x::3
 ------------>
 Element(GLOBAL_ASSIGNMENT)
   PsiElement(KTokenType.identifier)('x')
-  PsiElement(KTokenType.:)(':')
-  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.composed_monad)('::')
   PsiElement(KTokenType.number)('3')
-============|
-
-
-:x:::[1;2;3]
------------->
-Element(RESULT)
-  PsiElement(KTokenType.:)(':')
-  Element(GLOBAL_ASSIGNMENT)
-    PsiElement(KTokenType.identifier)('x')
-    PsiElement(KTokenType.:)(':')
-    PsiElement(KTokenType.:)(':')
-    Element(CONDITIONAL)
-      PsiElement(KTokenType.:)(':')
-      Element(INDEX)
-        PsiElement(KTokenType.[)('[')
-        PsiElement(KTokenType.number)('1')
-        PsiElement(KTokenType.;)(';')
-        PsiElement(KTokenType.number)('2')
-        PsiElement(KTokenType.;)(';')
-        PsiElement(KTokenType.number)('3')
-        PsiElement(KTokenType.])(']')
 ============|
 
 
@@ -134,6 +113,26 @@ Element(LIST)
 
 :r
 ------------>
-Element(RESULT)
-  PsiElement(KTokenType.:)(':')
+Element(MONAD)
+  PsiElement(KTokenType.verb)(':')
   PsiElement(KTokenType.identifier)('r')
+============|
+
+
+:x:::[1;2;3]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)(':')
+  Element(GLOBAL_ASSIGNMENT)
+    PsiElement(KTokenType.identifier)('x')
+    PsiElement(KTokenType.composed_monad)('::')
+    Element(CONDITIONAL)
+      PsiElement(KTokenType.:)(':')
+      Element(INDEX)
+        PsiElement(KTokenType.[)('[')
+        PsiElement(KTokenType.number)('1')
+        PsiElement(KTokenType.;)(';')
+        PsiElement(KTokenType.number)('2')
+        PsiElement(KTokenType.;)(';')
+        PsiElement(KTokenType.number)('3')
+        PsiElement(KTokenType.])(']')

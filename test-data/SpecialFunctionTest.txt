@@ -35,8 +35,8 @@ if []
 while []
 ------------>
 Element(FILE)
-  Element(CONDITIONAL)
-    PsiElement(KTokenType.:)(':')
+  Element(INDEXING)
+    PsiElement(KTokenType.verb)(':')
     Element(INDEX)
       PsiElement(KTokenType.[)('[')
       PsiElement(KTokenType.])(']')

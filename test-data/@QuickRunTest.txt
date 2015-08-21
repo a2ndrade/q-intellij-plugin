@@ -1,22 +1,14 @@
-.[;]
-/.[{{x}};1;:][1][0]
+$:
 ------------>
 Element(MONAD)
-  PsiElement(KTokenType.verb)('~')
-  Element(MONAD)
-    PsiElement(KTokenType.verb)('*')
-    Element(TRAP)
-      PsiElement(KTokenType..)('.')
+  PsiElement(KTokenType.verb)(':')
+  Element(CONDITIONAL)
+    PsiElement(KTokenType.:)(':')
+    Element(INDEX)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.composed_monad)('!:')
+      PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.;)(';')
-      Element(GROUP)
-        PsiElement(KTokenType.()('(')
-        Element(MONAD)
-          PsiElement(KTokenType.verb)('$')
-          PsiElement(KTokenType.identifier)('x')
-        PsiElement(KTokenType.))(')')
+      PsiElement(KTokenType.number)('2')
       PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.:)(':')
+      PsiElement(KTokenType.number)('3')
       PsiElement(KTokenType.])(']')
-============|

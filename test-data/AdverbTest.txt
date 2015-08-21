@@ -21,3 +21,15 @@ Element(DYAD)
   PsiElement(KTokenType.identifier)('a')
   PsiElement(KTokenType.derived_verb)('+/\/:\:':'')
   PsiElement(KTokenType.identifier)('b')
+============|
+
+
+(::;*>#:')
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.derived_verb)('*>#:'')
+  PsiElement(KTokenType.))(')')

@@ -1,14 +1,9 @@
-$:
+`.a.load[]
+1
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)(':')
-  Element(CONDITIONAL)
-    PsiElement(KTokenType.:)(':')
-    Element(INDEX)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
-      PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.number)('2')
-      PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.number)('3')
-      PsiElement(KTokenType.])(']')
+Element(FILE)
+  Element(LOCAL_ASSIGNMENT)
+    PsiElement(KTokenType.identifier)('f')
+    PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.number)('1')

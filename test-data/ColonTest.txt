@@ -15,23 +15,22 @@ Element(CONDITIONAL)
 
 x:y
 ------------>
-Element(DYAD)
+Element(LOCAL_ASSIGNMENT)
   PsiElement(KTokenType.identifier)('x')
-  PsiElement(KTokenType.verb)(':')
+  PsiElement(KTokenType.:)(':')
   PsiElement(KTokenType.identifier)('y')
 ============|
 
 
 x[i]:y
 ------------>
-Element(DYAD)
-  Element(INDEXING)
-    PsiElement(KTokenType.identifier)('x')
-    Element(INDEX)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.identifier)('i')
-      PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.verb)(':')
+Element(LOCAL_ASSIGNMENT)
+  PsiElement(KTokenType.identifier)('x')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('i')
+    PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.:)(':')
   PsiElement(KTokenType.identifier)('y')
 ============|
 
@@ -67,7 +66,8 @@ x::3
 ------------>
 Element(GLOBAL_ASSIGNMENT)
   PsiElement(KTokenType.identifier)('x')
-  PsiElement(KTokenType.composed_monad)('::')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.:)(':')
   PsiElement(KTokenType.number)('3')
 ============|
 
@@ -114,7 +114,7 @@ Element(LIST)
 :r
 ------------>
 Element(MONAD)
-  PsiElement(KTokenType.verb)(':')
+  PsiElement(KTokenType.:)(':')
   PsiElement(KTokenType.identifier)('r')
 ============|
 
@@ -122,10 +122,11 @@ Element(MONAD)
 :x:::[1;2;3]
 ------------>
 Element(MONAD)
-  PsiElement(KTokenType.verb)(':')
+  PsiElement(KTokenType.:)(':')
   Element(GLOBAL_ASSIGNMENT)
     PsiElement(KTokenType.identifier)('x')
-    PsiElement(KTokenType.composed_monad)('::')
+    PsiElement(KTokenType.:)(':')
+    PsiElement(KTokenType.:)(':')
     Element(CONDITIONAL)
       PsiElement(KTokenType.:)(':')
       Element(INDEX)
@@ -136,3 +137,15 @@ Element(MONAD)
         PsiElement(KTokenType.;)(';')
         PsiElement(KTokenType.number)('3')
         PsiElement(KTokenType.])(']')
+============|
+
+
+f+:
+1
+------------>
+Element(FILE)
+  Element(LOCAL_ASSIGNMENT)
+    PsiElement(KTokenType.identifier)('f')
+    PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.number)('1')

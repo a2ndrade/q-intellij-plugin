@@ -23,7 +23,7 @@ NEWLINE=\r|\n|\r\n
 COMMENT1="/" [^\r\n]* {EOL}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
-DIRECTORY={WHITE_SPACE}* "\\d" {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{EOL})+
+DIRECTORY={WHITE_SPACE}* "\\"[dl] {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{EOL})+
 IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
 IDENTIFIER_SYS="_" [._a-zA-Z0-9]*|[0-6] ":"
 ID={IDENTIFIER}|{IDENTIFIER_SYS}
@@ -36,14 +36,14 @@ CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE}*)+)
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
-VERB=[:!#$%&*+,-.<=>?@\^_|~]
+VERB=[!#$%&*+,-.<=>?@\^_|~]
 ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 
 // function composition
 COMPOSED_MONAD=({VERB}{WHITE_SPACE}*)+ ":"
 
 // higher-order functions
-DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
+DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
 
 // Is Next Minus Token a Dyad
 %state INMTD
@@ -65,8 +65,8 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   "while"/"["                  { return WHILE; }
 //  "::"/":"                     { return VERB; }
 //  "::"                         { return VERB; }
-  {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
+  {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
   {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
   {SYMBOL}                     { return SYMBOL; }
 //  "`"$                         { return SYMBOL; }
@@ -100,7 +100,7 @@ DERIVED_VERB=({ID}|{VERB})+{ADVERB}+
   {CHAR}                       { return CHAR; }
   {CHAR_VECTOR}                { return STRING; }
 
-//  ":"                          { return COLON; }
+  ":"                          { return COLON; }
   "`"                          { return SYMBOL; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

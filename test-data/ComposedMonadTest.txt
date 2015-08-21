@@ -47,9 +47,13 @@ Element(FILE)
 
 
 -3 --: 4
+1
 ------------>
 Element(FILE)
   PsiElement(KTokenType.number)('-3')
   PsiElement(KTokenType.composed_monad)('--:')
-  PsiErrorElement:'4' unexpected
-    PsiElement(KTokenType.number)('4')
+  PsiElement(KTokenType.number)('4')
+  PsiErrorElement:'
+' unexpected
+    PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.number)('1')

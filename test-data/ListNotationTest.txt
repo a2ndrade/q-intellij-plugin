@@ -89,3 +89,23 @@ Element(MONAD)
 Element(MONAD)
   PsiElement(KTokenType.verb)(',')
   PsiElement(KTokenType.number)('3.1416')
+============|
+
+
+(+;-';*/:;::;+:;:)
+------------>
+Element(LIST)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.verb)('+')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.derived_verb)('-'')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.derived_verb)('*/:')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.composed_monad)('+:')
+  PsiElement(KTokenType.;)(';')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.))(')')

@@ -122,16 +122,21 @@
 root ::= E0+ <<eof>>
 private E0 ::= directory
              | E1
+             | C0 separator
 private E1 ::= separator
              | E4
 private E2 ::= separator
              | E3
 private E3 ::= E4
-             | verb+
-             | composed_monad
+             | C0
 private E4 ::= control
              | comment
-             | value
+             | E5
+private E5 ::= value
+private C0 ::= verb+
+             | composed_monad
+             | derived_verb
+             | colon [colon]
 
 private separator ::= semicolon | newline
 
@@ -144,12 +149,11 @@ dyad ::= noun infix value
 private monad_value ::= monad_or_projection | noun
 private monad_or_projection ::= monad | projection
 monad ::= monad_op value
-private monad_op ::= noun_and_op | verb | derived_verb
+private monad_op ::= noun_and_op | verb | derived_verb | colon
 
 private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
-private noun_and_op ::= conditional | indexing | group | id | lambda | list
-//private compound_expr ::= lambda | indexing | list
+private noun_and_op ::= symbol | conditional | indexing | group | id | lambda | list
 
 private vector ::= symbol_vector | number_vector | string
 list ::= open_paren ([E3] separator [E3])* close_paren
@@ -157,21 +161,16 @@ list ::= open_paren ([E3] separator [E3])* close_paren
 private atom ::= symbol | number | char
 lambda ::= open_brace [index] E1* close_brace
 
-indexing ::= (verb | conditional | group | id | lambda | list) index+
-//indexing ::= (verb | noun_and_op) index
+indexing ::= (symbol | verb | conditional | group | id | lambda | list) index+
 index ::= open_bracket E2* close_bracket
 control ::= (if | do | while) index
 
 private infix ::= verb | identifier_sys | derived_verb
 
-projection ::= noun infix !noun
+projection ::= noun infix// !noun
 
 private assignment ::= global_assignment | local_assignment
-global_assignment ::= id '::' value
-local_assignment ::= id [index] (colon | composed_monad) [value]
+global_assignment ::= id '::' E5
+local_assignment ::= id [index] (colon E5 | composed_monad [E5])
 
 conditional ::= colon index
-
-//result ::= ':' E5
-
-//private verb_or_colon ::= verb | colon

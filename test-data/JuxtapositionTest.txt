@@ -99,6 +99,15 @@ Element(MONAD)
       PsiElement(KTokenType.;)(';')
       PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.verb)(':')
+      PsiElement(KTokenType.:)(':')
       PsiElement(KTokenType.])(']')
   PsiElement(KTokenType.number)('1')
+============|
+
+
+`abc 1
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.symbol)('`abc')
+  PsiElement(KTokenType.number)('1')
+

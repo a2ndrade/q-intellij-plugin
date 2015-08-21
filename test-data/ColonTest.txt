@@ -1,6 +1,6 @@
 :[a;b;c]
 ------------>
-Element(CONDITIONAL)
+Element(INDEXING)
   PsiElement(KTokenType.:)(':')
   Element(INDEX)
     PsiElement(KTokenType.[)('[')
@@ -127,7 +127,7 @@ Element(MONAD)
     PsiElement(KTokenType.identifier)('x')
     PsiElement(KTokenType.:)(':')
     PsiElement(KTokenType.:)(':')
-    Element(CONDITIONAL)
+    Element(INDEXING)
       PsiElement(KTokenType.:)(':')
       Element(INDEX)
         PsiElement(KTokenType.[)('[')

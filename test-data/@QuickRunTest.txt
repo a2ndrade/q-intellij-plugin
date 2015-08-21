@@ -1,7 +1,20 @@
-~#r:@'[.d.tum;tl;:]
+/r:.[type m;(0;wd@w);:;:[@c;,:;::][d]w:&~(#m)=wd:m[;`id]?/:c,()]
+:[@c;,:;::][d]
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.symbol)('`')
-  PsiComment(KTokenType.comment)(' / after back tick')
-  PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+Element(MONAD)
+  PsiElement(KTokenType.verb)('~')
+  Element(MONAD)
+    PsiElement(KTokenType.verb)('#')
+    Element(LOCAL_ASSIGNMENT)
+      PsiElement(KTokenType.identifier)('r')
+      PsiElement(KTokenType.:)(':')
+      Element(INDEXING)
+        PsiElement(KTokenType.derived_verb)('@'')
+        Element(INDEX)
+          PsiElement(KTokenType.[)('[')
+          PsiElement(KTokenType.identifier)('.d.tum')
+          PsiElement(KTokenType.;)(';')
+          PsiElement(KTokenType.identifier)('tl')
+          PsiElement(KTokenType.;)(';')
+          PsiElement(KTokenType.:)(':')
+          PsiElement(KTokenType.])(']')

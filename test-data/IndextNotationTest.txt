@@ -179,3 +179,25 @@ Element(INDEXING)
   Element(INDEX)
     PsiElement(KTokenType.[)('[')
     PsiElement(KTokenType.])(']')
+============|
+
+
+~#r:@'[.d.tum;tl;:]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.verb)('~')
+  Element(MONAD)
+    PsiElement(KTokenType.verb)('#')
+    Element(LOCAL_ASSIGNMENT)
+      PsiElement(KTokenType.identifier)('r')
+      PsiElement(KTokenType.:)(':')
+      Element(INDEXING)
+        PsiElement(KTokenType.derived_verb)('@'')
+        Element(INDEX)
+          PsiElement(KTokenType.[)('[')
+          PsiElement(KTokenType.identifier)('.d.tum')
+          PsiElement(KTokenType.;)(';')
+          PsiElement(KTokenType.identifier)('tl')
+          PsiElement(KTokenType.;)(';')
+          PsiElement(KTokenType.:)(':')
+          PsiElement(KTokenType.])(']')

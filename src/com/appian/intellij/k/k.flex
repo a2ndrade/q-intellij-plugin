@@ -43,7 +43,7 @@ ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 COMPOSED_MONAD=({VERB}{WHITE_SPACE}*)+ ":"
 
 // higher-order functions
-DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
+DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
 
 // Is Next Minus Token a Dyad
 %state MINUS
@@ -68,6 +68,7 @@ DERIVED_VERB=({ID}|{VERB}|":")+{ADVERB}+
   "if"/"["                     { return IF; }
   "do"/"["                     { return DO; }
   "while"/"["                  { return WHILE; }
+  {ADVERB}/"["                 { return ADVERB; }
 //  "::"/":"                     { return VERB; }
 //  "::"                         { return VERB; }
   {DERIVED_VERB}               { return DERIVED_VERB; }

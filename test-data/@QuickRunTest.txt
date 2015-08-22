@@ -16,3 +16,6 @@ STANDARD_CONV:{[d;sf;ef;csf;cf;cfx]
 
 ------------>
 @
+
+
+a = b + a

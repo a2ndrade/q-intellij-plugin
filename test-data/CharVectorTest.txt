@@ -30,16 +30,6 @@ PsiElement(KTokenType.string)('" \"multi\"-\n line"')
 ============|
 
 
-" \ "
------------->
-Element(FILE)
-  PsiErrorElement:<dyad>, <indexing>, <monad>, KTokenType.', KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.\, KTokenType.char, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.verb or KTokenType.{ expected, got '"'
-    PsiElement(BAD_CHARACTER)('"')
-  PsiElement(KTokenType.\)('\')
-  PsiElement(BAD_CHARACTER)('"')
-============|
-
-
 " " "
 ------------>
 Element(FILE)

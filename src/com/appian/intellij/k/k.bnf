@@ -153,9 +153,9 @@ private monad_op ::= noun_and_op | verb | derived_verb | colon
 
 private noun ::= noun_only | noun_and_op
 private noun_only ::= vector | atom
-private noun_and_op ::= simple_indexing | indexing | noun_and_op_or_indexing
+private noun_and_op ::= simple_indexing | indexing | op_and_index_target
 
-private noun_and_op_or_indexing ::= symbol | id | lambda | list | group
+private op_and_index_target ::= symbol | id | lambda | list | group
 
 private vector ::= symbol_vector | number_vector | string
 private atom ::= number | char // symbol is not atomic b/c it can be indexed and evaluated
@@ -163,7 +163,7 @@ private atom ::= number | char // symbol is not atomic b/c it can be indexed and
 list ::= open_paren ([E3] separator [E3])* close_paren
 lambda ::= open_brace [index] E1* close_brace
 simple_indexing ::= (verb | derived_verb | control) index+ {elementType=indexing}
-indexing ::= noun_and_op_or_indexing index+
+indexing ::= op_and_index_target index+
 index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 

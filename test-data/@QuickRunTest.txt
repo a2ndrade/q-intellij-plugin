@@ -1,11 +1,18 @@
-{}'[ids]
+A:{
+ :[(~#cf)|(~#wnn)
+  : .dot4[(#d)#_n;(wnn;ef);:;d[wnn;sf]]
+  :[csf
+   : .dot4[(#d)#_n;(wnn;ef);:; .dot4[d;(wnn;cf);:;+cfx@'+d[wnn;cf]][wnn;sf]]
+   : .dot4[v;(wnn;cf);:;+cfx@'+(v: .dot4[(#d)#_n;(wnn;ef);:;d[wnn;sf]])[wnn;cf]]]]}
+\
+STANDARD_CONV:{[d;sf;ef;csf;cf;cfx]
+ if[~#d; :()]
+ if[@d
+  :[d~_n
+   :d
+   :[csf
+    : .at4[_n;ef;:; .at4[d;cf;:;cfx@'d[cf]][sf]]
+    : .at4[v;cf;:;cfx@'(v: .at4[_n;ef;:;d[sf]])[cf]]]]]}
+
 ------------>
-Element(MONAD)
-  Element(LAMBDA)
-    PsiElement(KTokenType.{)('{')
-    PsiElement(KTokenType.})('}')
-  PsiElement(KTokenType.adverb)(''')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
-    PsiElement(KTokenType.identifier)('ids')
-    PsiElement(KTokenType.])(']')
+@

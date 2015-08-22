@@ -98,3 +98,13 @@ Element(FILE)
   PsiComment(KTokenType.comment)(' / after double colon')
   PsiElement(KTokenType.newline)('\n')
   PsiElement(KTokenType.number)('1')
+============|
+
+
+\
+all these
+are comments
+------------>
+Element(FILE)
+  PsiComment(KTokenType.comment)('\')
+  PsiComment(KTokenType.comment)('\nall these\nare comments')

@@ -20,10 +20,12 @@ LINE_WS=[\ \t\f]
 WHITE_SPACE={LINE_WS}+
 NEWLINE=\r|\n|\r\n
 
-COMMENT1="/" [^\r\n]* {EOL}?
+ANY=({NEWLINE}|.)*
+
+COMMENT1="/" [^\r\n]* {NEWLINE}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
-DIRECTORY={WHITE_SPACE}* "\\"[dl] {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{EOL})+
+DIRECTORY={WHITE_SPACE}* "\\"[dl] {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{NEWLINE})+
 IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
 IDENTIFIER_SYS="_" [._a-zA-Z0-9]*|[0-6] ":"
 ID={IDENTIFIER}|{IDENTIFIER_SYS}
@@ -48,6 +50,7 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
 // Is Next Minus Token a Dyad
 %state MINUS
 %state DERIVED_LAMBDA
+%state ESCAPE
 
 %%
 
@@ -57,6 +60,10 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
 
 <DERIVED_LAMBDA> {
   {ADVERB}                     { yybegin(YYINITIAL); return ADVERB;}
+}
+
+<ESCAPE> {
+  {ANY}                        { yybegin(YYINITIAL); return COMMENT; }
 }
 
 <YYINITIAL> {
@@ -77,7 +84,7 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
   {SYMBOL}                     { return SYMBOL; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
-  {COMMENT2}/{EOL}             { return COMMENT; }
+  {COMMENT2}/{NEWLINE}         { return COMMENT; }
   {COMMENT2}                   { return COMMENT; }
 
 
@@ -108,6 +115,7 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
 
   ":"                          { return COLON; }
   "'"                          { return TICK; }
+  "\\"/{NEWLINE}               { yybegin(ESCAPE); return COMMENT; }
   "\\"                         { return BACK_SLASH; }
   "`"                          { return SYMBOL; }
 

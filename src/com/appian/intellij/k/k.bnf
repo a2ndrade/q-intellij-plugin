@@ -121,6 +121,10 @@
   ]
 }
 
+/*{
+   consumeTokenMethod(".*")="consumeTokenFast"
+}*/
+
 root ::= E0+ <<eof>>
 private E0 ::= directory
              | E1
@@ -144,10 +148,8 @@ group ::= open_paren E3 close_paren
 
 private id ::= identifier | identifier_sys
 
-private value ::= signal | trace | assignment | dyad | monad_value
+private value ::= signal | trace | assignment | dyad | monad | noun
 dyad ::= noun infix [value] // projection
-private monad_value ::= monad_or_projection | noun
-private monad_or_projection ::= monad //| projection
 monad ::= monad_op ((adverb index) | ([adverb] value))
 private monad_op ::= noun_and_op | verb | derived_verb | colon
 
@@ -166,8 +168,6 @@ index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 
 private infix ::= verb | identifier_sys | derived_verb
-
-//projection ::= noun infix// !noun
 
 private assignment ::= global_assignment | local_assignment
 global_assignment ::= id colon colon E5

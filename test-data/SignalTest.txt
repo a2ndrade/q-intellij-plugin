@@ -8,7 +8,7 @@ Element(SIGNAL)
 
 if[1;'2;0]
 ------------>
-Element(CONTROL)
+Element(INDEXING)
   PsiElement(KTokenType.if)('if')
   Element(INDEX)
     PsiElement(KTokenType.[)('[')

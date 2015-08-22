@@ -94,6 +94,7 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
   ")"                          { return CLOSE_PAREN; }
   ";"                          { return SEMICOLON; }
   "["                          { return OPEN_BRACKET; }
+  "]"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACKET; }
   "]"/-                        { yybegin(MINUS); return CLOSE_BRACKET; }
   "]"                          { return CLOSE_BRACKET; }
   "{"                          { return OPEN_BRACE; }
@@ -111,6 +112,7 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
 
   ":"                          { return COLON; }
   "'"                          { return TICK; }
+  "\\"                         { return BACK_SLASH; }
   "`"                          { return SYMBOL; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

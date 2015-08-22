@@ -105,3 +105,19 @@ Element(MONAD)
         PsiElement(KTokenType.;)(';')
         PsiElement(KTokenType.:)(':')
         PsiElement(KTokenType.])(']')
+============|
+
+
+if[1;\0]
+------------>
+Element(INDEXING)
+  PsiElement(KTokenType.if)('if')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.number)('1')
+    PsiElement(KTokenType.;)(';')
+    Element(TRACE)
+      PsiElement(KTokenType.\)('\')
+      PsiElement(KTokenType.number)('0')
+    PsiElement(KTokenType.])(']')
+

@@ -201,3 +201,22 @@ Element(MONAD)
           PsiElement(KTokenType.;)(';')
           PsiElement(KTokenType.:)(':')
           PsiElement(KTokenType.])(']')
+============|
+
+
+:fn[]/[1;2]
+------------>
+Element(MONAD)
+  PsiElement(KTokenType.:)(':')
+  Element(INDEXING)
+    PsiElement(KTokenType.identifier)('fn')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+    PsiElement(KTokenType.adverb)('/')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.number)('1')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.number)('2')
+      PsiElement(KTokenType.])(']')

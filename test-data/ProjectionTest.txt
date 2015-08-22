@@ -1,6 +1,6 @@
 3 +
 ------------>
-Element(PROJECTION)
+Element(DYAD)
   PsiElement(KTokenType.number)('3')
   PsiElement(KTokenType.verb)('+')
 ============|
@@ -11,7 +11,7 @@ Element(PROJECTION)
 Element(MONAD)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(PROJECTION)
+    Element(DYAD)
       PsiElement(KTokenType.number)('3')
       PsiElement(KTokenType.verb)('+')
     PsiElement(KTokenType.))(')')
@@ -21,7 +21,7 @@ Element(MONAD)
 
 4 _div
 ------------>
-Element(PROJECTION)
+Element(DYAD)
   PsiElement(KTokenType.number)('4')
   PsiElement(KTokenType.identifier_sys)('_div')
 ============|
@@ -29,7 +29,7 @@ Element(PROJECTION)
 
 4_div
 ------------>
-Element(PROJECTION)
+Element(DYAD)
   PsiElement(KTokenType.number)('4')
   PsiElement(KTokenType.identifier_sys)('_div')
 ============|
@@ -40,7 +40,7 @@ Element(PROJECTION)
 Element(MONAD)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(PROJECTION)
+    Element(DYAD)
       PsiElement(KTokenType.number)('4')
       PsiElement(KTokenType.identifier_sys)('_div')
     PsiElement(KTokenType.))(')')
@@ -50,7 +50,7 @@ Element(MONAD)
 
 1+/
 ------------>
-Element(PROJECTION)
+Element(DYAD)
   PsiElement(KTokenType.number)('1')
   PsiElement(KTokenType.derived_verb)('+/')
 ============|
@@ -58,7 +58,7 @@ Element(PROJECTION)
 
 1+/:
 ------------>
-Element(PROJECTION)
+Element(DYAD)
   PsiElement(KTokenType.number)('1')
   PsiElement(KTokenType.derived_verb)('+/:')
 ============|
@@ -69,7 +69,7 @@ Element(PROJECTION)
 Element(MONAD)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(PROJECTION)
+    Element(DYAD)
       PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.derived_verb)('+/')
     PsiElement(KTokenType.))(')')
@@ -82,7 +82,7 @@ Element(MONAD)
 Element(MONAD)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(PROJECTION)
+    Element(DYAD)
       PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.derived_verb)('+/:')
     PsiElement(KTokenType.))(')')

@@ -5,6 +5,14 @@ PsiComment(KTokenType.comment)('/ beginning of line')
 
 
 1 / end of line
+------------>
+Element(FILE)
+  PsiElement(KTokenType.number)('1')
+  PsiComment(KTokenType.comment)(' / end of line')
+============|
+
+
+1 / end of line
 1
 ------------>
 Element(FILE)

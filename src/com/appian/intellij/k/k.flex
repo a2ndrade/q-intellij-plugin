@@ -69,21 +69,17 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
   "do"/"["                     { return DO; }
   "while"/"["                  { return WHILE; }
   {ADVERB}/"["                 { return ADVERB; }
-//  "::"/":"                     { return VERB; }
-//  "::"                         { return VERB; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
   {SYMBOL_VECTOR}/{LINE_WS}"/" { return SYMBOL_VECTOR; }
   {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
   {SYMBOL}/{LINE_WS}"/"        { return SYMBOL; }
   {SYMBOL}                     { return SYMBOL; }
-//  "`"$                         { return SYMBOL; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                  { return COMMENT; }
   {COMMENT2}/{EOL}             { return COMMENT; }
+  {COMMENT2}                   { return COMMENT; }
 
-//  "."/"["                      { return DOT; }
-//  "@"/"["                      { return AT; }
 
   {VERB}/{ID_START}            { return VERB;}
   {VERB}/-[0-9]                { return VERB;}

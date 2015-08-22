@@ -86,6 +86,6 @@ Element(MONAD)
       PsiElement(KTokenType.identifier)('exec')
       PsiElement(KTokenType.identifier)('y')
     PsiElement(KTokenType.})('}')
-    PsiElement(KTokenType.adverb)('/')
+  PsiElement(KTokenType.adverb)('/')
   PsiElement(KTokenType.identifier)('LOG')
 

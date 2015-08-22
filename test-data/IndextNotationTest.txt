@@ -208,11 +208,12 @@ Element(MONAD)
 ------------>
 Element(MONAD)
   PsiElement(KTokenType.:)(':')
-  Element(INDEXING)
-    PsiElement(KTokenType.identifier)('fn')
-    Element(INDEX)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.])(']')
+  Element(MONAD)
+    Element(INDEXING)
+      PsiElement(KTokenType.identifier)('fn')
+      Element(INDEX)
+        PsiElement(KTokenType.[)('[')
+        PsiElement(KTokenType.])(']')
     PsiElement(KTokenType.adverb)('/')
     Element(INDEX)
       PsiElement(KTokenType.[)('[')
@@ -220,3 +221,32 @@ Element(MONAD)
       PsiElement(KTokenType.;)(';')
       PsiElement(KTokenType.number)('2')
       PsiElement(KTokenType.])(']')
+============|
+
+
+@[;_n]'n
+------------>
+Element(MONAD)
+  Element(INDEXING)
+    PsiElement(KTokenType.verb)('@')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.identifier_sys)('_n')
+      PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.adverb)(''')
+  PsiElement(KTokenType.identifier)('n')
+============|
+
+
+{}'[ids]
+------------>
+Element(MONAD)
+  Element(LAMBDA)
+    PsiElement(KTokenType.{)('{')
+    PsiElement(KTokenType.})('}')
+  PsiElement(KTokenType.adverb)(''')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    PsiElement(KTokenType.identifier)('ids')
+    PsiElement(KTokenType.])(']')

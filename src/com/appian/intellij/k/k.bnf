@@ -117,6 +117,7 @@
 
     // punctuation
     newline='regexp:\r|\n|\r\n'
+    comment='comment'
   ]
 }
 
@@ -130,9 +131,7 @@ private E2 ::= separator
              | E3
 private E3 ::= E4
              | C0
-private E4 ::=
-              comment
-             | E5
+private E4 ::= E5
 private E5 ::= value
 private C0 ::= verb+
              | composed_monad
@@ -146,10 +145,10 @@ group ::= open_paren E3 close_paren
 private id ::= identifier | identifier_sys
 
 private value ::= signal | trace | assignment | dyad | monad_value
-dyad ::= noun infix value
+dyad ::= noun infix [value] // projection
 private monad_value ::= monad_or_projection | noun
-private monad_or_projection ::= monad | projection
-monad ::= monad_op value
+private monad_or_projection ::= monad //| projection
+monad ::= monad_op ((adverb index) | ([adverb] value))
 private monad_op ::= noun_and_op | verb | derived_verb | colon
 
 private noun ::= noun_only | noun_and_op
@@ -160,15 +159,15 @@ private vector ::= symbol_vector | number_vector | string
 list ::= open_paren ([E3] separator [E3])* close_paren
 
 private atom ::= number | char // string is not atomic b/c it can be indexed and evaluated
-lambda ::= open_brace [index] E1* close_brace [adverb]
+lambda ::= open_brace [index] E1* close_brace
 
-indexing ::= (symbol |verb | derived_verb | control | group | id | lambda | list) ∞∞index ([adverb] index)*
+indexing ::= (symbol |verb | derived_verb | control | group | id | lambda | list) index+
 index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 
 private infix ::= verb | identifier_sys | derived_verb
 
-projection ::= noun infix// !noun
+//projection ::= noun infix// !noun
 
 private assignment ::= global_assignment | local_assignment
 global_assignment ::= id colon colon E5

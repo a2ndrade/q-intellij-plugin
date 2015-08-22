@@ -50,22 +50,3 @@ PsiElement(KTokenType.char)('"\\"')
 "
 ------------>
 PsiElement(KTokenType.char)('"\n"')
-============|
-
-
-"\"
------------->
-Element(FILE)
-  PsiErrorElement:<dyad>, <indexing>, <monad>, <projection>, KTokenType.', KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.\, KTokenType.char, KTokenType.comment, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.verb or KTokenType.{ expected, got '"'
-    PsiElement(BAD_CHARACTER)('"')
-  PsiElement(KTokenType.\)('\')
-  PsiElement(BAD_CHARACTER)('"')
-============|
-
-
-"""
------------->
-Element(FILE)
-  PsiElement(KTokenType.string)('""')
-  PsiErrorElement:<dyad>, <indexing>, <monad>, <projection>, KTokenType.', KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.\, KTokenType.char, KTokenType.comment, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.directory, KTokenType.identifier, KTokenType.identifier_sys, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.verb or KTokenType.{ expected, got '"'
-    PsiElement(BAD_CHARACTER)('"')

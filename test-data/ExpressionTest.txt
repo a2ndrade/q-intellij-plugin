@@ -2,7 +2,7 @@
 ------------>
 Element(MONAD)
   PsiElement(KTokenType.verb)('*')
-  Element(PROJECTION)
+  Element(DYAD)
     PsiElement(KTokenType.number)('-1')
     PsiElement(KTokenType.verb)('#')
 ============|
@@ -37,7 +37,7 @@ Element(MONAD)
     PsiElement(KTokenType.()('(')
     Element(MONAD)
       PsiElement(KTokenType.verb)('*')
-      Element(PROJECTION)
+      Element(DYAD)
         PsiElement(KTokenType.number)('-1')
         PsiElement(KTokenType.verb)('#')
     PsiElement(KTokenType.))(')')

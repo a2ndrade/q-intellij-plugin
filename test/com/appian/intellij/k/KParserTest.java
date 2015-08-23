@@ -80,7 +80,7 @@ public class KParserTest extends ParsingTestCase {
     final long time = System.currentTimeMillis() - start;
     final String msg = testFileName + ":\t\t\t\t\t\t" + time + "ms\t\t" + content.length();
     final String s = DebugUtil.nodeTreeToString(tree, true);
-    if (s.contains("PsiErrorElement")) {
+    if (hasParseError(s)) {
       throw new RuntimeException(msg);
     } else {
       System.out.println(msg);
@@ -98,8 +98,16 @@ public class KParserTest extends ParsingTestCase {
       final String expression = inOut[0].trim();
       final String actual = parseAsString(expression).trim();
       final String expected = inOut[1].trim();
+      final boolean errorExpected = hasParseError(expected);
+      if (!errorExpected && hasParseError(actual)) {
+        throw new RuntimeException(actual);
+      }
       Assert.assertEquals(expected, actual);
     }
+  }
+
+  private boolean hasParseError(String treeAsString) {
+    return treeAsString.contains("PsiErrorElement");
   }
 
   private String parseAsString(String expression) {

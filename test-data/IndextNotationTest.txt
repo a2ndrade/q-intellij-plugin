@@ -208,7 +208,7 @@ Element(MONAD)
 ------------>
 Element(MONAD)
   PsiElement(KTokenType.:)(':')
-  Element(MONAD)
+  Element(DYAD)
     Element(INDEXING)
       PsiElement(KTokenType.identifier)('fn')
       Element(INDEX)
@@ -226,7 +226,7 @@ Element(MONAD)
 
 @[;_n]'n
 ------------>
-Element(MONAD)
+Element(DYAD)
   Element(INDEXING)
     PsiElement(KTokenType.verb)('@')
     Element(INDEX)
@@ -241,7 +241,7 @@ Element(MONAD)
 
 {}'[ids]
 ------------>
-Element(MONAD)
+Element(DYAD)
   Element(LAMBDA)
     PsiElement(KTokenType.{)('{')
     PsiElement(KTokenType.})('}')

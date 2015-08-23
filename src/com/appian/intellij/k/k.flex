@@ -15,7 +15,7 @@ import com.intellij.psi.tree.IElementType;
 %eof{  return NEWLINE;
 %eof}
 
-EOL="\r"|"\n"|"\r\n"
+//EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WHITE_SPACE={LINE_WS}+
 NEWLINE=\r|\n|\r\n
@@ -43,9 +43,11 @@ ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
 
 // function composition
 COMPOSED_MONAD=({VERB}{WHITE_SPACE}*)+ ":"
+COMPOSED_MONAD2={DERIVED_VERB}{COMPOSED_MONAD}
 
 // higher-order functions
 DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
+DERIVED_VERB2={DERIVED_VERB}?{COMPOSED_MONAD}{ADVERB}+
 
 // Is Next Minus Token a Dyad
 %state MINUS
@@ -76,6 +78,8 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
   "do"/"["                     { return DO; }
   "while"/"["                  { return WHILE; }
   {ADVERB}/"["                 { return ADVERB; }
+  {DERIVED_VERB2}              { return DERIVED_VERB; }
+  {COMPOSED_MONAD2}/[^\[]      { return COMPOSED_MONAD; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
   {SYMBOL_VECTOR}/{LINE_WS}"/" { return SYMBOL_VECTOR; }
@@ -93,6 +97,7 @@ DERIVED_VERB=({ID}|({VERB}":"?))+{ADVERB}+
   {VERB}                       { return VERB;}
 
   "("                          { return OPEN_PAREN; }
+  ")"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_PAREN; }
   ")"/-                        { yybegin(MINUS); return CLOSE_PAREN; }
   ")"                          { return CLOSE_PAREN; }
   ";"                          { return SEMICOLON; }

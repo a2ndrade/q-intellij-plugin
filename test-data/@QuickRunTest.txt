@@ -1,3 +1,11 @@
+?,/.:'
+#:''$:
+(::;1_)"."=*:
+\
+ALL_PROPERTIES_TYPES::?,/.:' taopByType[gaopSupportedTypes]
+?,/.:'
+a[b].[]
+(#:';#:''$:)
 A:{
  :[(~#cf)|(~#wnn)
   : .dot4[(#d)#_n;(wnn;ef);:;d[wnn;sf]]
@@ -16,6 +24,3 @@ STANDARD_CONV:{[d;sf;ef;csf;cf;cfx]
 
 ------------>
 @
-
-
-a = b + a

@@ -79,7 +79,7 @@ Element(FILE)
 
 {exec y}/LOG
 ------------>
-Element(MONAD)
+Element(DYAD)
   Element(LAMBDA)
     PsiElement(KTokenType.{)('{')
     Element(MONAD)

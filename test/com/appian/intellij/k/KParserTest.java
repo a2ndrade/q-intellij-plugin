@@ -46,23 +46,10 @@ public class KParserTest extends ParsingTestCase {
     return suite;
   }
 
-  public static Test suite0() {
-    final TestSuite suite = new TestSuite();
-    final File folder = new File("/Users/antonio.andrade/ae/c/server/_lib");
-    for(String fileName : folder.list()) {
-      final File f = new File(folder, fileName);
-      if (f.isFile()) {
-        suite.addTest(new KParserTest(fileName));
-      }
-    }
-    return suite;
-  }
-
-  private final String testFileName;
+  final String testFileName;
 
   KParserTest(String testFileName) {
     super("", "k", SPEC);
-    setName("testScripts");
     setName("testParser");
     this.testFileName = testFileName;
   }
@@ -70,21 +57,6 @@ public class KParserTest extends ParsingTestCase {
   @Override
   public String getName() {
     return testFileName;
-  }
-
-  public void testScripts() throws Exception {
-    final String f = "/Users/antonio.andrade/ae/c/server/_lib/"+testFileName;
-    final String content = new String(Files.readAllBytes(Paths.get(f)));
-    final long start = System.currentTimeMillis();
-    final ASTNode tree = parse(content);
-    final long time = System.currentTimeMillis() - start;
-    final String msg = testFileName + ":\t\t\t\t\t\t" + time + "ms\t\t" + content.length();
-    final String s = DebugUtil.nodeTreeToString(tree, true);
-    if (hasParseError(s)) {
-      throw new RuntimeException(msg);
-    } else {
-      System.out.println(msg);
-    }
   }
 
   public void testParser() throws Exception {
@@ -106,7 +78,7 @@ public class KParserTest extends ParsingTestCase {
     }
   }
 
-  private boolean hasParseError(String treeAsString) {
+  final boolean hasParseError(String treeAsString) {
     return treeAsString.contains("PsiErrorElement");
   }
 
@@ -124,7 +96,7 @@ public class KParserTest extends ParsingTestCase {
     return DebugUtil.nodeTreeToString(root, true);
   }
 
-  private ASTNode parse(String expression) {
+  final ASTNode parse(String expression) {
     final IFileElementType fileType = KParserDefinition.FILE;
     final PsiBuilder builder = newPsiBuilder(expression);
     return PARSER.parse(fileType, builder);

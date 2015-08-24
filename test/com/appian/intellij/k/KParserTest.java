@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,9 +31,9 @@ public class KParserTest extends ParsingTestCase {
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);
 
-  private static final String TEST_DATA_FOLDER_NAME = "test-data";
-  private static final String INPUT_OUTPUT_SEPARATOR = "------------>";
-  private static final String TEST_CASE_SEPARATOR = "============|";
+  static final String TEST_DATA_FOLDER_NAME = "test-data";
+  static final String INPUT_OUTPUT_SEPARATOR = "------------>";
+  static final String TEST_CASE_SEPARATOR = "============|";
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
@@ -82,7 +80,7 @@ public class KParserTest extends ParsingTestCase {
     return treeAsString.contains("PsiErrorElement");
   }
 
-  private String parseAsString(String expression) {
+  String parseAsString(String expression) {
     if (expression.isEmpty()) {
       return expression;
     }
@@ -108,7 +106,7 @@ public class KParserTest extends ParsingTestCase {
     return factory.createBuilder(SPEC, lexer, expression);
   }
 
-  private static String[] readFileIntoSections(Object source, String sectionsSeparator)
+  static String[] readFileIntoSections(Object source, String sectionsSeparator)
     throws IOException {
     final List<String> linesList = readLinesIncludingLineTerminators(source);
     final List<String> sectionsList = new ArrayList<String>();

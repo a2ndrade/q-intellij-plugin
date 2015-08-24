@@ -1,19 +1,28 @@
 a _bin b
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.identifier)('a')
-  PsiElement(KTokenType.identifier_sys)('_bin')
-  PsiElement(KTokenType.identifier)('b')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.identifier)('a')
+  Element(DYAD)
+    PsiElement(KTokenType.identifier_sys)('_bin')
+  Element(EXPRESSION)
+    Element(NOUN_OR_FN)
+      PsiElement(KTokenType.identifier)('b')
 ============|
 
 
 _bin[a;b]
 ------------>
-Element(INDEXING)
-  PsiElement(KTokenType.identifier_sys)('_bin')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
-    PsiElement(KTokenType.identifier)('a')
-    PsiElement(KTokenType.;)(';')
-    PsiElement(KTokenType.identifier)('b')
-    PsiElement(KTokenType.])(']')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.identifier_sys)('_bin')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      Element(EXPRESSION)
+        Element(NOUN_OR_FN)
+          PsiElement(KTokenType.identifier)('a')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        Element(NOUN_OR_FN)
+          PsiElement(KTokenType.identifier)('b')
+      PsiElement(KTokenType.])(']')

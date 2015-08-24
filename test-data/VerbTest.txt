@@ -1,36 +1,53 @@
 2 - 3
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.number)('2')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('3')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('2')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('3')
 ============|
 
 
 - 3
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('3')
+Element(EXPRESSION)
+  Element(MONAD)
+    PsiElement(KTokenType.verb)('-')
+    Element(EXPRESSION)
+      Element(NOUN)
+        PsiElement(KTokenType.number)('3')
 ============|
 
 
 ( - 3)
 ------------>
-Element(GROUP)
-  PsiElement(KTokenType.()('(')
-  Element(MONAD)
-    PsiElement(KTokenType.verb)('-')
-    PsiElement(KTokenType.number)('3')
-  PsiElement(KTokenType.))(')')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    Element(GROUP)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        Element(MONAD)
+          PsiElement(KTokenType.verb)('-')
+          Element(EXPRESSION)
+            Element(NOUN)
+              PsiElement(KTokenType.number)('3')
+      PsiElement(KTokenType.))(')')
 ============|
 
 
 12.5 + - 3
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.number)('12.5')
-  PsiElement(KTokenType.verb)('+')
-  Element(MONAD)
-    PsiElement(KTokenType.verb)('-')
-    PsiElement(KTokenType.number)('3')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('12.5')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('+')
+  Element(EXPRESSION)
+    Element(MONAD)
+      PsiElement(KTokenType.verb)('-')
+      Element(EXPRESSION)
+        Element(NOUN)
+          PsiElement(KTokenType.number)('3')

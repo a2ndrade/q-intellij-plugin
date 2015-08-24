@@ -1,35 +1,48 @@
 +/ 1 2 3 4
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.derived_verb)('+/')
-  PsiElement(KTokenType.number_vector)('1 2 3 4')
+Element(EXPRESSION)
+  Element(MONAD)
+    PsiElement(KTokenType.derived_verb)('+/')
+    Element(EXPRESSION)
+      Element(NOUN)
+        PsiElement(KTokenType.number_vector)('1 2 3 4')
 ============|
 
 
 16 +/ 1 2 3 4
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.number)('16')
-  PsiElement(KTokenType.derived_verb)('+/')
-  PsiElement(KTokenType.number_vector)('1 2 3 4')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('16')
+  Element(DYAD)
+    PsiElement(KTokenType.derived_verb)('+/')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number_vector)('1 2 3 4')
 ============|
 
 
 a +/\/:\:':' b
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.identifier)('a')
-  PsiElement(KTokenType.derived_verb)('+/\/:\:':'')
-  PsiElement(KTokenType.identifier)('b')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.identifier)('a')
+  Element(DYAD)
+    PsiElement(KTokenType.derived_verb)('+/\/:\:':'')
+  Element(EXPRESSION)
+    Element(NOUN_OR_FN)
+      PsiElement(KTokenType.identifier)('b')
 ============|
 
 
 (::;*>#:')
 ------------>
-Element(LIST)
-  PsiElement(KTokenType.()('(')
-  PsiElement(KTokenType.:)(':')
-  PsiElement(KTokenType.:)(':')
-  PsiElement(KTokenType.;)(';')
-  PsiElement(KTokenType.derived_verb)('*>#:'')
-  PsiElement(KTokenType.))(')')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    Element(LIST)
+      PsiElement(KTokenType.()('(')
+      PsiElement(KTokenType.:)(':')
+      PsiElement(KTokenType.:)(':')
+      PsiElement(KTokenType.;)(';')
+      PsiElement(KTokenType.derived_verb)('*>#:'')
+      PsiElement(KTokenType.))(')')

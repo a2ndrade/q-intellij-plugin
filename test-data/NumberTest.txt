@@ -1,45 +1,61 @@
 1
 ------------>
-PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('1')
 ============|
 
 
 -2
 ------------>
-PsiElement(KTokenType.number)('-2')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('-2')
 ============|
 
 
 -1.5
 ------------>
-PsiElement(KTokenType.number)('-1.5')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('-1.5')
 ============|
 
 
 2.1
 ------------>
-PsiElement(KTokenType.number)('2.1')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('2.1')
 ============|
 
 
 0i
 ------------>
-PsiElement(KTokenType.number)('0i')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0i')
 ============|
 
 
 0n
 ------------>
-PsiElement(KTokenType.number)('0n')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0n')
 ============|
 
 
 0N
 ------------>
-PsiElement(KTokenType.number)('0N')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0N')
 ============|
 
 
 0I
 ------------>
-PsiElement(KTokenType.number)('0I')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0I')

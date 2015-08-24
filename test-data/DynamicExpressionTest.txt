@@ -3,7 +3,9 @@
 ------------>
 Element(FILE)
   PsiElement(KTokenType.directory)('\d .some.dir\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -12,4 +14,6 @@ Element(FILE)
 ------------>
 Element(FILE)
   PsiElement(KTokenType.directory)('\l db\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')

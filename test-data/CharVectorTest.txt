@@ -1,32 +1,42 @@
 ""
 ------------>
-PsiElement(KTokenType.string)('""')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.string)('""')
 ============|
 
 
 "ab"
 ------------>
-PsiElement(KTokenType.string)('"ab"')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.string)('"ab"')
 ============|
 
 
 "\" \t \n \r \b \\ \a"
 ------------>
-PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
 ============|
 
 
 "
  "
 ------------>
-PsiElement(KTokenType.string)('"\n "')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.string)('"\n "')
 ============|
 
 
 " \"multi\"-
  line"
 ------------>
-PsiElement(KTokenType.string)('" \"multi\"-\n line"')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.string)('" \"multi\"-\n line"')
 ============|
 
 

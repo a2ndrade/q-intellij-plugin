@@ -1,52 +1,72 @@
 !0
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)('!')
-  PsiElement(KTokenType.number)('0')
+Element(EXPRESSION)
+  Element(MONAD)
+    PsiElement(KTokenType.verb)('!')
+    Element(EXPRESSION)
+      Element(NOUN)
+        PsiElement(KTokenType.number)('0')
 ============|
 
 
 0#0.0
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.number)('0')
-  PsiElement(KTokenType.verb)('#')
-  PsiElement(KTokenType.number)('0.0')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('0')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('#')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('0.0')
 ============|
 
 
 1 -2
 ------------>
-PsiElement(KTokenType.number_vector)('1 -2')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number_vector)('1 -2')
 ============|
 
 
 1 2.0 3
 ------------>
-PsiElement(KTokenType.number_vector)('1 2.0 3')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number_vector)('1 2.0 3')
 ============|
 
 
 ,1
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.verb)(',')
-  PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(MONAD)
+    PsiElement(KTokenType.verb)(',')
+    Element(EXPRESSION)
+      Element(NOUN)
+        PsiElement(KTokenType.number)('1')
 ============|
 
 
 -1.0 2
 ------------>
-PsiElement(KTokenType.number_vector)('-1.0 2')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number_vector)('-1.0 2')
 ============|
 
 
 0i -0I 0n -0N 0
 ------------>
-PsiElement(KTokenType.number_vector)('0i -0I 0n -0N 0')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number_vector)('0i -0I 0n -0N 0')
 ============|
 
 
 -0i 0I -0n 0N -0
 ------------>
-PsiElement(KTokenType.number_vector)('-0i 0I -0n 0N -0')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number_vector)('-0i 0I -0n 0N -0')

@@ -7,7 +7,9 @@ PsiComment(KTokenType.comment)('/ beginning of line')
 1 / end of line
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
   PsiComment(KTokenType.comment)(' / end of line')
 ============|
 
@@ -16,10 +18,14 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
   PsiComment(KTokenType.comment)(' / end of line')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -27,10 +33,14 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.symbol)('`')
+  Element(EXPRESSION)
+    Element(NOUN_OR_FN)
+      PsiElement(KTokenType.symbol)('`')
   PsiComment(KTokenType.comment)(' / after symbol')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -38,10 +48,14 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.symbol_vector)('` ` ` `')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.symbol_vector)('` ` ` `')
   PsiComment(KTokenType.comment)(' / after symbol vector')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -52,7 +66,9 @@ Element(FILE)
   PsiElement(KTokenType.verb)('-')
   PsiComment(KTokenType.comment)(' / after verb')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -63,7 +79,9 @@ Element(FILE)
   PsiElement(KTokenType.composed_monad)('*:')
   PsiComment(KTokenType.comment)(' / after composed monad')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -74,7 +92,9 @@ Element(FILE)
   PsiElement(KTokenType.derived_verb)('+/')
   PsiComment(KTokenType.comment)(' / after derived verb')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -85,7 +105,9 @@ Element(FILE)
   PsiElement(KTokenType.:)(':')
   PsiComment(KTokenType.comment)(' / after colon')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -97,7 +119,9 @@ Element(FILE)
   PsiElement(KTokenType.:)(':')
   PsiComment(KTokenType.comment)(' / after double colon')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 

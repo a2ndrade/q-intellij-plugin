@@ -21,6 +21,29 @@ STANDARD_CONV:{[d;sf;ef;csf;cf;cfx]
    :[csf
     : .at4[_n;ef;:; .at4[d;cf;:;cfx@'d[cf]][sf]]
     : .at4[v;cf;:;cfx@'(v: .at4[_n;ef;:;d[sf]])[cf]]]]]}
-
 ------------>
-@
+Element(FILE)
+  PsiElement(KTokenType.derived_verb)('?,/.:'')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.composed_monad)('#:''$:')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    Element(NOUN_OR_FN)
+      Element(LIST)
+        PsiElement(KTokenType.()('(')
+        PsiElement(KTokenType.:)(':')
+        PsiElement(KTokenType.:)(':')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          Element(NOUN)
+            PsiElement(KTokenType.number)('1')
+          Element(DYAD)
+            PsiElement(KTokenType.verb)('_')
+        PsiElement(KTokenType.))(')')
+    Element(EXPRESSION)
+      Element(NOUN)
+        PsiElement(KTokenType.char)('"."')
+  PsiElement(KTokenType.composed_monad)('=*:')
+  PsiElement(KTokenType.newline)('\n')
+  PsiComment(KTokenType.comment)('\')
+  PsiComment(KTokenType.comment)('\nALL_PROPERTIES_TYPES::?,/.:' taopByType[gaopSupportedTypes]\n?,/.:'\na[b].[]\n(#:';#:''$:)\nA:{\n :[(~#cf)|(~#wnn)\n  : .dot4[(#d)#_n;(wnn;ef);:;d[wnn;sf]]\n  :[csf\n   : .dot4[(#d)#_n;(wnn;ef);:; .dot4[d;(wnn;cf);:;+cfx@'+d[wnn;cf]][wnn;sf]]\n   : .dot4[v;(wnn;cf);:;+cfx@'+(v: .dot4[(#d)#_n;(wnn;ef);:;d[wnn;sf]])[wnn;cf]]]]}\n\\nSTANDARD_CONV:{[d;sf;ef;csf;cf;cfx]\n if[~#d; :()]\n if[@d\n  :[d~_n\n   :d\n   :[csf\n    : .at4[_n;ef;:; .at4[d;cf;:;cfx@'d[cf]][sf]]\n    : .at4[v;cf;:;cfx@'(v: .at4[_n;ef;:;d[sf]])[cf]]]]]}')

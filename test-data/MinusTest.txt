@@ -1,114 +1,164 @@
 x-1
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.identifier)('x')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.identifier)('x')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 x -1
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.identifier)('x')
-  PsiElement(KTokenType.number)('-1')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.identifier)('x')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('-1')
 ============|
 
 
 3.5-1
 ------------>
-Element(DYAD)
-  PsiElement(KTokenType.number)('3.5')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number)('3.5')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 3.5 -1
 ------------>
-PsiElement(KTokenType.number_vector)('3.5 -1')
+Element(EXPRESSION)
+  Element(NOUN)
+    PsiElement(KTokenType.number_vector)('3.5 -1')
 ============|
 
 
 x[1]-1
 ------------>
-Element(DYAD)
-  Element(INDEXING)
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
     PsiElement(KTokenType.identifier)('x')
     Element(INDEX)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
+      Element(EXPRESSION)
+        Element(NOUN)
+          PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 x[1] - 1
 ------------>
-Element(DYAD)
-  Element(INDEXING)
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
     PsiElement(KTokenType.identifier)('x')
     Element(INDEX)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
+      Element(EXPRESSION)
+        Element(NOUN)
+          PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 x[1] -1
 ------------>
-Element(MONAD)
-  Element(INDEXING)
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
     PsiElement(KTokenType.identifier)('x')
     Element(INDEX)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
+      Element(EXPRESSION)
+        Element(NOUN)
+          PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.number)('-1')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('-1')
 ============|
 
 
 (a+b)- 1
 ------------>
-Element(DYAD)
-  Element(GROUP)
-    PsiElement(KTokenType.()('(')
-    Element(DYAD)
-      PsiElement(KTokenType.identifier)('a')
-      PsiElement(KTokenType.verb)('+')
-      PsiElement(KTokenType.identifier)('b')
-    PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    Element(GROUP)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        Element(NOUN_OR_FN)
+          PsiElement(KTokenType.identifier)('a')
+        Element(DYAD)
+          PsiElement(KTokenType.verb)('+')
+        Element(EXPRESSION)
+          Element(NOUN_OR_FN)
+            PsiElement(KTokenType.identifier)('b')
+      PsiElement(KTokenType.))(')')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 (a+b) - 1
 ------------>
-Element(DYAD)
-  Element(GROUP)
-    PsiElement(KTokenType.()('(')
-    Element(DYAD)
-      PsiElement(KTokenType.identifier)('a')
-      PsiElement(KTokenType.verb)('+')
-      PsiElement(KTokenType.identifier)('b')
-    PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    Element(GROUP)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        Element(NOUN_OR_FN)
+          PsiElement(KTokenType.identifier)('a')
+        Element(DYAD)
+          PsiElement(KTokenType.verb)('+')
+        Element(EXPRESSION)
+          Element(NOUN_OR_FN)
+            PsiElement(KTokenType.identifier)('b')
+      PsiElement(KTokenType.))(')')
+  Element(DYAD)
+    PsiElement(KTokenType.verb)('-')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 (a+b) -1
 ------------>
-Element(MONAD)
-  Element(GROUP)
-    PsiElement(KTokenType.()('(')
-    Element(DYAD)
-      PsiElement(KTokenType.identifier)('a')
-      PsiElement(KTokenType.verb)('+')
-      PsiElement(KTokenType.identifier)('b')
-    PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.number)('-1')
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    Element(GROUP)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        Element(NOUN_OR_FN)
+          PsiElement(KTokenType.identifier)('a')
+        Element(DYAD)
+          PsiElement(KTokenType.verb)('+')
+        Element(EXPRESSION)
+          Element(NOUN_OR_FN)
+            PsiElement(KTokenType.identifier)('b')
+      PsiElement(KTokenType.))(')')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('-1')

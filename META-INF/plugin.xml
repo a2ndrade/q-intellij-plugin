@@ -30,6 +30,7 @@
     <lang.parserDefinition language="k" implementationClass="com.appian.intellij.k.KParserDefinition"/>
     <lang.syntaxHighlighterFactory key="k" implementationClass="com.appian.intellij.k.KSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.appian.intellij.k.KColorSettingsPage"/>
+    <lang.commenter language="k" implementationClass="com.appian.intellij.k.KCommenter"/>
   </extensions>
 
   <application-components>

@@ -12,25 +12,37 @@ import com.intellij.psi.impl.DebugUtil;
 
 public class ScriptsTest extends KParserTest {
 
+  private static final String[] TARGET_FOLDERS = new String[] {
+    "/Users/antonio.andrade/ae/c/server/_lib",
+    "/Users/antonio.andrade/ae/c/server/process/common"
+    //"/Users/antonio.andrade/ae/c/server/process/exec",
+    //"/Users/antonio.andrade/ae/c/server/process/design"
+  };
+
   public static Test suite() {
     final TestSuite suite = new TestSuite();
-    final File folder = new File("/Users/antonio.andrade/ae/c/server/_lib");
-    for(String fileName : folder.list()) {
-      final File f = new File(folder, fileName);
-      if (f.isFile()) {
-        suite.addTest(new ScriptsTest(fileName));
+    for(String folderPath : TARGET_FOLDERS) {
+      final File folder = new File(folderPath);
+      for(String fileName : folder.list()) {
+        final File f = new File(folder, fileName);
+        if (f.isFile()) {
+          suite.addTest(new ScriptsTest(f));
+        }
       }
     }
     return suite;
   }
 
-  ScriptsTest(String testFileName) {
-    super(testFileName);
+  private final File file;
+
+  ScriptsTest(File file) {
+    super(file.getName());
+    this.file = file;
     setName("testScripts");
   }
 
   public void testScripts() throws Exception {
-    final String f = "/Users/antonio.andrade/ae/c/server/_lib/"+testFileName;
+    final String f = file.getAbsolutePath();
     final String content = new String(Files.readAllBytes(Paths.get(f)));
     final long start = System.currentTimeMillis();
     final ASTNode tree = parse(content);

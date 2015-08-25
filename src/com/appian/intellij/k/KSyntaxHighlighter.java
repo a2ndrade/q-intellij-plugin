@@ -27,9 +27,9 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   public static final TextAttributesKey NUMBER = createTextAttributesKey("K_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
   public static final TextAttributesKey KEYWORD = createTextAttributesKey("K_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey STRING = createTextAttributesKey("K_STRING", DefaultLanguageHighlighterColors.STRING);
-  public static final TextAttributesKey BRACES = createTextAttributesKey("K_COMMENT", DefaultLanguageHighlighterColors.BRACES);
-  public static final TextAttributesKey BRACKETS = createTextAttributesKey("K_COMMENT", DefaultLanguageHighlighterColors.BRACKETS);
-  public static final TextAttributesKey PARENS = createTextAttributesKey("K_COMMENT", DefaultLanguageHighlighterColors.PARENTHESES);
+  public static final TextAttributesKey BRACES = createTextAttributesKey("K_BRACES", DefaultLanguageHighlighterColors.BRACES);
+  public static final TextAttributesKey BRACKETS = createTextAttributesKey("K_BRACKETS", DefaultLanguageHighlighterColors.BRACKETS);
+  public static final TextAttributesKey PARENS = createTextAttributesKey("K_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES);
   public static final TextAttributesKey COMMENT = createTextAttributesKey("K_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
 
   static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("K_BAD_CHARACTER",
@@ -88,13 +88,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.IF, KEYWORD_KEYS)
     .put(KTypes.DO, KEYWORD_KEYS)
     .put(KTypes.WHILE, KEYWORD_KEYS)
-    .put(KTypes.ZEROCOLON, KEYWORD_KEYS)
-    .put(KTypes.ONECOLON, KEYWORD_KEYS)
-    .put(KTypes.TWOCOLON, KEYWORD_KEYS)
-    .put(KTypes.THREECOLON, KEYWORD_KEYS)
-    .put(KTypes.FOURCOLON, KEYWORD_KEYS)
-    .put(KTypes.FIVECOLON, KEYWORD_KEYS)
-    .put(KTypes.SIXCOLON, KEYWORD_KEYS)
+    .put(KTypes.N_COLON, KEYWORD_KEYS)
 
     .put(KTypes.OPEN_BRACE, BRACES_KEYS)
     .put(KTypes.CLOSE_BRACE, BRACES_KEYS)

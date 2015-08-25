@@ -102,11 +102,11 @@ Element(EXPRESSION)
 0:f
 ------------>
 Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.identifier_sys)('0:')
-  Element(EXPRESSION)
-    Element(NOUN_OR_FN)
-      PsiElement(KTokenType.identifier)('f')
+  Element(MONAD)
+    PsiElement(KTokenType.n_colon)('0:')
+    Element(EXPRESSION)
+      Element(NOUN_OR_FN)
+        PsiElement(KTokenType.identifier)('f')
 ============|
 
 
@@ -116,7 +116,7 @@ Element(EXPRESSION)
   Element(NOUN)
     PsiElement(KTokenType.char)('"a"')
   Element(DYAD)
-    PsiElement(KTokenType.identifier_sys)('1:')
+    PsiElement(KTokenType.n_colon)('1:')
   Element(EXPRESSION)
     Element(NOUN_OR_FN)
       PsiElement(KTokenType.identifier)('f')

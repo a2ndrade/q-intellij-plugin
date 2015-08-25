@@ -162,3 +162,17 @@ Element(EXPRESSION)
   Element(EXPRESSION)
     Element(NOUN)
       PsiElement(KTokenType.number)('-1')
+============|
+
+
+msindi-/avg
+------------>
+Element(EXPRESSION)
+  Element(NOUN_OR_FN)
+    PsiElement(KTokenType.identifier)('msindi')
+  Element(DYAD)
+    PsiElement(KTokenType.derived_verb)('-/')
+  Element(EXPRESSION)
+    Element(NOUN_OR_FN)
+      PsiElement(KTokenType.identifier)('avg')
+

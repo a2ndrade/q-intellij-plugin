@@ -101,13 +101,7 @@
     // system verbs and nouns
 
     // i/o, dynamic load and client/server
-    zeroColon='0:'
-    oneColon='1:'
-    twoColon='2:'
-    threeColon='3:'
-    fourColon='4:'
-    fiveColon='5:'
-    sixColon='6:'
+    n_colon='regexp:[0-6]:'
 
     // assign, define, control and debug
 //    conditional=":"
@@ -139,6 +133,7 @@ private C0 ::= verb+
              | composed_monad
              | derived_verb
              | colon [colon]
+             | n_colon
 
 private separator ::= semicolon | newline
 
@@ -148,8 +143,8 @@ private id ::= identifier | identifier_sys
 
 expression ::= signal | trace | assignment | dyad_fn | monad | noun
 private dyad_fn ::= (noun dyad [expression | C0]) | (noun_or_fn [((dyad [expression | C0]) | expression)]) // projection
-monad ::= monad_fn expression
-private monad_fn ::= verb | derived_verb | colon
+monad ::= monad_fn (expression | C0)
+private monad_fn ::= verb | derived_verb | n_colon | colon
 
 noun ::= vector | atom
 noun_or_fn ::= indexing | op_and_index_target [index+]
@@ -166,8 +161,8 @@ index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 
 dyad ::= (infixNoIndex | infixIndex) [adverb]
-private infixNoIndex ::= (verb | identifier_sys)
-private infixIndex ::= (adverb | derived_verb) [index]
+private infixNoIndex ::= (verb | n_colon)
+private infixIndex ::= (adverb | identifier_sys | derived_verb) [index]
 
 private assignment ::= global_assignment | local_assignment
 global_assignment ::= identifier colon colon expression

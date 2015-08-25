@@ -1,10 +1,7 @@
-vk:{[key] :&/(_in[;VI]@*:;&/_lin[;VR]@1_)@'\:$key} / util.k
-ma:{~"\\"~*.d.trim _ssr[x;"[\t\r\n]";" "]} / authorized? /trans.k
-parse:{[f] parsers[`$#/(-?[;"."]@|:;::)@\:f][f]} / topology.k
-px:@/((::;1_)"."=*:;::)@\:_ssr[(#.a.AE_HOME)_(-1-(|f)?".")_ f;"[\\/]";"."] / properties.k
-:[_n~.[`.a;`p`S`U]; .dot4[`.a;`p`L`U;:;0N];:[4~4:.[`.a;`p`S`U]; .dot4[`.a;`p`L`U;:;hu@.[`.a;`p`S`U]]]] / ug.k
-\
 ?,/.:'
 #:''$:
 (::;1_)"."=*:
+\
+parse:{[f] parsers[`$#/(-?[;"."]@|:;::)@\:f][f]} / topology.k
+px:@/((::;1_)"."=*:;::)@\:_ssr[(#.a.AE_HOME)_(-1-(|f)?".")_ f;"[\\/]";"."] / properties.k
 ------------>

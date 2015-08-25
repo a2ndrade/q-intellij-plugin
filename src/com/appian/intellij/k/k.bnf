@@ -98,13 +98,13 @@
     char='regexp:"(\\"|[^"])"'
     string='regexp:"(\\"|[^"])*"'
 
-    // system verbs and nouns
+    // commands
+    command_name='regexp:\s*\\[dl]'
 
     // i/o, dynamic load and client/server
     n_colon='regexp:[0-6]:'
 
     // assign, define, control and debug
-//    conditional=":"
     if="if"
     do="do"
     while="while"
@@ -119,10 +119,10 @@
    consumeTokenMethod(".*")="consumeTokenFast"
 }*/
 
-root ::= E0+ <<eof>>
-private E0 ::= directory
+root ::= E0+ separator_or_eof
+private E0 ::= command
              | E1
-             | C0 separator
+             | C0
 private E1 ::= separator
              | expression
 private E2 ::= separator
@@ -136,6 +136,7 @@ private C0 ::= verb+
              | n_colon
 
 private separator ::= semicolon | newline
+private separator_or_eof ::= separator | <<eof>>
 
 group ::= open_paren E3 close_paren
 
@@ -171,3 +172,5 @@ local_assignment ::= identifier [index] (colon expression | composed_monad [expr
 signal ::= tick expression
 
 trace ::= back_slash expression
+
+command ::= command_name (identifier | "^")

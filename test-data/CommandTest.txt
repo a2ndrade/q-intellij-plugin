@@ -1,0 +1,49 @@
+\d .some.dir
+------------>
+Element(COMMAND)
+  PsiElement(KTokenType.command_name)('\d')
+  PsiElement(KTokenType.identifier)('.some.dir')
+============|
+
+
+\d ^
+------------>
+Element(COMMAND)
+  PsiElement(KTokenType.command_name)('\d')
+  PsiElement(KTokenType.^)('^')
+============|
+
+
+\l db
+------------>
+Element(COMMAND)
+  PsiElement(KTokenType.command_name)('\l')
+  PsiElement(KTokenType.identifier)('db')
+============|
+
+
+\d .some.dir
+1
+------------>
+Element(FILE)
+  Element(COMMAND)
+    PsiElement(KTokenType.command_name)('\d')
+    PsiElement(KTokenType.identifier)('.some.dir')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')
+============|
+
+
+\l db
+1
+------------>
+Element(FILE)
+  Element(COMMAND)
+    PsiElement(KTokenType.command_name)('\l')
+    PsiElement(KTokenType.identifier)('db')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    Element(NOUN)
+      PsiElement(KTokenType.number)('1')

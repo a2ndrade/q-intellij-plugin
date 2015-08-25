@@ -4,6 +4,18 @@ PsiComment(KTokenType.comment)('/ beginning of line')
 ============|
 
 
+\d .a.p.PROCESS
+ / after whitespace
+------------>
+Element(FILE)
+  Element(COMMAND)
+    PsiElement(KTokenType.command_name)('\d')
+    PsiElement(KTokenType.identifier)('.a.p.PROCESS')
+  PsiElement(KTokenType.newline)('\n')
+  PsiComment(KTokenType.comment)(' / after whitespace')
+============|
+
+
 1 / end of line
 ------------>
 Element(FILE)

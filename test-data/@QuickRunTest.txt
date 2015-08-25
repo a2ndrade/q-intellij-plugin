@@ -1,7 +1,9 @@
-?,/.:'
-#:''$:
-(::;1_)"."=*:
-\
-parse:{[f] parsers[`$#/(-?[;"."]@|:;::)@\:f][f]} / topology.k
-px:@/((::;1_)"."=*:;::)@\:_ssr[(#.a.AE_HOME)_(-1-(|f)?".")_ f;"[\\/]";"."] / properties.k
+\d .a.p.PROCESS
+ / after whitespace
 ------------>
+Element(FILE)
+  Element(COMMAND)
+    PsiElement(KTokenType.command_name)('\d')
+    PsiElement(KTokenType.identifier)('.a.p.PROCESS')
+    PsiElement(KTokenType.newline)('\n')
+  PsiComment(KTokenType.comment)(' / after whitespace')

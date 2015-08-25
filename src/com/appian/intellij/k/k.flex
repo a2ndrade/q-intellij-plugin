@@ -25,7 +25,7 @@ ANY=({NEWLINE}|.)*
 COMMENT1="/" [^\r\n]* {NEWLINE}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
-DIRECTORY={WHITE_SPACE}* "\\"[dl] {WHITE_SPACE}+ [._a-zA-Z0-9]+ ({WHITE_SPACE}|{NEWLINE})+
+COMMAND_NAME={WHITE_SPACE}*"\\"[dl]
 IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
 IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
 N_COLON=[0-6] ":"
@@ -52,10 +52,12 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
 %state MINUS
 %state DERIVED_LAMBDA
 %state ESCAPE
+%state COMMAND
 
 %%
 
 <MINUS> {
+  "-"/":["                     { yybegin(YYINITIAL); return VERB;}
   "-:"                         { yybegin(YYINITIAL); return COMPOSED_MONAD;}
   "-" (":"?) {ADVERB}+         { yybegin(YYINITIAL); return DERIVED_VERB;}
   "-"                          { yybegin(YYINITIAL); return VERB;}
@@ -69,10 +71,17 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
   {ANY}                        { yybegin(YYINITIAL); return COMMENT; }
 }
 
+<COMMAND> {
+  "^"                          { yybegin(YYINITIAL); return CARET; }
+  {IDENTIFIER}                 { yybegin(YYINITIAL); return IDENTIFIER; }
+  {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  {NEWLINE}                    { yybegin(YYINITIAL); return NEWLINE; }
+}
+
 <YYINITIAL> {
 
   {NEWLINE}+                   { return NEWLINE; }
-  ^{DIRECTORY}                 { return DIRECTORY; }
+  ^{COMMAND_NAME}              { yybegin(COMMAND); return COMMAND_NAME; }
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
   {N_COLON}/[^\[]              { return N_COLON; }
   ":"/"["                      { return COLON; }

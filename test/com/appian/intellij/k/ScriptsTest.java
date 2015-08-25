@@ -14,9 +14,10 @@ public class ScriptsTest extends KParserTest {
 
   private static final String[] TARGET_FOLDERS = new String[] {
     "/Users/antonio.andrade/ae/c/server/_lib",
-    "/Users/antonio.andrade/ae/c/server/process/common"
-    //"/Users/antonio.andrade/ae/c/server/process/exec",
-    //"/Users/antonio.andrade/ae/c/server/process/design"
+    "/Users/antonio.andrade/ae/c/server/process/common",
+    "/Users/antonio.andrade/ae/c/server/process/exec",
+    "/Users/antonio.andrade/ae/c/server/process/design",
+    "/Users/antonio.andrade/ae/c/server/process/analytics"
   };
 
   public static Test suite() {
@@ -25,7 +26,7 @@ public class ScriptsTest extends KParserTest {
       final File folder = new File(folderPath);
       for(String fileName : folder.list()) {
         final File f = new File(folder, fileName);
-        if (f.isFile()) {
+        if (f.isFile() && fileName.endsWith(".k")) {
           suite.addTest(new ScriptsTest(f));
         }
       }

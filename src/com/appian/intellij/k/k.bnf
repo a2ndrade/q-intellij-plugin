@@ -161,8 +161,8 @@ index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 
 dyad ::= (infixNoIndex | infixIndex) [adverb]
-private infixNoIndex ::= (verb | n_colon)
-private infixIndex ::= (adverb | identifier_sys | derived_verb) [index]
+private infixNoIndex ::= n_colon
+private infixIndex ::= (verb | adverb | identifier_sys | derived_verb) [index]
 
 private assignment ::= global_assignment | local_assignment
 global_assignment ::= identifier colon colon expression

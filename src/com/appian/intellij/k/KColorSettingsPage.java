@@ -20,7 +20,10 @@ public final class KColorSettingsPage implements ColorSettingsPage {
     new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
     new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
     new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
-    new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER)
+    new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
+    new AttributesDescriptor("Braces", KSyntaxHighlighter.BRACES),
+    new AttributesDescriptor("Brackets", KSyntaxHighlighter.BRACKETS),
+    new AttributesDescriptor("Parens", KSyntaxHighlighter.PARENS)
   };
 
   @Override

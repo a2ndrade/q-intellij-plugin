@@ -39,6 +39,9 @@ public class KParserTest extends ParsingTestCase {
     final TestSuite suite = new TestSuite();
     final File folder = new File(TEST_DATA_FOLDER_NAME);
     for(String fileName : folder.list()) {
+      if (fileName.startsWith("_")) { // e.g. sandboxØ
+        continue;
+      }
       suite.addTest(new KParserTest(fileName));
     }
     return suite;

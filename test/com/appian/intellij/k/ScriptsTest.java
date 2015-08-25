@@ -17,6 +17,9 @@ public class ScriptsTest extends KParserTest {
     "/Users/antonio.andrade/ae/c/server/process/common",
     "/Users/antonio.andrade/ae/c/server/process/exec",
     "/Users/antonio.andrade/ae/c/server/process/design",
+    "/Users/antonio.andrade/ae/c/server/process/events",
+    "/Users/antonio.andrade/ae/c/server/process/exec",
+    "/Users/antonio.andrade/ae/c/server/process/migration",
     "/Users/antonio.andrade/ae/c/server/process/analytics"
   };
 
@@ -44,11 +47,15 @@ public class ScriptsTest extends KParserTest {
 
   public void testScripts() throws Exception {
     final String f = file.getAbsolutePath();
-    final String content = new String(Files.readAllBytes(Paths.get(f)));
+    final byte[] bytes = Files.readAllBytes(Paths.get(f));
+    final String content = new String(bytes);
     final long start = System.currentTimeMillis();
     final ASTNode tree = parse(content);
     final long time = System.currentTimeMillis() - start;
-    final String msg = testFileName + ":\t\t\t\t\t\t" + time + "ms\t\t" + content.length();
+    final String msg = String.format(
+      "%-30s %8sms  %10.2fKB",
+      testFileName, time, bytes.length/1024.0
+    );
     final String s = DebugUtil.nodeTreeToString(tree, true);
     if (hasParseError(s)) {
       throw new RuntimeException(msg);

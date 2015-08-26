@@ -1,14 +1,14 @@
 <idea-plugin version="2">
-  <id>com.appian.intellij.k</id>
+  <id>idea.k</id>
   <name>K</name>
   <version>0.1</version>
-  <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
-
+  <category>Custom Languages</category>
+  <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
-      K3 syntax analysis & highlighting
+      K Language Support
   ]]></description>
-
   <change-notes><![CDATA[
+      <strong>0.1</strong><br/>
       <ul>
         <li>Syntax Highlighting</li>
         <li>Braces/Brackets/Parens Matching</li>
@@ -17,18 +17,9 @@
       </ul>
     ]]>
   </change-notes>
-
-  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="131"/>
-
-  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
-  -->
-
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
     <fileTypeFactory implementation="com.appian.intellij.k.KFileTypeFactory"/>
     <lang.parserDefinition language="k" implementationClass="com.appian.intellij.k.KParserDefinition"/>
     <lang.syntaxHighlighterFactory key="k" implementationClass="com.appian.intellij.k.KSyntaxHighlighterFactory"/>
@@ -36,17 +27,4 @@
     <lang.commenter language="k" implementationClass="com.appian.intellij.k.KCommenter"/>
     <lang.braceMatcher language="k" implementationClass="com.appian.intellij.k.KPairedBraceMatcherAdapter"/>
   </extensions>
-
-  <application-components>
-    <!-- Add your application components here -->
-  </application-components>
-
-  <project-components>
-    <!-- Add your project components here -->
-  </project-components>
-
-  <actions>
-    <!-- Add your actions here -->
-  </actions>
-
 </idea-plugin>

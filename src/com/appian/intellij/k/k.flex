@@ -88,7 +88,7 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
   "if"/"["                     { return IF; }
   "do"/"["                     { return DO; }
   "while"/"["                  { return WHILE; }
-  {ADVERB}/"["                 { return ADVERB; }
+  {ADVERB}+/"["                { return ADVERB; }
   {DERIVED_VERB}               { return DERIVED_VERB; }
   {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
   {SYMBOL_VECTOR}/{LINE_WS}"/" { return SYMBOL_VECTOR; }
@@ -99,7 +99,6 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
   ^{COMMENT1}                  { return COMMENT; }
   {COMMENT2}/{NEWLINE}         { return COMMENT; }
   {COMMENT2}                   { return COMMENT; }
-
 
   {VERB}/{ID_START}            { return VERB;}
   {VERB}/-[0-9]                { return VERB;}

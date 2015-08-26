@@ -143,8 +143,8 @@ group ::= open_paren E3 close_paren
 private id ::= identifier | identifier_sys
 
 expression ::= signal | trace | assignment | dyad_fn | monad | noun
-private dyad_fn ::= (noun dyad [expression | C0]) | (noun_or_fn [((dyad [expression | C0]) | expression)]) // projection
-monad ::= monad_fn (expression | C0)
+private dyad_fn ::= (noun dyad [E3]) | (noun_or_fn [(dyad [E3]) | expression]) // projection
+monad ::= monad_fn E3
 private monad_fn ::= verb | derived_verb | n_colon | colon
 
 noun ::= vector | atom

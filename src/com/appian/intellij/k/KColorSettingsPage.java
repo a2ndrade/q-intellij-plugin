@@ -13,17 +13,15 @@ import com.intellij.openapi.options.colors.ColorSettingsPage;
 public final class KColorSettingsPage implements ColorSettingsPage {
 
   private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-    new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
-    new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
-    new AttributesDescriptor("Operator", KSyntaxHighlighter.VERB),
-    new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
+    new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
     new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
     new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
-    new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
     new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
-    new AttributesDescriptor("Braces", KSyntaxHighlighter.BRACES),
-    new AttributesDescriptor("Brackets", KSyntaxHighlighter.BRACKETS),
-    new AttributesDescriptor("Parens", KSyntaxHighlighter.PARENS)
+    new AttributesDescriptor("Verb", KSyntaxHighlighter.VERB),
+    new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
+    new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
+    new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
+    new AttributesDescriptor("Command", KSyntaxHighlighter.COMMAND)
   };
 
   @Override
@@ -38,9 +36,7 @@ public final class KColorSettingsPage implements ColorSettingsPage {
 
   @Override
   public String getDemoText() {
-    return "/ comment\n" +
-      "\n" +
-      "1 2 2.4 0N 3 43 0i / numbers\n" +
+    return "1 2 2.4 0N 3 43 0i / numbers\n" +
       "\n" +
       "\"string\"\n" +
       "\n" +
@@ -48,7 +44,17 @@ public final class KColorSettingsPage implements ColorSettingsPage {
       "\n" +
       "identifier\n" +
       "\n" +
-      "_systemFunction";
+      "(+;*:;~=) / verbs\n" +
+      "\n" +
+      "+/ / derived verb\n" +
+      "\n" +
+      "_in / system function\n" +
+      "\n" +
+      "/:\\:' / adverb\n" +
+      "\n" +
+      "(:[];if[];do[];while[];0:)  / keywords and io commands\n" +
+      "\n" +
+      "\\d .some.dir";
   }
 
   @Override

@@ -19,8 +19,8 @@ import com.intellij.psi.tree.IElementType;
 
 public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
 
-  public static final TextAttributesKey VERB = createTextAttributesKey("K_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-  public static final TextAttributesKey ADVERB = createTextAttributesKey("K_ADVERB", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+  public static final TextAttributesKey VERB = createTextAttributesKey("K_OPERATOR", DefaultLanguageHighlighterColors.KEYWORD);
+  public static final TextAttributesKey ADVERB = createTextAttributesKey("K_ADVERB", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("K_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
   public static final TextAttributesKey IDENTIFIER_SYS = createTextAttributesKey("K_SYSFUNCTION", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey SYMBOL = createTextAttributesKey("K_SYMBOL", DefaultLanguageHighlighterColors.CONSTANT);
@@ -31,6 +31,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   public static final TextAttributesKey BRACKETS = createTextAttributesKey("K_BRACKETS", DefaultLanguageHighlighterColors.BRACKETS);
   public static final TextAttributesKey PARENS = createTextAttributesKey("K_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES);
   public static final TextAttributesKey COMMENT = createTextAttributesKey("K_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+  public static final TextAttributesKey COMMAND = createTextAttributesKey("K_COMMAND", DefaultLanguageHighlighterColors.METADATA);
 
   static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("K_BAD_CHARACTER",
     new TextAttributes(Color.RED, null, null, null, Font.BOLD));
@@ -47,6 +48,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final TextAttributesKey[] BRACKETS_KEYS = new TextAttributesKey[]{BRACKETS};
   private static final TextAttributesKey[] PARENS_KEYS = new TextAttributesKey[]{PARENS};
   private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
+  private static final TextAttributesKey[] COMMAND_KEYS = new TextAttributesKey[]{COMMAND};
 
   private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
   private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
@@ -71,18 +73,11 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS)
 
     .put(KTypes.VERB, VERB_KEYS)
-    //.put(KTypes.COMPOSED_VERB, VERB_KEYS)
-    .put(KTypes.COMPOSED_MONAD, ADVERB_KEYS)
+    .put(KTypes.COMPOSED_MONAD, VERB_KEYS)
     .put(KTypes.DERIVED_VERB, KEYWORD_KEYS)
+    .put(KTypes.ADVERB, ADVERB_KEYS)
 
-/*
-    .put(KTypes.SLASH, ADVERB_KEYS)
-    .put(KTypes.SLASH_COLON, ADVERB_KEYS)
-    .put(KTypes.BACK_SLASH, ADVERB_KEYS)
-    .put(KTypes.BACK_SLASH_COLON, ADVERB_KEYS)
-    .put(KTypes.TICK, ADVERB_KEYS)
-    .put(KTypes.TICK_COLON, ADVERB_KEYS)
-*/
+    .put(KTypes.COMMAND_NAME, COMMAND_KEYS)
 
     .put(KTypes.COLON, KEYWORD_KEYS)
     .put(KTypes.IF, KEYWORD_KEYS)

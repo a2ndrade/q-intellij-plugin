@@ -1,17 +1,20 @@
 <idea-plugin version="2">
   <id>com.appian.intellij.k</id>
   <name>K</name>
-  <version>1.0</version>
+  <version>0.1</version>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
-    ]]></description>
+      K3 syntax analysis & highlighting
+  ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      <ul>
+        <li>Syntax Highlighting</li>
+        <li>Braces/Brackets/Parens Matching</li>
+        <li>Customizable Color Settings</li>
+        <li>Line Comments</li>
+      </ul>
     ]]>
   </change-notes>
 

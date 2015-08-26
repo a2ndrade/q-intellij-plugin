@@ -31,6 +31,7 @@
     <lang.syntaxHighlighterFactory key="k" implementationClass="com.appian.intellij.k.KSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.appian.intellij.k.KColorSettingsPage"/>
     <lang.commenter language="k" implementationClass="com.appian.intellij.k.KCommenter"/>
+    <lang.braceMatcher language="k" implementationClass="com.appian.intellij.k.KPairedBraceMatcherAdapter"/>
   </extensions>
 
   <application-components>

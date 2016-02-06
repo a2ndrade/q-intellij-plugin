@@ -1,8 +1,5 @@
 package com.appian.intellij.k;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,17 +7,22 @@ import java.nio.file.Paths;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.impl.DebugUtil;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class ScriptsTest extends KParserTest {
+  
+  private static final String AE = "/Users/antonio.andrade/ae/c/";
 
   private static final String[] TARGET_FOLDERS = new String[] {
-    "/Users/antonio.andrade/ae/c/server/_lib",
-    "/Users/antonio.andrade/ae/c/server/process/common",
-    "/Users/antonio.andrade/ae/c/server/process/exec",
-    "/Users/antonio.andrade/ae/c/server/process/design",
-    "/Users/antonio.andrade/ae/c/server/process/events",
-    "/Users/antonio.andrade/ae/c/server/process/exec",
-    "/Users/antonio.andrade/ae/c/server/process/migration",
-    "/Users/antonio.andrade/ae/c/server/process/analytics"
+    AE + "server/_lib",
+    AE + "server/process/common",
+    AE + "server/process/exec",
+    AE + "server/process/design",
+    AE + "server/process/events",
+    AE + "server/process/exec",
+    AE + "server/process/migration",
+    AE + "server/process/analytics"
   };
 
   public static Test suite() {

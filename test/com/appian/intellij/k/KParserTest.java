@@ -1,5 +1,6 @@
 package com.appian.intellij.k;
 
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -13,8 +14,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.junit.Assert;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;

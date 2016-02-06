@@ -19,6 +19,12 @@
   </change-notes>
   <idea-version since-build="131"/>
   <depends>com.intellij.modules.lang</depends>
+  <project-components>
+    <component>
+      <interface-class>com.intellij.openapi.components.ProjectComponent</interface-class>
+      <implementation-class>com.appian.intellij.k.KProjectComponent</implementation-class>
+    </component>
+  </project-components>
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="com.appian.intellij.k.KFileTypeFactory"/>
     <lang.parserDefinition language="k" implementationClass="com.appian.intellij.k.KParserDefinition"/>
@@ -26,5 +32,8 @@
     <colorSettingsPage implementation="com.appian.intellij.k.KColorSettingsPage"/>
     <lang.commenter language="k" implementationClass="com.appian.intellij.k.KCommenter"/>
     <lang.braceMatcher language="k" implementationClass="com.appian.intellij.k.KPairedBraceMatcherAdapter"/>
+    <lang.refactoringSupport language="k" implementationClass="com.appian.intellij.k.KRefactoringSupportProvider"/>
+    <psi.referenceContributor implementation="com.appian.intellij.k.KReferenceContributor"/>
+    <gotoSymbolContributor implementation="com.appian.intellij.k.KChooseByNameContributor"/>
   </extensions>
 </idea-plugin>

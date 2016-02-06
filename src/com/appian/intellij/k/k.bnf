@@ -1,6 +1,6 @@
 {
   parserClass="com.appian.intellij.k.parser.KParser"
-  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  extends="com.appian.intellij.k.KAstWrapperPsiElement"
 
   psiClassPrefix="K"
   psiImplClassSuffix="Impl"
@@ -11,41 +11,7 @@
   elementTypeClass="com.appian.intellij.k.psi.KElementType"
   tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
 
-  /*  http://kparc.com/parse.txt
-
-/``"."
-/("\\mkdir -p \"";"\\mkdir \"")
-/`$r
-/rf:|f$:
-
-*-1#x
-
-  TOKEN ;a0`"+
-
-  a:[a-zA-Z]                         / alpha
-  d:[0-9]                            / digit
-  p:[;()[]{}]                        / punctuation
-  o:[:+-*%!&|<>=~,^#_$?@.'/\]        / operator
-
-  n:(![]})ad]-)?(d*.)?d+(e-?d+)?        / number, e.g. -2
-  i:a[ad]*                              / identifier
-  s:`[ad]*                              / symbol
-  t:p|i(.i)*|n( n)*|s+|"_*"|o:?| (/_*)? / token
-
-  (+:;a.b;2 -.3;`a`bc) / nine tokens and comment
-
-  lexical analysis is fairly simple. punctuation is normal. operators have optional':'.
-  characters("ab"), numbers(2 -3) and symbols(`a`bc) are atom or vector(more than one).
-  "2-3" is three tokens and "2 -3" is one token. end-of-line comment with [space]/ .
-
-  PARSE Noun(x) Verb(+) Adverb(/)
-
-  e:nve|te| t:n|v v:tA|V n:t[E]|(E)|[E]|{E}|N E:;e
-
-  (+/x)%#x  is  (%;((/;+);x);(#:;x))
-
-  SCRIPTS have nested multi-line comments with / and \ .
-  multi-line functions(and data) with indentation. newlines are treated like ;'s .  */
+  psiImplUtilClass="com.appian.intellij.k.psi.impl.KPsiImplUtil"
 
   tokens=[
 
@@ -80,6 +46,8 @@
     close_brace='}'
     tilde='~'
 
+    verb="regexp:[!#$%&*+,-.<=>?@\^_|~]"
+
     // adverbs
     slash='/'
     slash_colon='/:'
@@ -87,16 +55,20 @@
     back_slash_colon='\:'
     tick="'"
     tick_colon="':"
-    adverb="adverb"
+    adverb="regexp:/ | /: | \\ | \\: | ' | ':"
+    composed_monad="composed_monad"
+    derived_verb="derived_verb"
 
     // names
-    identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
-    identifier_sys='regexp:_[._a-zA-Z0-9]*|[0-6]:'
+    user_identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
+    system_identifier='regexp:_[._a-zA-Z0-9]*|[0-6]:'
 
     // nouns
     number='regexp:((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
     char='regexp:"(\\"|[^"])"'
     string='regexp:"(\\"|[^"])*"'
+    symbol_vector="symbol_vector"
+    number_vector="number_vector"
 
     // commands
     command_name='regexp:\s*\\[dl]'
@@ -104,7 +76,7 @@
     // i/o, dynamic load and client/server
     n_colon='regexp:[0-6]:'
 
-    // assign, define, control and debug
+    // control
     if="if"
     do="do"
     while="while"
@@ -114,10 +86,6 @@
     comment='comment'
   ]
 }
-
-/*{
-   consumeTokenMethod(".*")="consumeTokenFast"
-}*/
 
 root ::= E0+ separator_or_eof
 private E0 ::= command
@@ -140,37 +108,44 @@ private separator_or_eof ::= separator | <<eof>>
 
 group ::= open_paren E3 close_paren
 
-private id ::= identifier | identifier_sys
+user_id ::= user_identifier {
+  mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
+  implements="com.appian.intellij.k.psi.KNamedElement"
+  methods=[getName setName getNameIdentifier getPresentation]
+}
 
-expression ::= signal | trace | assignment | dyad_fn | monad | noun
+private expression ::= signal | trace | assignment | dyad_fn | monad | noun
 private dyad_fn ::= (noun dyad [E3]) | (noun_or_fn [(dyad [E3]) | expression]) // projection
 monad ::= monad_fn E3
 private monad_fn ::= verb | derived_verb | n_colon | colon
 
-noun ::= vector | atom
-noun_or_fn ::= indexing | op_and_index_target [index+]
+private noun ::= vector | atom
+private noun_or_fn ::= fn_call | user_fn_call | user_id | system_fn_call | system_identifier | fn_and_index_target [index+]
 
-private op_and_index_target ::= symbol | string | id | lambda | list | group
+user_fn_call ::= user_id index+
+system_fn_call ::= system_identifier index+
+
+private fn_and_index_target ::= symbol | string | lambda | list | group
 
 private vector ::= symbol_vector | number_vector // string is not a vector-only noun b/c it can be indexed
 private atom ::= number | char // symbol is not atomic-only b/c it can be indexed
 
 list ::= open_paren ([E3] separator [E3])* close_paren
 lambda ::= open_brace [index] E1* close_brace
-private indexing ::= (verb | derived_verb | control) index+
+private fn_call ::= (control | derived_verb | verb) index+
 index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 
 dyad ::= (infixNoIndex | infixIndex) [adverb]
 private infixNoIndex ::= n_colon
-private infixIndex ::= (verb | adverb | identifier_sys | derived_verb) [index]
+private infixIndex ::= (verb | adverb | system_identifier | derived_verb) [index]
 
 private assignment ::= global_assignment | local_assignment
-global_assignment ::= identifier colon colon expression
-local_assignment ::= identifier [index] (colon expression | composed_monad [expression])
+global_assignment ::= user_id colon colon expression
+local_assignment ::= user_id [index] (colon expression | composed_monad [expression])
 
 signal ::= tick expression
 
 trace ::= back_slash expression
 
-command ::= command_name (identifier | "^")
+command ::= command_name (user_id | "^")

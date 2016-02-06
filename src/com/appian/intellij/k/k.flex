@@ -26,10 +26,10 @@ COMMENT1="/" [^\r\n]* {NEWLINE}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
 COMMAND_NAME={WHITE_SPACE}*"\\"[dl]
-IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
-IDENTIFIER_SYS="_" [._a-zA-Z0-9]*
+USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
+SYSTEM_IDENTIFIER="_" [._a-zA-Z0-9]*
 N_COLON=[0-6] ":"
-ID={IDENTIFIER}|{IDENTIFIER_SYS}
+ID={USER_IDENTIFIER}|{SYSTEM_IDENTIFIER}
 ID_START=[_.][a-zA-Z]
 
 NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
@@ -40,7 +40,7 @@ CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE}*)+)
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
 VERB=[!#$%&*+,-.<=>?@\^_|~]
-ADVERB="/" | "/:" | "\\" | "\\:" | "'" | "':"
+ADVERB="/" | "/": | \\ | \\: | ' | ':
 
 // function composition
 COMPOSED_MONAD=(({VERB}|{N_COLON}){WHITE_SPACE}*) ":"
@@ -48,7 +48,6 @@ COMPOSED_MONAD=(({VERB}|{N_COLON}){WHITE_SPACE}*) ":"
 // higher-order functions
 DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
 
-// Is Next Minus Token a Dyad
 %state MINUS
 %state DERIVED_LAMBDA
 %state ESCAPE
@@ -73,7 +72,7 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
 
 <COMMAND> {
   "^"                          { yybegin(YYINITIAL); return CARET; }
-  {IDENTIFIER}                 { yybegin(YYINITIAL); return IDENTIFIER; }
+  {USER_IDENTIFIER}            { yybegin(YYINITIAL); return USER_IDENTIFIER; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
   {NEWLINE}                    { yybegin(YYINITIAL); return NEWLINE; }
 }
@@ -117,10 +116,10 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
   "}"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACE; }
   "}"                          { return CLOSE_BRACE; }
 
-  {IDENTIFIER_SYS}/-           { yybegin(MINUS); return IDENTIFIER_SYS; }
-  {IDENTIFIER_SYS}             { return IDENTIFIER_SYS; }
-  {IDENTIFIER}/-               { yybegin(MINUS); return IDENTIFIER; }
-  {IDENTIFIER}                 { return IDENTIFIER; }
+  {SYSTEM_IDENTIFIER}/-        { yybegin(MINUS); return SYSTEM_IDENTIFIER; }
+  {SYSTEM_IDENTIFIER}          { return SYSTEM_IDENTIFIER; }
+  {USER_IDENTIFIER}/-          { yybegin(MINUS); return USER_IDENTIFIER; }
+  {USER_IDENTIFIER}            { return USER_IDENTIFIER; }
   {NUMBER}/-                   { yybegin(MINUS); return NUMBER; }
   {NUMBER}                     { return NUMBER; }
   {CHAR}                       { return CHAR; }

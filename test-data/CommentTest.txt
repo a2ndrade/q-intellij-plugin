@@ -1,9 +1,3 @@
-/ beginning of line
------------->
-PsiComment(KTokenType.comment)('/ beginning of line')
-============|
-
-
 \d .a.p.PROCESS
  / after whitespace
 ------------>

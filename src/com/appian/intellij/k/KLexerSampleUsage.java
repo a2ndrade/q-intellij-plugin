@@ -2,7 +2,7 @@ package com.appian.intellij.k;
 
 import com.intellij.psi.tree.IElementType;
 
-public final class Sandbox {
+public final class KLexerSampleUsage {
   public static void main(String[] args) throws Exception {
     final String input = "$ / some comment\n/ another comment";
     final KLexer lexer = new KLexer(null);

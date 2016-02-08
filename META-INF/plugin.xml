@@ -1,13 +1,20 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>K</name>
-  <version>0.1</version>
+  <version>0.2</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
       K Language Support
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.2</strong><br/>
+      <ul>
+        <li>Basic Function Completion</li>
+        <li>Basic Function Rename</li>
+        <li>Basic Go to Symbol</li>
+        <li>Basic Search Everywhere</li>
+      </ul>
       <strong>0.1</strong><br/>
       <ul>
         <li>Syntax Highlighting</li>

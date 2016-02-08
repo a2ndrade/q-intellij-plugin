@@ -1,70 +1,52 @@
 "a"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"a"')
+PsiElement(KTokenType.char)('"a"')
 ============|
 
 
 " "
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('" "')
+PsiElement(KTokenType.char)('" "')
 ============|
 
 
 "\""
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\""')
+PsiElement(KTokenType.char)('"\""')
 ============|
 
 
 "\t"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\t"')
+PsiElement(KTokenType.char)('"\t"')
 ============|
 
 
 "\n"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\n"')
+PsiElement(KTokenType.char)('"\n"')
 ============|
 
 
 "\r"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\r"')
+PsiElement(KTokenType.char)('"\r"')
 ============|
 
 
 "\b"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\b"')
+PsiElement(KTokenType.char)('"\b"')
 ============|
 
 
 "\\"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\\"')
+PsiElement(KTokenType.char)('"\\"')
 ============|
 
 
 "
 "
 ------------>
-Element(EXPRESSION)
-  Element(NOUN)
-    PsiElement(KTokenType.char)('"\n"')
+PsiElement(KTokenType.char)('"\n"')

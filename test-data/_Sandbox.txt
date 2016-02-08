@@ -4,6 +4,7 @@
 Element(FILE)
   Element(COMMAND)
     PsiElement(KTokenType.command_name)('\d')
-    PsiElement(KTokenType.identifier)('.a.p.PROCESS')
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('.a.p.PROCESS')
   PsiElement(KTokenType.newline)('\n')
   PsiComment(KTokenType.comment)(' / after whitespace')

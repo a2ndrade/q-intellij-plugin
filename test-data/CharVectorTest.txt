@@ -1,42 +1,32 @@
 ""
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.string)('""')
+PsiElement(KTokenType.string)('""')
 ============|
 
 
 "ab"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.string)('"ab"')
+PsiElement(KTokenType.string)('"ab"')
 ============|
 
 
 "\" \t \n \r \b \\ \a"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
+PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
 ============|
 
 
 "
  "
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.string)('"\n "')
+PsiElement(KTokenType.string)('"\n "')
 ============|
 
 
 " \"multi\"-
  line"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.string)('" \"multi\"-\n line"')
+PsiElement(KTokenType.string)('" \"multi\"-\n line"')
 ============|
 
 
@@ -44,6 +34,5 @@ Element(EXPRESSION)
 ------------>
 Element(FILE)
   PsiElement(KTokenType.char)('" "')
-  PsiElement(BAD_CHARACTER)('"')
-  PsiErrorElement:unexpected end of file
-    <empty list>
+  PsiErrorElement:<dyad>, <monad>, KTokenType.', KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.\, KTokenType.char, KTokenType.command_name, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.do, KTokenType.if, KTokenType.n_colon, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.system_identifier, KTokenType.user_identifier, KTokenType.verb, KTokenType.while or KTokenType.{ expected, got '"'
+    PsiElement(BAD_CHARACTER)('"')

@@ -2,7 +2,8 @@
 ------------>
 Element(COMMAND)
   PsiElement(KTokenType.command_name)('\d')
-  PsiElement(KTokenType.identifier)('.some.dir')
+  Element(USER_ID)
+    PsiElement(KTokenType.user_identifier)('.some.dir')
 ============|
 
 
@@ -18,7 +19,8 @@ Element(COMMAND)
 ------------>
 Element(COMMAND)
   PsiElement(KTokenType.command_name)('\l')
-  PsiElement(KTokenType.identifier)('db')
+  Element(USER_ID)
+    PsiElement(KTokenType.user_identifier)('db')
 ============|
 
 
@@ -28,11 +30,10 @@ Element(COMMAND)
 Element(FILE)
   Element(COMMAND)
     PsiElement(KTokenType.command_name)('\d')
-    PsiElement(KTokenType.identifier)('.some.dir')
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('.some.dir')
   PsiElement(KTokenType.newline)('\n')
-  Element(EXPRESSION)
-    Element(NOUN)
-      PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.number)('1')
 ============|
 
 
@@ -42,8 +43,7 @@ Element(FILE)
 Element(FILE)
   Element(COMMAND)
     PsiElement(KTokenType.command_name)('\l')
-    PsiElement(KTokenType.identifier)('db')
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('db')
   PsiElement(KTokenType.newline)('\n')
-  Element(EXPRESSION)
-    Element(NOUN)
-      PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.number)('1')

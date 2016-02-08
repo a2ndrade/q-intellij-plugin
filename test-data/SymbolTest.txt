@@ -1,63 +1,47 @@
 `
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`')
+PsiElement(KTokenType.symbol)('`')
 ============|
 
 
 `abc
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`abc')
+PsiElement(KTokenType.symbol)('`abc')
 ============|
 
 
 `"ab"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`"ab"')
+PsiElement(KTokenType.symbol)('`"ab"')
 ============|
 
 
 `" "
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`" "')
+PsiElement(KTokenType.symbol)('`" "')
 ============|
 
 
 `"
 "
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`"\n"')
+PsiElement(KTokenType.symbol)('`"\n"')
 ============|
 
 
 `a..b_2
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`a..b_2')
+PsiElement(KTokenType.symbol)('`a..b_2')
 ============|
 
 
 `" \"multi\"-
  line"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`" \"multi\"-\n line"')
+PsiElement(KTokenType.symbol)('`" \"multi\"-\n line"')
 ============|
 
 
 `"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"
 ------------>
-Element(EXPRESSION)
-  Element(NOUN_OR_FN)
-    PsiElement(KTokenType.symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
+PsiElement(KTokenType.symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')

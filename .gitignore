@@ -2,8 +2,6 @@
 out/
 gen/
 *~
-*.iws
-*.ipr
 idea-flex.skeleton
 JFlex.jar
 KLexer.java

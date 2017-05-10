@@ -1,10 +1,10 @@
 package com.appian.intellij.k;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.io.File;
 import java.io.PrintStream;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class GeneratorTest extends KParserTest {
 
@@ -25,7 +25,7 @@ public class GeneratorTest extends KParserTest {
   public void testGenerateTestCases() throws Exception {
     final File input = new File(getTestDataPath() + "/" + testFileName);
     final String[] testCases = readFileIntoSections(input, TEST_CASE_SEPARATOR);
-    final File outputDir = new File("/Users/antonio.andrade/ae/");
+    final File outputDir = new File(System.getProperty("user.home") + "/repo");
     final File outputFile = new File(outputDir, testFileName);
     final PrintStream ps = new PrintStream(outputFile);
     for (int i = 0; i < testCases.length; i++) {

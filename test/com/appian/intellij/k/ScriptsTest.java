@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
 
 public class ScriptsTest extends KParserTest {
   
-  private static final String AE = "/Users/antonio.andrade/ae/c/";
+  private static final String AE = System.getProperty("user.home") + "/repo/ae/";
 
   private static final String[] TARGET_FOLDERS = new String[] {
     AE + "server/_lib",

@@ -1,24 +1,29 @@
 a _bin b
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('a')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.system_identifier)('_bin')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('b')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('b')
 ============|
 
 
 _bin[a;b]
 ------------>
-Element(SYSTEM_FN_CALL)
-  PsiElement(KTokenType.system_identifier)('_bin')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('a')
-    PsiElement(KTokenType.;)(';')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('b')
-    PsiElement(KTokenType.])(']')
+Element(EXPRESSION)
+  Element(PREFIX_FN_CALL)
+    Element(PREFIX_FN)
+      PsiElement(KTokenType.system_identifier)('_bin')
+    Element(PREFIX_FN_ARGS)
+      PsiElement(KTokenType.[)('[')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
+      PsiElement(KTokenType.])(']')

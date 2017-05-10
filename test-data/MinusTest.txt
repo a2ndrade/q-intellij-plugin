@@ -1,162 +1,192 @@
 x-1
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('x')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1')
 ============|
 
 
 x -1
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('x')
-  PsiElement(KTokenType.number)('-1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('-1')
 ============|
 
 
 3.5-1
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('3.5')
-  Element(DYAD)
-    PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.number)('3.5')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.verb)('-')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('1')
 ============|
 
 
 3.5 -1
 ------------>
-PsiElement(KTokenType.number_vector)('3.5 -1')
+Element(EXPRESSION)
+  PsiElement(KTokenType.number_vector)('3.5 -1')
 ============|
 
 
 x[1]-1
 ------------>
-Element(FILE)
-  Element(USER_FN_CALL)
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('x')
-    Element(INDEX)
+Element(EXPRESSION)
+  Element(PREFIX_FN_CALL)
+    Element(PREFIX_FN)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('x')
+    Element(PREFIX_FN_ARGS)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.])(']')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1')
 ============|
 
 
 x[1] - 1
 ------------>
-Element(FILE)
-  Element(USER_FN_CALL)
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('x')
-    Element(INDEX)
+Element(EXPRESSION)
+  Element(PREFIX_FN_CALL)
+    Element(PREFIX_FN)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('x')
+    Element(PREFIX_FN_ARGS)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.])(']')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1')
 ============|
 
 
 x[1] -1
 ------------>
-Element(FILE)
-  Element(USER_FN_CALL)
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('x')
-    Element(INDEX)
+Element(EXPRESSION)
+  Element(PREFIX_FN_CALL)
+    Element(PREFIX_FN)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('x')
+    Element(PREFIX_FN_ARGS)
       PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('1')
       PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.number)('-1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('-1')
 ============|
 
 
 (a+b)- 1
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('a')
-    Element(DYAD)
-      PsiElement(KTokenType.verb)('+')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('b')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('a')
+      Element(INFIX_FN)
+        PsiElement(KTokenType.verb)('+')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
     PsiElement(KTokenType.))(')')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1')
 ============|
 
 
 (a+b) - 1
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('a')
-    Element(DYAD)
-      PsiElement(KTokenType.verb)('+')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('b')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('a')
+      Element(INFIX_FN)
+        PsiElement(KTokenType.verb)('+')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
     PsiElement(KTokenType.))(')')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1')
 ============|
 
 
 (a+b) -1
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('a')
-    Element(DYAD)
-      PsiElement(KTokenType.verb)('+')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('b')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('a')
+      Element(INFIX_FN)
+        PsiElement(KTokenType.verb)('+')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
     PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.number)('-1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('-1')
 ============|
 
 
 msindi-/avg
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('msindi')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.derived_verb)('-/')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('avg')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('avg')
 ============|
 
 
 time-:[1;2;3]
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('time')
-  Element(DYAD)
+  Element(INFIX_FN)
     PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.:)(':')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
-    PsiElement(KTokenType.number)('1')
-    PsiElement(KTokenType.;)(';')
-    PsiElement(KTokenType.number)('2')
-    PsiElement(KTokenType.;)(';')
-    PsiElement(KTokenType.number)('3')
-    PsiElement(KTokenType.])(']')
+  Element(EXPRESSION)
+    Element(PREFIX_FN_CALL)
+      Element(PREFIX_FN)
+        PsiElement(KTokenType.:)(':')
+      Element(PREFIX_FN_ARGS)
+        PsiElement(KTokenType.[)('[')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('1')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('2')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('3')
+        PsiElement(KTokenType.])(']')

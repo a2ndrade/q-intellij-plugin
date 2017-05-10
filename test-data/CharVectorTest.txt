@@ -1,32 +1,37 @@
 ""
 ------------>
-PsiElement(KTokenType.string)('""')
+Element(EXPRESSION)
+  PsiElement(KTokenType.string)('""')
 ============|
 
 
 "ab"
 ------------>
-PsiElement(KTokenType.string)('"ab"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.string)('"ab"')
 ============|
 
 
 "\" \t \n \r \b \\ \a"
 ------------>
-PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
 ============|
 
 
 "
  "
 ------------>
-PsiElement(KTokenType.string)('"\n "')
+Element(EXPRESSION)
+  PsiElement(KTokenType.string)('"\n "')
 ============|
 
 
 " \"multi\"-
  line"
 ------------>
-PsiElement(KTokenType.string)('" \"multi\"-\n line"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.string)('" \"multi\"-\n line"')
 ============|
 
 
@@ -34,5 +39,5 @@ PsiElement(KTokenType.string)('" \"multi\"-\n line"')
 ------------>
 Element(FILE)
   PsiElement(KTokenType.char)('" "')
-  PsiErrorElement:<dyad>, <monad>, KTokenType.', KTokenType.(, KTokenType.:, KTokenType.;, KTokenType.\, KTokenType.char, KTokenType.command_name, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.do, KTokenType.if, KTokenType.n_colon, KTokenType.newline, KTokenType.number, KTokenType.number_vector, KTokenType.string, KTokenType.symbol, KTokenType.symbol_vector, KTokenType.system_identifier, KTokenType.user_identifier, KTokenType.verb, KTokenType.while or KTokenType.{ expected, got '"'
+  PsiErrorElement:<expression>, <infix fn>, KTokenType.:, KTokenType.;, KTokenType.command_name, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.n_colon, KTokenType.newline, KTokenType.user_identifier or KTokenType.verb expected, got '"'
     PsiElement(BAD_CHARACTER)('"')

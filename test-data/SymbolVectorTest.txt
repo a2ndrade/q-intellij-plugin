@@ -1,56 +1,66 @@
 0#`
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.number)('0')
-  Element(DYAD)
-    PsiElement(KTokenType.verb)('#')
-  PsiElement(KTokenType.symbol)('`')
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.number)('0')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.verb)('#')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.symbol)('`')
 ============|
 
 
 ``
 ------------>
-PsiElement(KTokenType.symbol_vector)('``')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('``')
 ============|
 
 
 ` ` `
 ------------>
-PsiElement(KTokenType.symbol_vector)('` ` `')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('` ` `')
 ============|
 
 
 ``abc
 ------------>
-PsiElement(KTokenType.symbol_vector)('``abc')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('``abc')
 ============|
 
 
 `"ab"`
 ------------>
-PsiElement(KTokenType.symbol_vector)('`"ab"`')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('`"ab"`')
 ============|
 
 
 `a`b`c
 ------------>
-PsiElement(KTokenType.symbol_vector)('`a`b`c')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('`a`b`c')
 ============|
 
 
 `" \"multi\"-
  line"`b`
 ------------>
-PsiElement(KTokenType.symbol_vector)('`" \"multi\"-\n line"`b`')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('`" \"multi\"-\n line"`b`')
 ============|
 
 
 `a`"bc"`cd`z
 ------------>
-PsiElement(KTokenType.symbol_vector)('`a`"bc"`cd`z')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('`a`"bc"`cd`z')
 ============|
 
 
 `a `"bc" `cd `z
 ------------>
-PsiElement(KTokenType.symbol_vector)('`a `"bc" `cd `z')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol_vector)('`a `"bc" `cd `z')

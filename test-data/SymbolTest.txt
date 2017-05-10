@@ -1,47 +1,55 @@
 `
 ------------>
-PsiElement(KTokenType.symbol)('`')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`')
 ============|
 
 
 `abc
 ------------>
-PsiElement(KTokenType.symbol)('`abc')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`abc')
 ============|
 
 
 `"ab"
 ------------>
-PsiElement(KTokenType.symbol)('`"ab"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`"ab"')
 ============|
 
 
 `" "
 ------------>
-PsiElement(KTokenType.symbol)('`" "')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`" "')
 ============|
 
 
 `"
 "
 ------------>
-PsiElement(KTokenType.symbol)('`"\n"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`"\n"')
 ============|
 
 
 `a..b_2
 ------------>
-PsiElement(KTokenType.symbol)('`a..b_2')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`a..b_2')
 ============|
 
 
 `" \"multi\"-
  line"
 ------------>
-PsiElement(KTokenType.symbol)('`" \"multi\"-\n line"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`" \"multi\"-\n line"')
 ============|
 
 
 `"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"
 ------------>
-PsiElement(KTokenType.symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')

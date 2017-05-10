@@ -1,54 +1,74 @@
 (--:) 4
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(MONAD)
-      PsiElement(KTokenType.verb)('-')
-      PsiElement(KTokenType.composed_monad)('-:')
+    Element(EXPRESSION)
+      Element(MONAD_FN_CALL)
+        Element(MONAD_FN)
+          PsiElement(KTokenType.verb)('-')
+        Element(MONAD_ARG)
+          PsiElement(KTokenType.composed_monad)('-:')
     PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.number)('4')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('4')
 ============|
 
 
 ( - - :) 4
 ------------>
-Element(FILE)
+Element(EXPRESSION)
   Element(GROUP)
     PsiElement(KTokenType.()('(')
-    Element(MONAD)
-      PsiElement(KTokenType.verb)('-')
-      PsiElement(KTokenType.composed_monad)('- :')
+    Element(EXPRESSION)
+      Element(MONAD_FN_CALL)
+        Element(MONAD_FN)
+          PsiElement(KTokenType.verb)('-')
+        Element(MONAD_ARG)
+          PsiElement(KTokenType.composed_monad)('- :')
     PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.number)('4')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('4')
 ============|
 
 
 -3 (--:) 4
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.number)('-3')
-  Element(GROUP)
-    PsiElement(KTokenType.()('(')
-    Element(MONAD)
-      PsiElement(KTokenType.verb)('-')
-      PsiElement(KTokenType.composed_monad)('-:')
-    PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.number)('4')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('-3')
+  Element(EXPRESSION)
+    Element(GROUP)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        Element(MONAD_FN_CALL)
+          Element(MONAD_FN)
+            PsiElement(KTokenType.verb)('-')
+          Element(MONAD_ARG)
+            PsiElement(KTokenType.composed_monad)('-:')
+      PsiElement(KTokenType.))(')')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('4')
 ============|
 
 
 -3 ( - - :) 4
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.number)('-3')
-  Element(GROUP)
-    PsiElement(KTokenType.()('(')
-    Element(MONAD)
-      PsiElement(KTokenType.verb)('-')
-      PsiElement(KTokenType.composed_monad)('- :')
-    PsiElement(KTokenType.))(')')
-  PsiElement(KTokenType.number)('4')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('-3')
+  Element(EXPRESSION)
+    Element(GROUP)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        Element(MONAD_FN_CALL)
+          Element(MONAD_FN)
+            PsiElement(KTokenType.verb)('-')
+          Element(MONAD_ARG)
+            PsiElement(KTokenType.composed_monad)('- :')
+      PsiElement(KTokenType.))(')')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('4')
 ============|
 
 

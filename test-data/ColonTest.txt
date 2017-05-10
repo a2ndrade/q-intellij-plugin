@@ -1,160 +1,205 @@
 :[a;b;c]
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.:)(':')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('a')
-    PsiElement(KTokenType.;)(';')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('b')
-    PsiElement(KTokenType.;)(';')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('c')
-    PsiElement(KTokenType.])(']')
+Element(EXPRESSION)
+  Element(PREFIX_FN_CALL)
+    Element(PREFIX_FN)
+      PsiElement(KTokenType.:)(':')
+    Element(PREFIX_FN_ARGS)
+      PsiElement(KTokenType.[)('[')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('c')
+      PsiElement(KTokenType.])(']')
 ============|
 
 
 x:y
 ------------>
-Element(LOCAL_ASSIGNMENT)
+Element(TOP_LEVEL_ASSIGNMENT)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('x')
   PsiElement(KTokenType.:)(':')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('y')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('y')
 ============|
 
 
 x[i]:y
 ------------>
-Element(LOCAL_ASSIGNMENT)
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('x')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
+Element(EXPRESSION)
+  Element(LOCAL_ASSIGNMENT)
     Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('i')
-    PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.:)(':')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('y')
+      PsiElement(KTokenType.user_identifier)('x')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('i')
+      PsiElement(KTokenType.])(']')
+    PsiElement(KTokenType.:)(':')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('y')
 ============|
 
 
 x+:y[4]
 ------------>
-Element(LOCAL_ASSIGNMENT)
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('x')
-  PsiElement(KTokenType.composed_monad)('+:')
-  Element(USER_FN_CALL)
+Element(EXPRESSION)
+  Element(LOCAL_ASSIGNMENT)
     Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('y')
-    Element(INDEX)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('4')
-      PsiElement(KTokenType.])(']')
+      PsiElement(KTokenType.user_identifier)('x')
+    PsiElement(KTokenType.composed_monad)('+:')
+    Element(EXPRESSION)
+      Element(PREFIX_FN_CALL)
+        Element(PREFIX_FN)
+          Element(USER_ID)
+            PsiElement(KTokenType.user_identifier)('y')
+        Element(PREFIX_FN_ARGS)
+          PsiElement(KTokenType.[)('[')
+          Element(EXPRESSION)
+            PsiElement(KTokenType.number)('4')
+          PsiElement(KTokenType.])(']')
 ============|
 
 
 x[i],:y
 ------------>
-Element(LOCAL_ASSIGNMENT)
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('x')
-  Element(INDEX)
-    PsiElement(KTokenType.[)('[')
+Element(EXPRESSION)
+  Element(LOCAL_ASSIGNMENT)
     Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('i')
-    PsiElement(KTokenType.])(']')
-  PsiElement(KTokenType.composed_monad)(',:')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('y')
+      PsiElement(KTokenType.user_identifier)('x')
+    Element(INDEX)
+      PsiElement(KTokenType.[)('[')
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('i')
+      PsiElement(KTokenType.])(']')
+    PsiElement(KTokenType.composed_monad)(',:')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('y')
 ============|
 
 
 x::3
 ------------>
-Element(GLOBAL_ASSIGNMENT)
+Element(TOP_LEVEL_ASSIGNMENT)
   Element(USER_ID)
     PsiElement(KTokenType.user_identifier)('x')
   PsiElement(KTokenType.:)(':')
-  PsiElement(KTokenType.:)(':')
-  PsiElement(KTokenType.number)('3')
+  Element(EXPRESSION)
+    Element(MONAD_FN_CALL)
+      Element(MONAD_FN)
+        PsiElement(KTokenType.:)(':')
+      Element(MONAD_ARG)
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('3')
 ============|
 
 
 0:f
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.n_colon)('0:')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('f')
+Element(EXPRESSION)
+  Element(MONAD_FN_CALL)
+    Element(MONAD_FN)
+      PsiElement(KTokenType.n_colon)('0:')
+    Element(MONAD_ARG)
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('f')
 ============|
 
 
 "a" 1:f
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.char)('"a"')
-  Element(DYAD)
-    PsiElement(KTokenType.n_colon)('1:')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('f')
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.char)('"a"')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.n_colon)('1:')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('f')
 ============|
 
 
 (-;3)
 ------------>
-Element(LIST)
-  PsiElement(KTokenType.()('(')
-  PsiElement(KTokenType.verb)('-')
-  PsiElement(KTokenType.;)(';')
-  PsiElement(KTokenType.number)('3')
-  PsiElement(KTokenType.))(')')
+Element(EXPRESSION)
+  Element(LIST)
+    PsiElement(KTokenType.()('(')
+    PsiElement(KTokenType.verb)('-')
+    PsiElement(KTokenType.;)(';')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('3')
+    PsiElement(KTokenType.))(')')
 ============|
 
 
 (-:;3)
 ------------>
-Element(LIST)
-  PsiElement(KTokenType.()('(')
-  PsiElement(KTokenType.composed_monad)('-:')
-  PsiElement(KTokenType.;)(';')
-  PsiElement(KTokenType.number)('3')
-  PsiElement(KTokenType.))(')')
+Element(EXPRESSION)
+  Element(LIST)
+    PsiElement(KTokenType.()('(')
+    PsiElement(KTokenType.composed_monad)('-:')
+    PsiElement(KTokenType.;)(';')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('3')
+    PsiElement(KTokenType.))(')')
 ============|
 
 
 :r
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.:)(':')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('r')
+Element(EXPRESSION)
+  Element(MONAD_FN_CALL)
+    Element(MONAD_FN)
+      PsiElement(KTokenType.:)(':')
+    Element(MONAD_ARG)
+      Element(EXPRESSION)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('r')
 ============|
 
 
 :x:::[1;2;3]
 ------------>
-Element(MONAD)
-  PsiElement(KTokenType.:)(':')
-  Element(GLOBAL_ASSIGNMENT)
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('x')
-    PsiElement(KTokenType.:)(':')
-    PsiElement(KTokenType.:)(':')
-    PsiElement(KTokenType.:)(':')
-    Element(INDEX)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.number)('1')
-      PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.number)('2')
-      PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.number)('3')
-      PsiElement(KTokenType.])(']')
+Element(EXPRESSION)
+  Element(MONAD_FN_CALL)
+    Element(MONAD_FN)
+      PsiElement(KTokenType.:)(':')
+    Element(MONAD_ARG)
+      Element(EXPRESSION)
+        Element(GLOBAL_ASSIGNMENT)
+          Element(USER_ID)
+            PsiElement(KTokenType.user_identifier)('x')
+          PsiElement(KTokenType.:)(':')
+          PsiElement(KTokenType.:)(':')
+          Element(EXPRESSION)
+            Element(PREFIX_FN_CALL)
+              Element(PREFIX_FN)
+                PsiElement(KTokenType.:)(':')
+              Element(PREFIX_FN_ARGS)
+                PsiElement(KTokenType.[)('[')
+                Element(EXPRESSION)
+                  PsiElement(KTokenType.number)('1')
+                PsiElement(KTokenType.;)(';')
+                Element(EXPRESSION)
+                  PsiElement(KTokenType.number)('2')
+                PsiElement(KTokenType.;)(';')
+                Element(EXPRESSION)
+                  PsiElement(KTokenType.number)('3')
+                PsiElement(KTokenType.])(']')
 ============|
 
 
@@ -162,9 +207,11 @@ f+:
 1
 ------------>
 Element(FILE)
-  Element(LOCAL_ASSIGNMENT)
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('f')
-    PsiElement(KTokenType.composed_monad)('+:')
+  Element(EXPRESSION)
+    Element(LOCAL_ASSIGNMENT)
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('f')
+      PsiElement(KTokenType.composed_monad)('+:')
   PsiElement(KTokenType.newline)('\n')
-  PsiElement(KTokenType.number)('1')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1')

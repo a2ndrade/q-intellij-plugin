@@ -29,36 +29,13 @@ final class KUserIdCache extends VirtualFileAdapter {
     return INSTANCE;
   }
 
-  // has any k file been touched?
-  private boolean dirty = false;
-
-  // if no k file has been touched
-  private Collection<KUserId> allIds;
-  private String[] allNames;
-
   // if any k file has been touched
   private final Map<String, Collection<KUserId>> idCache = new HashMap<>();
   private final Map<String, String[]> nameCache = new HashMap<>();
 
   private KUserIdCache() {}
 
-  private boolean useCache(Project project) {
-    if (this.dirty) {
-      return false;
-    }
-    if (this.allIds == null) {
-      this.allIds = KUtil.findIdentifiers(project);
-    }
-    if (this.allNames == null) {
-      this.allNames = allIds.stream().map(KUserId::getName).toArray(size -> new String[size]);
-    }
-    return true;
-  }
-
   public String[] getAllNames(Project project) {
-    if (useCache(project)) {
-      return allNames;
-    }
     return findNames(project);
   }
 
@@ -82,9 +59,6 @@ final class KUserIdCache extends VirtualFileAdapter {
   }
 
   public NavigationItem[] getByName(Project project, String pattern) {
-    if (useCache(project)) {
-      return filter(allIds, pattern);
-    }
     return findByName(project, pattern);
   }
 
@@ -132,9 +106,6 @@ final class KUserIdCache extends VirtualFileAdapter {
     if (KFileType.INSTANCE != file.getFileType()) {
       return;
     }
-    dirty = true;
-    allIds = null;
-    allNames = null;
     final String filePath = file.getPath();
     idCache.remove(filePath);
     nameCache.remove(filePath);

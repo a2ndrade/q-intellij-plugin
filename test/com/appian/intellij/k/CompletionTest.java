@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 public class CompletionTest extends LightCodeInsightFixtureTestCase {

@@ -32,8 +32,28 @@ N_COLON=[0-6] ":"
 ID={USER_IDENTIFIER}|{SYSTEM_IDENTIFIER}
 ID_START=[_.][a-zA-Z]
 
-NUMBER=-?((0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|0[iInN])
-NUMBER_VECTOR={NUMBER}({WHITE_SPACE}{NUMBER})+
+INT_TYPE=[ihjepuvt]
+FLOAT_TYPE=[fen]
+Q_DATETIME_TYPE=[mdz]
+TYPE={INT_TYPE}|{FLOAT_TYPE}|{Q_DATETIME_TYPE}
+// only positive numbers
+Q_NULL_POSITIVE="0N"({INT_TYPE}|{FLOAT_TYPE}|"g")
+Q_BINARY=[01]"b"
+Q_HEX_CHAR=[[:digit:]A-Fa-f]
+Q_HEX_NUMBER="0x"{Q_HEX_CHAR}{Q_HEX_CHAR}?
+NUMBER_POSITIVE={Q_NULL_POSITIVE}|{Q_BINARY}|{Q_HEX_NUMBER}
+// positive & negative
+NULL_OR_INFINITY=0[iInNwW] // iI are from k3; wW are from k4; nN are from both
+Q_MONTH=[:digit:]+\.[:digit:]{2}
+Q_DATE={Q_MONTH}+\.[:digit:]{2}
+Q_TIME=[:digit:]+(\:[:digit:]{2}(\:[:digit:]{2}(\.[:digit:]+)?)?)?
+Q_DATETIME={Q_DATE}"T"{Q_TIME}
+NUMBER_POSITIVE_NEGATIVE=(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|{NULL_OR_INFINITY}
+// all numbers
+NUMBER_NO_TYPE=-?({NUMBER_POSITIVE_NEGATIVE})|{NUMBER_POSITIVE}|-?({Q_MONTH}|{Q_DATE}|{Q_TIME}|{Q_DATETIME})
+NUMBER={NUMBER_NO_TYPE}{TYPE}?
+BINARY_VECTOR=[01][01]+"b"|"0x"{Q_HEX_CHAR}{2}{Q_HEX_CHAR}+
+NUMBER_VECTOR={NUMBER_NO_TYPE}({WHITE_SPACE}{NUMBER_NO_TYPE})+{TYPE}?|{BINARY_VECTOR}
 C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
@@ -49,7 +69,7 @@ SIMPLE_COMPOSED_MONAD=(({VERB}{WHITE_SPACE}*)+|{N_COLON}){WHITE_SPACE}* ":"
 COMPOSED_MONAD={SIMPLE_COMPOSED_MONAD} {MONADIC_AND_DYADIC_ADVERB}*
 
 // higher-order functions
-DERIVED_VERB=({ID}|({VERB}|{N_COLON})){ADVERB}+
+DERIVED_VERB=({ID}|({VERB}|{N_COLON}|":")){ADVERB}+
 
 %state INFIX
 %state DERIVED_LAMBDA

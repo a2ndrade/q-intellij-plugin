@@ -1,0 +1,27 @@
+prev::':
+------------>
+Element(FILE)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.[)('[')
+  PsiElement(KTokenType.])(']')
+  PsiErrorElement:KTokenType.user_identifier expected, got ')'
+    PsiElement(KTokenType.))(')')
+============|
+
+
+([]a:1 2 3)
+------------>
+Element(EXPRESSION)
+  Element(TABLE)
+    PsiElement(KTokenType.()('(')
+    Element(TABLE_PKS)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+    Element(TABLE_COLS)
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number_vector)('1 2 3')
+    PsiElement(KTokenType.))(')')

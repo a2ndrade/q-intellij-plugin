@@ -111,6 +111,7 @@ private separator ::= semicolon | newline
 private separator_or_eof ::= separator | <<eof>>
 
 group ::= open_paren E3 close_paren
+statement ::= open_bracket E2* close_bracket
 
 user_id ::= user_identifier {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
@@ -130,17 +131,21 @@ monad_arg ::= E3
 private noun ::= vector | atom
 private callable ::= user_id | system_identifier | fn_and_index_target [index+]
 
-private fn_and_index_target ::= symbol | string | vector | lambda | list | group
+private fn_and_index_target ::= symbol | string | vector | lambda | list | table | group
 
 private vector ::= symbol_vector | number_vector // string is not a vector-only noun b/c it can be indexed
 private atom ::= number | char // symbol is not atomic-only b/c it can be indexed
 
-list ::= open_paren ([E3] separator [E3])* close_paren
+list ::= open_paren ([E3] separator [E3|prefix_fn_args])* close_paren // see (`.fn;[])
+table ::= open_paren table_pks table_cols close_paren
+table_pks ::= open_bracket table_cols? close_bracket
+table_cols ::= (table_col (separator table_col)*)
+table_col ::= user_id colon E1 // ignores significant k3 whitespaces
 lambda ::= open_brace [lambda_params] E1* close_brace
 lambda_params ::= open_bracket [user_id (separator user_id)*] close_bracket
 prefix_fn ::= (control | derived_verb | verb | user_id | system_identifier)
 prefix_fn_call ::= prefix_fn prefix_fn_args index*
-prefix_fn_args ::= open_bracket E2* close_bracket
+prefix_fn_args ::= open_bracket (E2|statement)* close_bracket
 index ::= open_bracket E2* close_bracket
 private control ::= (colon | if | do | while)
 

@@ -1,13 +1,17 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>K</name>
-  <version>0.3</version>
+  <version>0.4</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
       K Language Support
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.4</strong><br/>
+      <ul>
+        <li>Basic support for Q</li>
+      </ul>
       <strong>0.3</strong><br/>
       <ul>
         <li>Small grammar fixes</li>

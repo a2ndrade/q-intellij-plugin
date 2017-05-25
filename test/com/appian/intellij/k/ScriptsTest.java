@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 public class ScriptsTest extends KParserTest {
   
   private static final String AE = System.getProperty("user.home") + "/repo/ae/";
+  private static final String DL = System.getProperty("user.home") + "/repo/data-layer/";
 
   private static final String[] TARGET_FOLDERS = new String[] {
     AE + "server/_lib",
@@ -22,16 +23,23 @@ public class ScriptsTest extends KParserTest {
     AE + "server/process/events",
     AE + "server/process/exec",
     AE + "server/process/migration",
-    AE + "server/process/analytics"
+    AE + "server/process/analytics",
+    DL + "appian-data-server/src/main/engine",
+    DL + "appian-data-server/src/main/engine/core",
+    DL + "appian-data-server/src/main/engine/lib",
+    DL + "appian-data-server/src/main/engine/debug"
   };
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
     for(String folderPath : TARGET_FOLDERS) {
       final File folder = new File(folderPath);
+      if (!folder.exists()) {
+        throw new RuntimeException("Folder does not exists: " + folder);
+      }
       for(String fileName : folder.list()) {
         final File f = new File(folder, fileName);
-        if (f.isFile() && fileName.endsWith(".k")) {
+        if (f.isFile() && (fileName.endsWith(".k") || fileName.endsWith(".q"))) {
           suite.addTest(new ScriptsTest(f));
         }
       }

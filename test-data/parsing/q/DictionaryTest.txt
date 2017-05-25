@@ -1,0 +1,70 @@
+10 20 30!1.1 2.2 3.3
+------------>
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.number_vector)('10 20 30')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.verb)('!')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number_vector)('1.1 2.2 3.3')
+============|
+
+
+`a`b`c!100 200 300
+------------>
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.symbol_vector)('`a`b`c')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.verb)('!')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number_vector)('100 200 300')
+============|
+
+
+(`a`b`c)!100 200 300
+------------>
+Element(EXPRESSION)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.symbol_vector)('`a`b`c')
+    PsiElement(KTokenType.))(')')
+  Element(INFIX_FN)
+    PsiElement(KTokenType.verb)('!')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number_vector)('100 200 300')
+============|
+
+![`a`b;1 2]
+------------>
+Element(EXPRESSION)
+  Element(PREFIX_FN_CALL)
+    Element(PREFIX_FN)
+      PsiElement(KTokenType.verb)('!')
+    Element(PREFIX_FN_ARGS)
+      PsiElement(KTokenType.[)('[')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.symbol_vector)('`a`b')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number_vector)('1 2')
+      PsiElement(KTokenType.])(']')
+============|
+
+
+(!)[`a`b;1 2]
+------------>
+Element(EXPRESSION)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    PsiElement(KTokenType.verb)('!')
+    PsiElement(KTokenType.))(')')
+  Element(INDEX)
+    PsiElement(KTokenType.[)('[')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.symbol_vector)('`a`b')
+    PsiElement(KTokenType.;)(';')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number_vector)('1 2')
+    PsiElement(KTokenType.])(']')

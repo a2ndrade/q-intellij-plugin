@@ -1,9 +1,5 @@
 package com.appian.intellij.k;
 
-import junit.framework.Assert;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,18 +21,22 @@ import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.testFramework.ParsingTestCase;
 
+import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class KParserTest extends ParsingTestCase {
 
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);
 
-  static final String TEST_DATA_FOLDER_NAME = "test-data";
+  static final String TEST_DATA_FOLDERS_PATH = "test-data/parsing/k";
   static final String INPUT_OUTPUT_SEPARATOR = "------------>";
   static final String TEST_CASE_SEPARATOR = "============|";
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
-    final File folder = new File(TEST_DATA_FOLDER_NAME);
+    final File folder = new File(TEST_DATA_FOLDERS_PATH);
     for(String fileName : folder.list()) {
       if (fileName.startsWith("_")) { // e.g. sandboxØ
         continue;
@@ -49,7 +49,11 @@ public class KParserTest extends ParsingTestCase {
   final String testFileName;
 
   KParserTest(String testFileName) {
-    super("", "k", SPEC);
+    this(testFileName, "k");
+  }
+
+  KParserTest(String testFileName, String ext) {
+    super("", ext, SPEC);
     setName("testParser");
     this.testFileName = testFileName;
   }
@@ -168,7 +172,7 @@ public class KParserTest extends ParsingTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return TEST_DATA_FOLDER_NAME;
+    return TEST_DATA_FOLDERS_PATH;
   }
 
 }

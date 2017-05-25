@@ -1,0 +1,141 @@
+([])
+------------>
+Element(FILE)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.[)('[')
+  PsiElement(KTokenType.])(']')
+  PsiErrorElement:KTokenType.user_identifier expected, got ')'
+    PsiElement(KTokenType.))(')')
+============|
+
+
+([]a:1 2 3)
+------------>
+Element(EXPRESSION)
+  Element(TABLE)
+    PsiElement(KTokenType.()('(')
+    Element(TABLE_PKS)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+    Element(TABLE_COLS)
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number_vector)('1 2 3')
+    PsiElement(KTokenType.))(')')
+============|
+
+
+([] a:1 2 3; b:`a`b`c)
+------------>
+Element(EXPRESSION)
+  Element(TABLE)
+    PsiElement(KTokenType.()('(')
+    Element(TABLE_PKS)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+    Element(TABLE_COLS)
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number_vector)('1 2 3')
+      PsiElement(KTokenType.;)(';')
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.symbol_vector)('`a`b`c')
+    PsiElement(KTokenType.))(')')
+============|
+
+
+
+( [  ]  a:
+   1
+   2 3
+)
+------------>
+Element(FILE)
+  PsiElement(KTokenType.()('(')
+  PsiElement(KTokenType.[)('[')
+  PsiElement(KTokenType.])(']')
+  PsiElement(KTokenType.user_identifier)('a')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.newline)('\n')
+  PsiErrorElement:KTokenType.), KTokenType.; or KTokenType.newline expected, got '1'
+    PsiElement(KTokenType.number)('1')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.number_vector)('2 3')
+  PsiElement(KTokenType.newline)('\n')
+  PsiElement(KTokenType.))(')')
+============|
+
+
+([pk1:3 1 4]a:1 2 3)
+------------>
+Element(EXPRESSION)
+  Element(TABLE)
+    PsiElement(KTokenType.()('(')
+    Element(TABLE_PKS)
+      PsiElement(KTokenType.[)('[')
+      Element(TABLE_COLS)
+        Element(TABLE_COL)
+          Element(USER_ID)
+            PsiElement(KTokenType.user_identifier)('pk1')
+          PsiElement(KTokenType.:)(':')
+          Element(EXPRESSION)
+            PsiElement(KTokenType.number_vector)('3 1 4')
+      PsiElement(KTokenType.])(']')
+    Element(TABLE_COLS)
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number_vector)('1 2 3')
+    PsiElement(KTokenType.))(')')
+============|
+
+
+([pk1:3 1 4; pk2:110b] a:1 2 3; b:`a`b`c)
+------------>
+Element(EXPRESSION)
+  Element(TABLE)
+    PsiElement(KTokenType.()('(')
+    Element(TABLE_PKS)
+      PsiElement(KTokenType.[)('[')
+      Element(TABLE_COLS)
+        Element(TABLE_COL)
+          Element(USER_ID)
+            PsiElement(KTokenType.user_identifier)('pk1')
+          PsiElement(KTokenType.:)(':')
+          Element(EXPRESSION)
+            PsiElement(KTokenType.number_vector)('3 1 4')
+        PsiElement(KTokenType.;)(';')
+        Element(TABLE_COL)
+          Element(USER_ID)
+            PsiElement(KTokenType.user_identifier)('pk2')
+          PsiElement(KTokenType.:)(':')
+          Element(EXPRESSION)
+            PsiElement(KTokenType.number_vector)('110b')
+      PsiElement(KTokenType.])(']')
+    Element(TABLE_COLS)
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('a')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number_vector)('1 2 3')
+      PsiElement(KTokenType.;)(';')
+      Element(TABLE_COL)
+        Element(USER_ID)
+          PsiElement(KTokenType.user_identifier)('b')
+        PsiElement(KTokenType.:)(':')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.symbol_vector)('`a`b`c')
+    PsiElement(KTokenType.))(')')

@@ -10,7 +10,7 @@ public class GeneratorTest extends KParserTest {
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
-    final File folder = new File(TEST_DATA_FOLDER_NAME);
+    final File folder = new File(TEST_DATA_FOLDERS_PATH);
     for(String fileName : folder.list()) {
       suite.addTest(new GeneratorTest(fileName));
     }

@@ -1,0 +1,309 @@
+42
+42j
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('42')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('42j')
+============|
+
+
+-123h
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.number)('-123h')
+============|
+
+
+12345i
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.number)('12345i')
+============|
+
+
+3.14f
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.number)('3.14f')
+============|
+
+
+1.23e7
+1.23e07
+1.23e-7
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1.23e7')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1.23e07')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1.23e-7')
+============|
+
+
+12.34e
+1.23e7e
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('12.34e')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1.23e7e')
+============|
+
+
+0b
+1b
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('0b')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('1b')
+============|
+
+
+-1b
+2b
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('-1')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('b')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(KTokenType.user_identifier)('b')
+============|
+
+
+0x2a
+0x2A
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('0x2a')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('0x2A')
+============|
+
+
+"a"
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.char)('"a"')
+============|
+
+
+`some
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.symbol)('`some')
+============|
+
+
+2015.01.01
+2015.01.01d
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2015.01.01')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2015.01.01d')
+============|
+
+
+2015.1.1
+------------>
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.number)('2015.1')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.verb)('.')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('1')
+============|
+
+
+12:34
+12:34:56
+12:34:56.789
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('12:34')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('12:34:56')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('12:34:56.789')
+============|
+
+
+2000.01.02T12
+2000.01.02T12:00
+2000.01.02T12:00:00
+2000.01.02T12:00:00.000
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2000.01.02T12')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2000.01.02T12:00')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2000.01.02T12:00:00')
+  PsiElement(KTokenType.newline)('\n')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('2000.01.02T12:00:00.000')
+============|
+
+
+2015.11m
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.number)('2015.11m')
+============|
+
+
+12:30
+------------>
+Element(EXPRESSION)
+  PsiElement(KTokenType.number)('12:30')
+============|
+
+
+((0w -0w 0n 0W -0W 0N);
+ (0b;0Ng;0x00;0Nh;0N;0Nj;0Ne;0n;" ";`;0Np;0Nm;0Nd;0Nz;0Nn;0Nu;0Nv;0Nt))
+------------>
+Element(EXPRESSION)
+  Element(LIST)
+    PsiElement(KTokenType.()('(')
+    Element(EXPRESSION)
+      Element(GROUP)
+        PsiElement(KTokenType.()('(')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number_vector)('0w -0w 0n 0W -0W 0N')
+        PsiElement(KTokenType.))(')')
+    PsiElement(KTokenType.;)(';')
+    PsiElement(KTokenType.newline)('\n')
+    Element(EXPRESSION)
+      Element(LIST)
+        PsiElement(KTokenType.()('(')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0b')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Ng')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0x00')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nh')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0N')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nj')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Ne')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0n')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.char)('" "')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.symbol)('`')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Np')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nm')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nd')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nz')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nn')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nu')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nv')
+        PsiElement(KTokenType.;)(';')
+        Element(EXPRESSION)
+          PsiElement(KTokenType.number)('0Nt')
+        PsiElement(KTokenType.))(')')
+    PsiElement(KTokenType.))(')')
+============|
+
+
+(0wh;-0wh;0Wh;-0Wh;0wi;-0wi;0Wi;-0Wi;0wf;-0wf;0Wf;-0Wf);
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    Element(LIST)
+      PsiElement(KTokenType.()('(')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('0wh')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('-0wh')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('0Wh')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('-0Wh')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('0wi')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('-0wi')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('0Wi')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('-0Wi')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('0wf')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('-0wf')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('0Wf')
+      PsiElement(KTokenType.;)(';')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.number)('-0Wf')
+      PsiElement(KTokenType.))(')')
+  PsiElement(KTokenType.;)(';')

@@ -60,7 +60,7 @@ public class ScriptsTest extends KParserTest {
     );
     final String s = DebugUtil.nodeTreeToString(tree, true);
     if (hasParseError(s)) {
-      throw new RuntimeException(msg);
+      throw new RuntimeException(s);
     } else {
       System.out.println(msg);
     }

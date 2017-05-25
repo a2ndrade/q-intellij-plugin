@@ -27,7 +27,7 @@ COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
 COMMAND_NAME={WHITE_SPACE}*"\\"[dl]
 USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
-SYSTEM_IDENTIFIER="_" [._a-zA-Z0-9]*
+SYSTEM_IDENTIFIER="_" [._a-zA-Z0-9]+
 N_COLON=[0-6] ":"
 ID={USER_IDENTIFIER}|{SYSTEM_IDENTIFIER}
 ID_START=[_.][a-zA-Z]
@@ -40,26 +40,30 @@ CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE}*)+)
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
 VERB=[!#$%&*+,-.<=>?@\^_|~]
-ADVERB="/" | "/": | \\ | \\: | ' | ':
+MONADIC_AND_DYADIC_ADVERB="/" | \\ | '
+DYADIC_ONLY_ADVERB="/": | \\: | ':
+ADVERB={MONADIC_AND_DYADIC_ADVERB}|{DYADIC_ONLY_ADVERB}
 
 // function composition
-COMPOSED_MONAD=(({VERB}|{N_COLON}){WHITE_SPACE}*) ":"
+SIMPLE_COMPOSED_MONAD=(({VERB}{WHITE_SPACE}*)+|{N_COLON}){WHITE_SPACE}* ":"
+COMPOSED_MONAD={SIMPLE_COMPOSED_MONAD} {MONADIC_AND_DYADIC_ADVERB}*
 
 // higher-order functions
-DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
+DERIVED_VERB=({ID}|({VERB}|{N_COLON})){ADVERB}+
 
-%state MINUS
+%state INFIX
 %state DERIVED_LAMBDA
 %state ESCAPE
 %state COMMAND
 
 %%
 
-<MINUS> {
-  "-"/":["                     { yybegin(YYINITIAL); return VERB;}
-  "-:"                         { yybegin(YYINITIAL); return COMPOSED_MONAD;}
-  "-" (":"?) {ADVERB}+         { yybegin(YYINITIAL); return DERIVED_VERB;}
-  "-"                          { yybegin(YYINITIAL); return VERB;}
+<INFIX> {
+  {SYSTEM_IDENTIFIER}          { yybegin(YYINITIAL);  return SYSTEM_IDENTIFIER; }
+  {DERIVED_VERB}               { yybegin(YYINITIAL); return DERIVED_VERB;}
+  {VERB}/":["                  { yybegin(YYINITIAL); return VERB;}
+  {VERB}/{COMPOSED_MONAD}      { yybegin(YYINITIAL); return VERB;}
+  {VERB}                       { yybegin(YYINITIAL); return VERB;}
 }
 
 <DERIVED_LAMBDA> {
@@ -105,24 +109,26 @@ DERIVED_VERB=({ID}|(({VERB}|{N_COLON})":"?)){ADVERB}+
 
   "("                          { return OPEN_PAREN; }
   ")"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_PAREN; }
-  ")"/-                        { yybegin(MINUS); return CLOSE_PAREN; }
+  ")"/{VERB}                   { yybegin(INFIX); return CLOSE_PAREN; }
   ")"                          { return CLOSE_PAREN; }
   ";"                          { return SEMICOLON; }
   "["                          { return OPEN_BRACKET; }
   "]"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACKET; }
-  "]"/-                        { yybegin(MINUS); return CLOSE_BRACKET; }
+  "]"/{VERB}                   { yybegin(INFIX); return CLOSE_BRACKET; }
   "]"                          { return CLOSE_BRACKET; }
   "{"                          { return OPEN_BRACE; }
   "}"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACE; }
   "}"                          { return CLOSE_BRACE; }
 
-  {SYSTEM_IDENTIFIER}/-        { yybegin(MINUS); return SYSTEM_IDENTIFIER; }
+  {SYSTEM_IDENTIFIER}/{VERB}   { yybegin(INFIX); return SYSTEM_IDENTIFIER; }
   {SYSTEM_IDENTIFIER}          { return SYSTEM_IDENTIFIER; }
-  {USER_IDENTIFIER}/-          { yybegin(MINUS); return USER_IDENTIFIER; }
+  {USER_IDENTIFIER}/{VERB}     { yybegin(INFIX); return USER_IDENTIFIER; }
   {USER_IDENTIFIER}            { return USER_IDENTIFIER; }
-  {NUMBER}/-                   { yybegin(MINUS); return NUMBER; }
+  {NUMBER}/{VERB}              { yybegin(INFIX); return NUMBER; }
   {NUMBER}                     { return NUMBER; }
+  {CHAR}/{VERB}                { yybegin(INFIX); return CHAR; }
   {CHAR}                       { return CHAR; }
+  {CHAR_VECTOR}/{VERB}         { yybegin(INFIX); return STRING; }
   {CHAR_VECTOR}                { return STRING; }
 
   ":"                          { return COLON; }

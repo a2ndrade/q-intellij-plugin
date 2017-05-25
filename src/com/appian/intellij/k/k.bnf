@@ -91,17 +91,20 @@ root ::= E0+ separator_or_eof
 private E0 ::= top_level_assignment
              | command
              | E1
-             | C0
+             | E5
+             | E6
 private E1 ::= separator
              | expression
 private E2 ::= separator
              | E3
-private E3 ::= expression
-             | C0
-private C0 ::= verb+
+private E3 ::= E4
+             | E6
+private E4 ::= expression
+             | E5
+private E5 ::= verb+
              | composed_monad
              | derived_verb
-             | colon [colon]
+private E6 ::= colon [colon]
              | n_colon
 
 private separator ::= semicolon | newline
@@ -116,12 +119,12 @@ user_id ::= user_identifier {
 }
 
 expression ::= signal | trace | assignment | fn_call | noun
-private fn_call ::= infix_fn_call | mixed_fn_call | monad_fn_call
+private fn_call ::= infix_fn_call | monad_fn_call | mixed_fn_call
 // this rule is written this way for parsing performance (reuse as much work as possible)
 // if you change anything about it, make sure performance is not affected
 private mixed_fn_call ::= (prefix_fn_call | callable) [(infix_fn [E3]) | expression]
 monad_fn_call ::= monad_fn monad_arg
-monad_fn ::= verb | derived_verb | n_colon | colon
+monad_fn ::= verb | derived_verb | composed_monad | n_colon | colon
 monad_arg ::= E3
 
 private noun ::= vector | atom
@@ -146,10 +149,11 @@ infix_fn ::= (infixNoIndex | infixIndex) [adverb]
 private infixNoIndex ::= n_colon
 private infixIndex ::= (verb | adverb | system_identifier | derived_verb) [index]
 
-private assignment ::= global_assignment | local_assignment
-global_assignment ::= user_id colon colon expression
-local_assignment ::= user_id [index] (colon expression | composed_monad [expression])
-top_level_assignment ::= user_id colon [colon] expression
+private assignment ::= global_assignment | local_assignment | compound_assignment
+global_assignment ::= user_id colon colon E4
+local_assignment ::= user_id colon E4
+compound_assignment ::= user_id [index] [verb] colon E4
+top_level_assignment ::= user_id colon [colon] E4
 
 signal ::= tick expression
 trace ::= back_slash expression

@@ -7,7 +7,8 @@ import com.intellij.psi.PsiFileFactory;
 public final class KElementFactory {
   public static KUserId createProperty(Project project, String name) {
     final KFile file = createFile(project, name);
-    return (KUserId)file.getFirstChild();
+    // file -> expression -> user_id
+    return (KUserId)file.getFirstChild().getFirstChild();
   }
 
   public static KFile createFile(Project project, String text) {

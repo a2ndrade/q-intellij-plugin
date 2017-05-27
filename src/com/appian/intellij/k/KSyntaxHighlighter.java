@@ -61,7 +61,8 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final Map<IElementType, TextAttributesKey[]> M = ImmutableMap.<IElementType, TextAttributesKey[]>builder()
 
     .put(KTypes.USER_IDENTIFIER, IDENTIFIER_KEYS)
-    .put(KTypes.SYSTEM_IDENTIFIER, IDENTIFIER_SYS_KEYS)
+    .put(KTypes.K3_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS)
+    .put(KTypes.Q_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS)
 
     .put(KTypes.NUMBER, NUMBER_KEYS)
     .put(KTypes.NUMBER_VECTOR, NUMBER_KEYS)

@@ -164,7 +164,7 @@ Element(EXPRESSION)
     PsiElement(KTokenType.derived_verb)('-/')
   Element(EXPRESSION)
     Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('avg')
+      PsiElement(KTokenType.q_system_function)('avg')
 ============|
 
 

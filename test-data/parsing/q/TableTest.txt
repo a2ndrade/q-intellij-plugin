@@ -4,7 +4,7 @@ Element(FILE)
   PsiElement(KTokenType.()('(')
   PsiElement(KTokenType.[)('[')
   PsiElement(KTokenType.])(']')
-  PsiErrorElement:KTokenType.user_identifier expected, got ')'
+  PsiErrorElement:<table cols> expected, got ')'
     PsiElement(KTokenType.))(')')
 ============|
 

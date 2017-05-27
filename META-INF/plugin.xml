@@ -50,5 +50,6 @@
     <lang.refactoringSupport language="k" implementationClass="com.appian.intellij.k.KRefactoringSupportProvider"/>
     <psi.referenceContributor implementation="com.appian.intellij.k.KReferenceContributor"/>
     <gotoSymbolContributor implementation="com.appian.intellij.k.KChooseByNameContributor"/>
+    <lang.namesValidator language="k" implementationClass="com.appian.intellij.k.KNamesValidator"/>
   </extensions>
 </idea-plugin>

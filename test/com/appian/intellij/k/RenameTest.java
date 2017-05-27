@@ -20,6 +20,15 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
 
   public void testReference() {
     myFixture.configureByFiles("RenameTest.k");
+    doTestReference();
+  }
+
+  public void testReferenceNs() {
+    myFixture.configureByFiles("RenameNsTest.k");
+    doTestReference();
+  }
+
+  private void doTestReference() {
     PsiElement elementAt = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
     KPrefixFnArgs element = (KPrefixFnArgs)elementAt.getParent();
     PsiReference[] references = ((KPrefixFnCall)element.getParent()).getPrefixFn()
@@ -34,6 +43,12 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
     myFixture.configureByFiles("RenameTest.k");
     myFixture.renameElementAtCaret("powerRenamed");
     myFixture.checkResultByFile("RenameTestAfter.k", false);
+  }
+
+  public void testRenameNs() {
+    myFixture.configureByFiles("RenameNsTest.k");
+    myFixture.renameElementAtCaret(".x.y.powerRenamed");
+    myFixture.checkResultByFile("RenameNsTestAfter.k", false);
   }
 
 }

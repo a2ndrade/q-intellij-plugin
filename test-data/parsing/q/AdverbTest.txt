@@ -1,11 +1,10 @@
 prev::':
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.()('(')
-  PsiElement(KTokenType.[)('[')
-  PsiElement(KTokenType.])(']')
-  PsiErrorElement:KTokenType.user_identifier expected, got ')'
-    PsiElement(KTokenType.))(')')
+Element(TOP_LEVEL_ASSIGNMENT)
+  Element(USER_ID)
+    PsiElement(KTokenType.q_system_function)('prev')
+  PsiElement(KTokenType.:)(':')
+  PsiElement(KTokenType.derived_verb)(':':')
 ============|
 
 

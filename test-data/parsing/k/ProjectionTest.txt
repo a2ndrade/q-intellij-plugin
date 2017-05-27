@@ -30,7 +30,7 @@ Element(EXPRESSION)
   Element(INFIX_FN_CALL)
     PsiElement(KTokenType.number)('4')
     Element(INFIX_FN)
-      PsiElement(KTokenType.system_identifier)('_div')
+      PsiElement(KTokenType.k3_system_function)('_div')
 ============|
 
 
@@ -40,7 +40,10 @@ Element(EXPRESSION)
   Element(INFIX_FN_CALL)
     PsiElement(KTokenType.number)('4')
     Element(INFIX_FN)
-      PsiElement(KTokenType.system_identifier)('_div')
+      PsiElement(KTokenType.verb)('_')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(KTokenType.q_system_function)('div')
 ============|
 
 
@@ -53,7 +56,7 @@ Element(EXPRESSION)
       Element(INFIX_FN_CALL)
         PsiElement(KTokenType.number)('4')
         Element(INFIX_FN)
-          PsiElement(KTokenType.system_identifier)('_div')
+          PsiElement(KTokenType.k3_system_function)('_div')
     PsiElement(KTokenType.))(')')
   Element(EXPRESSION)
     PsiElement(KTokenType.number)('2')

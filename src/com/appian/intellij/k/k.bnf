@@ -60,8 +60,9 @@
     derived_verb="derived_verb"
 
     // names
-    user_identifier='regexp:[a-zA-Z][._a-zA-Z0-9]*'
-    system_identifier='regexp:_[._a-zA-Z0-9]*|[0-6]:'
+    user_identifier="user_identifier"
+    k3_system_function="k3_system_function"
+    q_system_function="q_system_function"
 
     // nouns
     number='regexp:((0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?|0[iInN])'
@@ -113,7 +114,7 @@ private separator_or_eof ::= separator | <<eof>>
 group ::= open_paren E3 close_paren
 statement ::= open_bracket E2* close_bracket
 
-user_id ::= user_identifier {
+user_id ::= (user_identifier | q_system_function) {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
   implements="com.appian.intellij.k.psi.KNamedElement"
   methods=[getName setName getNameIdentifier getPresentation]
@@ -128,8 +129,9 @@ monad_fn_call ::= monad_fn monad_arg
 monad_fn ::= verb | derived_verb | composed_monad | n_colon | colon
 monad_arg ::= E3
 
+private system_function ::= k3_system_function | q_system_function
 private noun ::= vector | atom
-private callable ::= user_id | system_identifier | fn_and_index_target [index+]
+private callable ::= user_id | system_function | fn_and_index_target [index+]
 
 private fn_and_index_target ::= symbol | string | vector | lambda | list | table | group
 
@@ -143,7 +145,7 @@ table_cols ::= (table_col (separator table_col)*)
 table_col ::= user_id colon E1 // ignores significant k3 whitespaces
 lambda ::= open_brace [lambda_params] E1* close_brace
 lambda_params ::= open_bracket [user_id (separator user_id)*] close_bracket
-prefix_fn ::= (control | derived_verb | verb | user_id | system_identifier)
+prefix_fn ::= (control | derived_verb | verb | user_id | system_function)
 prefix_fn_call ::= prefix_fn prefix_fn_args index*
 prefix_fn_args ::= open_bracket (E2|statement)* close_bracket
 index ::= open_bracket E2* close_bracket
@@ -152,7 +154,7 @@ private control ::= (colon | if | do | while)
 infix_fn_call ::= noun infix_fn [E3]
 infix_fn ::= (infixNoIndex | infixIndex) [adverb]
 private infixNoIndex ::= n_colon
-private infixIndex ::= (verb | adverb | system_identifier | derived_verb) [index]
+private infixIndex ::= (verb | adverb | system_function | derived_verb) [index]
 
 private assignment ::= global_assignment | local_assignment | compound_assignment
 global_assignment ::= user_id colon colon E4

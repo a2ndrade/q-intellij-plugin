@@ -148,7 +148,7 @@ not:~:
 ------------>
 Element(TOP_LEVEL_ASSIGNMENT)
   Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('not')
+    PsiElement(KTokenType.q_system_function)('not')
   PsiElement(KTokenType.:)(':')
   Element(EXPRESSION)
     Element(MONAD_FN_CALL)
@@ -163,7 +163,7 @@ neg:-:
 ------------>
 Element(TOP_LEVEL_ASSIGNMENT)
   Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('neg')
+    PsiElement(KTokenType.q_system_function)('neg')
   PsiElement(KTokenType.:)(':')
   Element(EXPRESSION)
     Element(MONAD_FN_CALL)

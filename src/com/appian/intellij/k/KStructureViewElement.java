@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.Icon;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KUserId;
@@ -43,7 +46,10 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
   @NotNull
   @Override
   public ItemPresentation getPresentation() {
-    return element instanceof NavigationItem ? ((NavigationItem)element).getPresentation() : null;
+    if (element instanceof KFile) {
+      return ((NavigationItem)element).getPresentation();
+    }
+    return getTreeItemPresentation((KUserId)element);
   }
 
   @NotNull
@@ -77,5 +83,27 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
   @Override
   public boolean canNavigateToSource() {
     return element instanceof NavigationItem && ((NavigationItem)element).canNavigateToSource();
+  }
+
+  private static ItemPresentation getTreeItemPresentation(final KUserId element) {
+    return new ItemPresentation() {
+      @Nullable
+      @Override
+      public String getPresentableText() {
+        return KUtil.getDescriptiveName(element);
+      }
+
+      @Nullable
+      @Override
+      public String getLocationString() {
+        return null;
+      }
+
+      @Nullable
+      @Override
+      public Icon getIcon(boolean unused) {
+        return null;
+      }
+    };
   }
 }

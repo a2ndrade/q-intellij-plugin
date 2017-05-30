@@ -8,6 +8,7 @@ import com.appian.intellij.k.psi.KExpression;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
+import com.google.common.base.Strings;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
@@ -57,12 +58,17 @@ public class KFindUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getDescriptiveName(@NotNull PsiElement element) {
-    return element instanceof KUserId ? ((KUserId)element).getName() : "";
+    if (element instanceof KUserId) {
+      return KUtil.getDescriptiveName((KUserId)element);
+    }
+    return "";
   }
+
+
 
   @NotNull
   @Override
   public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-    return getDescriptiveName(element);
+    return Strings.nullToEmpty(element instanceof KUserId ? ((KUserId)element).getName() : null);
   }
 }

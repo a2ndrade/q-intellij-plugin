@@ -13,16 +13,23 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
+import com.appian.intellij.k.psi.KExpression;
 import com.appian.intellij.k.psi.KFile;
+import com.appian.intellij.k.psi.KLambda;
+import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamespaceDefinition;
 import com.appian.intellij.k.psi.KTopLevelAssignment;
 import com.appian.intellij.k.psi.KUserId;
+import com.google.common.base.Strings;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiTreeUtil;
 
 public final class KUtil {
 
@@ -113,6 +120,16 @@ public final class KUtil {
       topLevelElement = topLevelElement.getNextSibling();
     } while (topLevelElement != null);
     return namespaces;
+  }
+
+  @NotNull
+  static String getDescriptiveName(@NotNull KUserId element) {
+    final KExpression expression = PsiTreeUtil.getNextSiblingOfType(element, KExpression.class);
+    if (expression != null && expression.getFirstChild() instanceof KLambda) {
+      final KLambdaParams lambdaParams = ((KLambda)expression.getFirstChild()).getLambdaParams();
+      return element.getName() + (lambdaParams == null ? "[]" : String.valueOf(lambdaParams.getText()));
+    }
+    return Strings.nullToEmpty(element.getName());
   }
 
 }

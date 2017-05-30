@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +24,6 @@ import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamespaceDefinition;
 import com.appian.intellij.k.psi.KTopLevelAssignment;
 import com.appian.intellij.k.psi.KUserId;
-import com.google.common.base.Strings;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -152,12 +152,22 @@ public final class KUtil {
 
   @NotNull
   static String getDescriptiveName(@NotNull KUserId element) {
+    return getFunctionDefinition(element).map((KLambda lambda) -> {
+      final KLambdaParams lambdaParams = lambda.getLambdaParams();
+      final String paramsText = Optional.ofNullable(lambdaParams)
+          .map(KLambdaParams::getUserIdList)
+          .map(params -> params.isEmpty() ? "" : lambdaParams.getText())
+          .orElse("");
+      return element.getName() + paramsText;
+    }).orElse(element.getName());
+  }
+
+  static Optional<KLambda> getFunctionDefinition(@NotNull KUserId element) {
     final KExpression expression = PsiTreeUtil.getNextSiblingOfType(element, KExpression.class);
     if (expression != null && expression.getFirstChild() instanceof KLambda) {
-      final KLambdaParams lambdaParams = ((KLambda)expression.getFirstChild()).getLambdaParams();
-      return element.getName() + (lambdaParams == null ? "[]" : String.valueOf(lambdaParams.getText()));
+      return Optional.of((KLambda)expression.getFirstChild());
     }
-    return Strings.nullToEmpty(element.getName());
+    return Optional.empty();
   }
 
 }

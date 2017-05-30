@@ -11,7 +11,7 @@
   elementTypeClass="com.appian.intellij.k.psi.KElementType"
   tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
 
-//  implements("(local|global|compound|top_level)_assignment") = "com.appian.intellij.k.psi.KAssignment"
+  implements("(local|global|top_level)_assignment") = "com.appian.intellij.k.psi.KAssignment"
 
   psiImplUtilClass="com.appian.intellij.k.psi.impl.KPsiImplUtil"
 

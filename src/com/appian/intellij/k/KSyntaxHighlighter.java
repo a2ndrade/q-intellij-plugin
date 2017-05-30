@@ -2,7 +2,8 @@ package com.appian.intellij.k;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.Reader;
 import java.util.Map;
 
@@ -31,7 +32,6 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   public static final TextAttributesKey BRACKETS = createTextAttributesKey("K_BRACKETS", DefaultLanguageHighlighterColors.BRACKETS);
   public static final TextAttributesKey PARENS = createTextAttributesKey("K_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES);
   public static final TextAttributesKey COMMENT = createTextAttributesKey("K_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-  public static final TextAttributesKey COMMAND = createTextAttributesKey("K_COMMAND", DefaultLanguageHighlighterColors.METADATA);
 
   static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("K_BAD_CHARACTER",
     new TextAttributes(Color.RED, null, null, null, Font.BOLD));
@@ -48,7 +48,6 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final TextAttributesKey[] BRACKETS_KEYS = new TextAttributesKey[]{BRACKETS};
   private static final TextAttributesKey[] PARENS_KEYS = new TextAttributesKey[]{PARENS};
   private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
-  private static final TextAttributesKey[] COMMAND_KEYS = new TextAttributesKey[]{COMMAND};
 
   private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
   private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
@@ -78,7 +77,8 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.DERIVED_VERB, KEYWORD_KEYS)
     .put(KTypes.ADVERB, ADVERB_KEYS)
 
-    .put(KTypes.COMMAND_NAME, COMMAND_KEYS)
+    .put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS)
+    .put(KTypes.NAMESPACE_DEFINITION, IDENTIFIER_SYS_KEYS)
 
     .put(KTypes.COLON, KEYWORD_KEYS)
     .put(KTypes.IF, KEYWORD_KEYS)

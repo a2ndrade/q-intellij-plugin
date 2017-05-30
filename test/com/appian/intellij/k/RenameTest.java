@@ -1,9 +1,8 @@
 package com.appian.intellij.k;
 
-import com.appian.intellij.k.psi.KPrefixFnArgs;
-import com.appian.intellij.k.psi.KPrefixFnCall;
-import com.appian.intellij.k.psi.KTopLevelAssignment;
+import com.appian.intellij.k.psi.KUserId;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
@@ -15,40 +14,36 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return "test-data";
+    return "test-data/renaming";
   }
 
-  public void testReference() {
-    myFixture.configureByFiles("RenameTest.k");
-    doTestReference();
+  public void testRenameAll() {
+    for (String context : new String[]{"top", "fn"}) {
+      for (String fromType : new String[]{"local"}) {
+        for (String toType : new String[]{"global"}) {
+          for (String from : new String[]{"def", "usage"}) {
+            final String fileNamePrefix = context + "_" + fromType + "_to_" + toType + "_from_" + from;
+            final String inputFileName = fileNamePrefix + ".k";
+            final String outputFileName = fileNamePrefix + "_after.k";
+            final String renameTo = "local".equals(toType) ? "test2" : ".g.test";
+            myFixture.configureByFile(inputFileName);
+            final PsiFile virtualFile = myFixture.getFile();
+            assertReferences(virtualFile);
+            myFixture.renameElementAtCaret(renameTo);
+            myFixture.checkResultByFile(outputFileName, false);
+          }
+        }
+      }
+    }
   }
 
-  public void testReferenceNs() {
-    myFixture.configureByFiles("RenameNsTest.k");
-    doTestReference();
-  }
-
-  private void doTestReference() {
-    PsiElement elementAt = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
-    KPrefixFnArgs element = (KPrefixFnArgs)elementAt.getParent();
-    PsiReference[] references = ((KPrefixFnCall)element.getParent()).getPrefixFn()
-        .getUserId()
-        .getReferences();
+  private void assertReferences(PsiFile file) {
+    final PsiElement userIdToken = file.findElementAt(myFixture.getCaretOffset());
+    final PsiElement userId = userIdToken.getContext();
+    assertInstanceOf(userId, KUserId.class);
+    final PsiReference[] references = userId.getReferences();
     assertEquals(1, references.length);
-    PsiElement topLevelAssignment = references[0].resolve().getParent();
-    assertInstanceOf(topLevelAssignment, KTopLevelAssignment.class);
-  }
-
-  public void testRename() {
-    myFixture.configureByFiles("RenameTest.k");
-    myFixture.renameElementAtCaret("powerRenamed");
-    myFixture.checkResultByFile("RenameTestAfter.k", false);
-  }
-
-  public void testRenameNs() {
-    myFixture.configureByFiles("RenameNsTest.k");
-    myFixture.renameElementAtCaret(".x.y.powerRenamed");
-    myFixture.checkResultByFile("RenameNsTestAfter.k", false);
+    assertNotNull(references[0].resolve());
   }
 
 }

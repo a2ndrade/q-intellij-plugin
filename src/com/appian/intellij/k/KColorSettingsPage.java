@@ -21,7 +21,7 @@ public final class KColorSettingsPage implements ColorSettingsPage {
     new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
     new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
     new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
-    new AttributesDescriptor("Command", KSyntaxHighlighter.COMMAND)
+    new AttributesDescriptor("Command", KSyntaxHighlighter.IDENTIFIER_SYS)
   };
 
   @Override

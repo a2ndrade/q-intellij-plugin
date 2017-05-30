@@ -2,8 +2,8 @@
  / after whitespace
 ------------>
 Element(FILE)
-  Element(COMMAND)
-    PsiElement(KTokenType.command_name)('\d')
+  Element(NAMESPACE_DEFINITION)
+    PsiElement(KTokenType.\\d)('\d')
     Element(USER_ID)
       PsiElement(KTokenType.user_identifier)('.a.p.PROCESS')
   PsiElement(KTokenType.newline)('\n')
@@ -129,7 +129,7 @@ all these
 are comments
 ------------>
 Element(FILE)
-  PsiErrorElement:<expression>, <top level assignment>, KTokenType.:, KTokenType.;, KTokenType.command_name, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.n_colon, KTokenType.newline or KTokenType.verb expected, unexpected end of file
+  PsiErrorElement:<command>, <expression>, <top level assignment>, KTokenType.:, KTokenType.;, KTokenType.\\d, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.n_colon, KTokenType.newline or KTokenType.verb expected, unexpected end of file
     <empty list>
   PsiComment(KTokenType.comment)('\')
   PsiComment(KTokenType.comment)('\nall these\nare comments')

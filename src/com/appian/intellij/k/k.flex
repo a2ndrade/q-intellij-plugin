@@ -25,7 +25,14 @@ ANY=({NEWLINE}|.)*
 COMMENT1="/" [^\r\n]* {NEWLINE}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
-COMMAND_NAME={WHITE_SPACE}*"\\"[dl]
+SIMPLE_COMMAND="\\"(
+  [dafv_ib] // ({WHITE_SPACE}+{USER_IDENTIFIER})?
+ |([ls12x]|"kr") // {WHITE_SPACE}+{USER_IDENTIFIER}
+ |[egopPSTwWz] // ({WHITE_SPACE}+{NUMBER})? // 't' is not included b/c in K3 it takes an expression
+ |[bBrsu\\wm]
+ |[cC] //{NUMBER_VECTOR}
+  )
+COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
 USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
 N_COLON=[0-6] ":"
 ID={USER_IDENTIFIER}|{K3_SYSTEM_FUNCTION}|{Q_SYSTEM_FUNCTION}
@@ -108,16 +115,19 @@ DERIVED_VERB=({ID}|({VERB}|{N_COLON}|":")){ADVERB}+
 }
 
 <COMMAND> {
-  "^"                          { yybegin(YYINITIAL); return CARET; }
-  {USER_IDENTIFIER}            { yybegin(YYINITIAL); return USER_IDENTIFIER; }
+  "^"                          { yybegin(YYINITIAL); return USER_IDENTIFIER; }
+  "."                          { yybegin(YYINITIAL); return USER_IDENTIFIER; }
   {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
-  {NEWLINE}                    { yybegin(YYINITIAL); return NEWLINE; }
+  {USER_IDENTIFIER}            { yybegin(YYINITIAL); return USER_IDENTIFIER; }
+  {NUMBER}                     { yybegin(YYINITIAL); return NUMBER; }
+  {NUMBER_VECTOR}              { yybegin(YYINITIAL); return NUMBER_VECTOR; }
 }
 
 <YYINITIAL> {
-
   {NEWLINE}+                   { return NEWLINE; }
-  ^{COMMAND_NAME}              { yybegin(COMMAND); return COMMAND_NAME; }
+  ^"\\d"                       { yybegin(COMMAND); return CURRENT_NAMESPACE; }
+  ^{SIMPLE_COMMAND}            { yybegin(COMMAND); return SIMPLE_COMMAND; }
+  ^{COMPLEX_COMMAND}           { return COMPLEX_COMMAND; }
   {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
   {N_COLON}/[^\[]              { return N_COLON; }
   ":"/"["                      { return COLON; }
@@ -153,8 +163,8 @@ DERIVED_VERB=({ID}|({VERB}|{N_COLON}|":")){ADVERB}+
   "}"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACE; }
   "}"                          { return CLOSE_BRACE; }
 
-  {K3_SYSTEM_FUNCTION}/{VERB}   { yybegin(INFIX); return K3_SYSTEM_FUNCTION; }
-  {K3_SYSTEM_FUNCTION}          { return K3_SYSTEM_FUNCTION; }
+  {K3_SYSTEM_FUNCTION}/{VERB}  { yybegin(INFIX); return K3_SYSTEM_FUNCTION; }
+  {K3_SYSTEM_FUNCTION}         { return K3_SYSTEM_FUNCTION; }
   {Q_SYSTEM_FUNCTION}/{VERB}   { yybegin(INFIX); return Q_SYSTEM_FUNCTION; }
   {Q_SYSTEM_FUNCTION}          { return Q_SYSTEM_FUNCTION; }
   {USER_IDENTIFIER}/{VERB}     { yybegin(INFIX); return USER_IDENTIFIER; }

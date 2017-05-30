@@ -24,7 +24,7 @@ public final class KReferenceContributor extends PsiReferenceContributor {
         public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
           if (element instanceof KUserId) {
             final String key = element.getText();
-            return new PsiReference[]{new KReference(element, new TextRange(0, key.length()))};
+            return new PsiReference[]{new KReference((KUserId)element, new TextRange(0, key.length()))};
           }
           return new PsiReference[0];
         }

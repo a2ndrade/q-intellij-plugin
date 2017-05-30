@@ -39,5 +39,5 @@ Element(EXPRESSION)
 ------------>
 Element(FILE)
   PsiElement(KTokenType.char)('" "')
-  PsiErrorElement:<expression>, <infix fn>, <top level assignment>, KTokenType.:, KTokenType.;, KTokenType.command_name, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.n_colon, KTokenType.newline or KTokenType.verb expected, got '"'
+  PsiErrorElement:<command>, <expression>, <infix fn>, <top level assignment>, KTokenType.:, KTokenType.;, KTokenType.\\d, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.n_colon, KTokenType.newline or KTokenType.verb expected, got '"'
     PsiElement(BAD_CHARACTER)('"')

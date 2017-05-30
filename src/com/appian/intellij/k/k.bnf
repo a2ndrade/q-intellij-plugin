@@ -11,6 +11,8 @@
   elementTypeClass="com.appian.intellij.k.psi.KElementType"
   tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
 
+//  implements("(local|global|compound|top_level)_assignment") = "com.appian.intellij.k.psi.KAssignment"
+
   psiImplUtilClass="com.appian.intellij.k.psi.impl.KPsiImplUtil"
 
   tokens=[
@@ -72,7 +74,9 @@
     number_vector="number_vector"
 
     // commands
-    command_name='regexp:\s*\\[dl]'
+    current_namespace="\\d"
+    simple_command="simple_command"
+    complex_command="complex_command"
 
     // i/o, dynamic load and client/server
     n_colon='regexp:[0-6]:'
@@ -90,6 +94,7 @@
 
 root ::= E0+ separator_or_eof
 private E0 ::= top_level_assignment
+             | namespace_definition
              | command
              | E1
              | E5
@@ -164,4 +169,5 @@ top_level_assignment ::= user_id colon [colon] E4
 
 signal ::= tick expression
 trace ::= back_slash expression
-command ::= command_name (user_id | "^")
+namespace_definition ::= current_namespace user_id
+command ::= simple_command (user_id|number|number_vector|caret) | complex_command (number|expression)

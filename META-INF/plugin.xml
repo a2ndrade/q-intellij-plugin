@@ -52,5 +52,6 @@
     <gotoSymbolContributor implementation="com.appian.intellij.k.KChooseByNameContributor"/>
     <lang.namesValidator language="k" implementationClass="com.appian.intellij.k.KNamesValidator"/>
     <lang.findUsagesProvider language="k" implementationClass="com.appian.intellij.k.KFindUsagesProvider"/>
+    <lang.psiStructureViewFactory language="k" implementationClass="com.appian.intellij.k.KStructureViewFactory"/>
   </extensions>
 </idea-plugin>

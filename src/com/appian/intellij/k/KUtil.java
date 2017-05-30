@@ -23,14 +23,17 @@ import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamespaceDefinition;
 import com.appian.intellij.k.psi.KTopLevelAssignment;
+import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public final class KUtil {
@@ -168,6 +171,34 @@ public final class KUtil {
       return Optional.of((KLambda)expression.getFirstChild());
     }
     return Optional.empty();
+  }
+
+  static boolean isInKFile(PsiElement element) {
+    return isInFileWithExt(element, "k");
+  }
+
+  static boolean isInQFile(PsiElement element) {
+    return isInFileWithExt(element, "q");
+  }
+
+  private static boolean isInFileWithExt(PsiElement element, String extension) {
+    return Optional.ofNullable(element.getContainingFile())
+        .map(PsiFile::getVirtualFile)
+        .map(VirtualFile::getExtension)
+        .filter(ext -> ext.equals(extension))
+        .isPresent();
+  }
+
+  public static boolean isValidIdentifier(PsiElement element) {
+    if (!(element instanceof KUserId)) {
+      return false;
+    }
+    // in k3, the Q built-in functions are valid variable names. In Q, they are not
+    if (KUtil.isInQFile(element)) {
+      final IElementType elementType = ((KUserId)element).getNameIdentifier().getNode().getElementType();
+      return KTypes.Q_SYSTEM_FUNCTION != elementType;
+    }
+    return true;
   }
 
 }

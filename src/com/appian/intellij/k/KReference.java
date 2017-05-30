@@ -8,8 +8,6 @@ import com.appian.intellij.k.psi.KLocalAssignment;
 import com.appian.intellij.k.psi.KNamespaceDefinition;
 import com.appian.intellij.k.psi.KUserId;
 import com.appian.intellij.k.psi.impl.KPsiImplUtil;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -38,18 +36,18 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
       return null;
     }
     final Project project = myElement.getProject();
-    final KLambda lambda = PsiTreeUtil.getContextOfType(myElement, KLambda.class);
     final String targetName = ((KUserId)myElement).getName();
     if (targetName == null) {
       return null;
     }
-    final KUserId foundInSameFile = Optional.ofNullable(lambda)
-        .map(KLambda::getLambdaParams) // 1) check the enclosing lambda params
+    final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(myElement, KLambda.class);
+    final KUserId foundInSameFile = Optional.ofNullable(enclosingLambda)
+        .map(KLambda::getLambdaParams) // 1) check the enclosing enclosingLambda params
         .map(l -> l.getUserIdList()
             .stream()
             .filter(id -> targetName.equals(id.getName()))
             .findFirst()
-            .orElse(PsiTreeUtil.findChildrenOfType(lambda, KLocalAssignment.class) // 2) check locals
+            .orElse(PsiTreeUtil.findChildrenOfType(enclosingLambda, KLocalAssignment.class) // 2) check locals
                 .stream()
                 .map(KLocalAssignment::getUserId)
                 .filter(id -> targetName.equals(id.getName()))
@@ -73,17 +71,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
 
   @Override
   public Object[] getVariants() {
-    final VirtualFile file = myElement.getContainingFile().getOriginalFile().getVirtualFile();
-    if (file == null) {
-      return new Object[0];
-    }
-    final Project project = myElement.getProject();
-    return KUtil.findFileIdentifiers(project, file).stream()
-      .filter(identifier -> identifier.getName() != null && identifier.getName().length() > 0)
-      .map(identifier -> LookupElementBuilder.create(identifier)
-        .withIcon(KIcons.FILE)
-        .withTypeText(identifier.getContainingFile().getName()))
-      .toArray(LookupElement[]::new);
+    return new Object[0];
   }
 
   @Override

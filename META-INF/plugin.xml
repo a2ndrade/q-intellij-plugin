@@ -53,5 +53,6 @@
     <lang.namesValidator language="k" implementationClass="com.appian.intellij.k.KNamesValidator"/>
     <lang.findUsagesProvider language="k" implementationClass="com.appian.intellij.k.KFindUsagesProvider"/>
     <lang.psiStructureViewFactory language="k" implementationClass="com.appian.intellij.k.KStructureViewFactory"/>
+    <completion.contributor language="k" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
   </extensions>
 </idea-plugin>

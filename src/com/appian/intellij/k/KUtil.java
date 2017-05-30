@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.appian.intellij.k.psi.KTopLevelAssignment;
 import com.appian.intellij.k.psi.KUserId;
 import com.google.common.base.Strings;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
@@ -32,6 +34,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public final class KUtil {
+
+  static final Key<String> FQN = Key.create("fqn");
 
   public static Collection<KUserId> findProjectIdentifiers(Project project) {
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
@@ -61,12 +65,25 @@ public final class KUtil {
 
   @Nullable
   public static KUserId findMatchingIdentifier(Project project, VirtualFile virtualFile, String targetName) {
+    final Iterator<KUserId> it = findAllMatchingIdentifiers(project, virtualFile, targetName, true,
+        true).iterator();
+    return it.hasNext() ? it.next() : null;
+  }
+
+  @Nullable
+  public static Collection<KUserId> findAllMatchingIdentifiers(
+      Project project,
+      VirtualFile virtualFile,
+      String targetName,
+      boolean stopAfterFirst,
+      boolean exactMatch) {
     final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(virtualFile);
     if (kFile == null) {
-      return null;
+      return Collections.emptyList();
     }
     String currentNamespace = null;
     PsiElement topLevelElement = kFile.getFirstChild();
+    final Collection<KUserId> results = new ArrayList<>(0);
     do {
       if (topLevelElement instanceof KNamespaceDefinition) {
         currentNamespace = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
@@ -74,14 +91,25 @@ public final class KUtil {
         final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
         final String userIdName = userId.getName();
         final String userIdNamespace = KUserIdCache.getExplicitNamespace(userIdName);
-        if (targetName.equals(userIdName) || (userIdNamespace == null && currentNamespace != null &&
-            targetName.equals(KUserIdCache.generateFqn(currentNamespace, userIdName)))) {
-          return userId;
+        if (exactMatch ? targetName.equals(userIdName) : userIdName.startsWith(targetName)) {
+          results.add(userId);
+          if (stopAfterFirst) {
+            return results;
+          }
+        } else if (userIdNamespace == null && currentNamespace != null) {
+          final String fqn = KUserIdCache.generateFqn(currentNamespace, userIdName);
+          if (exactMatch ? targetName.equals(fqn) : fqn.startsWith(targetName)) {
+            userId.putUserData(FQN, fqn);
+            results.add(userId);
+            if (stopAfterFirst) {
+              return results;
+            }
+          }
         }
       }
       topLevelElement = topLevelElement.getNextSibling();
     } while (topLevelElement != null);
-    return null;
+    return results;
   }
 
   public static Map<String, Set<VirtualFile>> findProjectNamespaces(Project project) {

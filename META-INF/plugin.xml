@@ -1,37 +1,23 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>K</name>
-  <version>0.8</version>
+  <version>0.8.1</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
-      K/Q Language Support (kx.com)
+      K3 + Q Language Support (kx.com)
   ]]></description>
   <change-notes><![CDATA[
       <strong>0.8</strong><br/>
       <ul>
-        <li>Q support</li>
-        <li>Structure View</li>
-        <li>Auto-complete</li>
-        <li>Find usages</li>
-      </ul>
-      <strong>0.3</strong><br/>
-      <ul>
-        <li>Small grammar fixes</li>
-      </ul>
-      <strong>0.2</strong><br/>
-      <ul>
-        <li>Basic Function Completion</li>
-        <li>Basic Function Rename</li>
-        <li>Basic Go to Symbol</li>
-        <li>Basic Search Everywhere</li>
-      </ul>
-      <strong>0.1</strong><br/>
-      <ul>
+        <li>K3 & Q support</li>
         <li>Syntax Highlighting</li>
-        <li>Braces/Brackets/Parens Matching</li>
-        <li>Customizable Color Settings</li>
-        <li>Line Comments</li>
+        <li>Navigate to Declaration</li>
+        <li>Completion</li>
+        <li>Find usages</li>
+        <li>Structure View</li>
+        <li>Go to Symbol</li>
+        <li>Color Settings</li>
       </ul>
     ]]>
   </change-notes>

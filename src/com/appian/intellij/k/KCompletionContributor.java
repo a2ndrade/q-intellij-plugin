@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLocalAssignment;
+import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.google.common.base.Strings;
 import com.intellij.codeInsight.completion.CompletionContributor;
@@ -47,14 +48,20 @@ public class KCompletionContributor extends CompletionContributor {
       "xlog", "xprev", "xrank"};
 
   private static final String[] SYSTEM_FNS_K3 = new String[] {"_a", "_abs", "_acos", "_asin", "_atan", "_bd",
-      "_bin", "_binl", "_ci", "_cos", "_cosh", "_d", "_db", "_di", "_div", "_dot", "_draw", "_dv", "_dvl",
-      "_exit", "_exp", "_f", "_floor", "_getenv", "_gtime", "_h", "_host", "_i", "_ic", "_in", "_inv", "_jd",
-      "_k", "_lin", "_log", "_lsq", "_lt", "_mul", "_n", "_p", "_sin", "_sinh", "_sm", "_sqr", "_sqrt", "_ss",
-      "_ssr", "_sv", "_T", "_t", "_t", "_tan", "_tanh", "_u", "_v", "_w"};
+      "_bin", "_binl", "_ci", "_cos", "_cosh", "_d", "_db", "_di", "_div", "_dj", "_dot", "_draw", "_dv",
+      "_dvl", "_exit", "_exp", "_f", "_floor", "_getenv", "_gtime", "_h", "_host", "_i", "_ic", "_in", "_inv",
+      "_jd", "_k", "_lin", "_log", "_lsq", "_lt", "_mul", "_n", "_p", "_setenv", "_sin", "_sinh", "_size",
+      "_s", "_sm", "_sqr", "_sqrt", "_ss", "_ssr", "_sv", "_T", "_t", "_tan", "_tanh", "_u", "_v", "_vs",
+      "_w"};
+
+  static {
+    Arrays.sort(SYSTEM_FNS_Q);
+    Arrays.sort(SYSTEM_FNS_K3);
+  }
 
   public KCompletionContributor() {
     extend(CompletionType.BASIC,
-        PlatformPatterns.psiElement().withLanguage(KLanguage.INSTANCE),
+        PlatformPatterns.psiElement(KTypes.USER_IDENTIFIER).withLanguage(KLanguage.INSTANCE),
         new CompletionProvider<CompletionParameters>() {
           public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet resultSet) {
             final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive();

@@ -3,8 +3,10 @@ package com.appian.intellij.k;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
@@ -31,7 +33,11 @@ final class KUserIdCache extends VirtualFileAdapter {
   String[] getIdentifiers(Project project, VirtualFile file) {
     String[] userIds = file.getUserData(USER_IDS);
     if (userIds == null) {
-      userIds = KUtil.findIdentifiers(project, file).stream().map(KUserId::getName).toArray(String[]::new);
+      userIds = KUtil.findIdentifiers(project, file)
+          .stream()
+          .map(KUtil::getFqnOrName)
+          .sorted()
+          .toArray(String[]::new);
       file.putUserData(USER_IDS, userIds);
     }
     return userIds;
@@ -50,10 +56,17 @@ final class KUserIdCache extends VirtualFileAdapter {
     return userIds;
   }
 
+  @Nullable
+  KUserId findFirstExactMatch(Project project, VirtualFile file, String targetIdentifier) {
+    final Iterator<KUserId> it = findIdentifiers(project, file, targetIdentifier, true,
+        new KUtil.ExactMatcher(targetIdentifier)).iterator();
+    return it.hasNext() ? it.next() : null;
+  }
+
   @NotNull
   Collection<KUserId> findAllIdentifiers(
-      Project project, VirtualFile file, String targetIdentifier, boolean exactMatch) {
-    return findIdentifiers(project, file, targetIdentifier, false, exactMatch);
+      Project project, VirtualFile file, String targetIdentifier, KUtil.Matcher matcher) {
+    return findIdentifiers(project, file, targetIdentifier, false, matcher);
   }
 
   @NotNull
@@ -62,19 +75,19 @@ final class KUserIdCache extends VirtualFileAdapter {
       VirtualFile file,
       String targetIdentifier,
       boolean stopAfterFirstMatch,
-      boolean exactMatch) {
-    if (exactMatch) {
+      KUtil.Matcher matcher) {
+    if (matcher instanceof KUtil.ExactMatcher) {
       final String[] userIds = getIdentifiers(project, file);
       if (Arrays.binarySearch(userIds, targetIdentifier) < 0) {
         return Collections.emptyList();
       }
-    } else {
+    } else if (matcher instanceof KUtil.PrefixMatcher) {
       final Trie<Boolean> userIds = getIdentifiersTrie(project, file);
       if (!userIds.containsKeyWithPrefix(targetIdentifier)) {
         return Collections.emptyList();
       }
     }
-    return KUtil.findIdentifiers(project, file, targetIdentifier, stopAfterFirstMatch, exactMatch);
+    return KUtil.findIdentifiers(project, file, matcher, stopAfterFirstMatch);
   }
 
   @Override
@@ -92,6 +105,7 @@ final class KUserIdCache extends VirtualFileAdapter {
       return;
     }
     file.putUserData(USER_IDS, null);
+    file.putUserData(USER_IDS_TRIE, null);
   }
 
 }

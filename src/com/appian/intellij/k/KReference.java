@@ -27,41 +27,56 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
 
   @Override
   public PsiElement resolve() {
-    final VirtualFile file = myElement.getContainingFile().getOriginalFile().getVirtualFile();
-    if (file == null) {
+    final VirtualFile sameFile = myElement.getContainingFile().getOriginalFile().getVirtualFile();
+    if (sameFile == null) {
       return null;
     }
+    final String sameFilePath = sameFile.getCanonicalPath();
     final PsiElement context = myElement.getContext();
     if (context instanceof KNamespaceDefinition) {
       return null;
     }
     final Project project = myElement.getProject();
-    final String targetName = ((KUserId)myElement).getName();
-    if (targetName == null) {
+    final KUserId reference = (KUserId)this.myElement;
+    final String referenceName = reference.getName();
+    if (referenceName == null) {
       return null;
     }
-    final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(myElement, KLambda.class);
+    final KUserIdCache cache = KUserIdCache.getInstance();
+    final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(this.myElement, KLambda.class);
     final KUserId foundInSameFile = Optional.ofNullable(enclosingLambda)
         .map(KLambda::getLambdaParams) // 1) check the enclosing enclosingLambda params
         .map(l -> l.getUserIdList()
             .stream()
-            .filter(id -> targetName.equals(id.getName()))
+            .filter(id -> referenceName.equals(id.getName()))
             .findFirst()
             .orElse(PsiTreeUtil.findChildrenOfType(enclosingLambda, KLocalAssignment.class) // 2) check locals
                 .stream()
                 .map(KLocalAssignment::getUserId)
-                .filter(id -> targetName.equals(id.getName()))
+                .filter(id -> referenceName.equals(id.getName()))
                 .findFirst()
                 .orElse(null)))
-        .orElse(KUtil.findFirstExactMatch(project, file, targetName)); // 3) check same-file globals
+        .orElseGet(() -> {
+          // 3) check same-file globals
+          if (KUtil.isAbsoluteId(referenceName)) {
+            return cache.findFirstExactMatch(project, sameFile, referenceName);
+          }
+          // transform relative reference into an absolute one using its current namespace
+          final String currentNs = KUtil.getCurrentNamespace(reference);
+          final String fqn = KUtil.generateFqn(currentNs, referenceName);
+          return cache.findFirstExactMatch(project, sameFile, fqn);
+        });
     if (foundInSameFile != null) {
       return foundInSameFile;
     }
-    // 4) check other file's globals
+    // 4) check other sameFile's globals
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     for (VirtualFile virtualFile : virtualFiles) {
-      final KUserId foundInOtherFile = KUtil.findFirstExactMatch(project, virtualFile, targetName);
+      if (sameFilePath.equals(virtualFile.getCanonicalPath())) {
+        continue; // already processed above
+      }
+      final KUserId foundInOtherFile = cache.findFirstExactMatch(project, virtualFile, referenceName);
       if (foundInOtherFile != null) {
         return foundInOtherFile;
       }

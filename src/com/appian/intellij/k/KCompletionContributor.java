@@ -103,10 +103,10 @@ public class KCompletionContributor extends CompletionContributor {
             final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
                 GlobalSearchScope.allScope(project));
             for (VirtualFile otherFile : otherFiles) {
-              Optional.ofNullable(cache.findAllIdentifiers(project, otherFile, input, false).stream())
+              Optional.ofNullable(cache.findAllIdentifiers(project, otherFile, input, new KUtil.PrefixMatcher(input)).stream())
                   .orElse(Stream.empty())
                   .forEach(global -> {
-                    final String fqn = global.getUserData(KUtil.FQN);
+                    final String fqn = KUtil.getFqn(global);
                     final LookupElementBuilder lookup = fqn == null ?
                         LookupElementBuilder.create(global) :
                         LookupElementBuilder.create(global, fqn);

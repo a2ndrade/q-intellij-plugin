@@ -35,87 +35,88 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 
-final class KUtil {
+public final class KUtil {
 
-  static final Key<String> FQN = Key.create("fqn");
+  private static final Key<String> FQN = Key.create("fqn");
 
   public static Collection<KUserId> findProjectIdentifiers(Project project) {
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     final Stream<KUserId> stream = virtualFiles.stream()
-        .flatMap(file -> findIdentifiers(project, file).stream());
+        .flatMap(file -> findIdentifiers(project, file, AnyMatcher, false).stream());
     List<KUserId> fnNames = stream.collect(Collectors.toList());
     return fnNames;
   }
 
   public static Collection<KUserId> findIdentifiers(Project project, VirtualFile file) {
-    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
-    if (kFile == null) {
-      return Collections.emptyList();
-    }
-    final Collection<KUserId> topLevelIdentifiers = new ArrayList<>();
-    PsiElement topLevelElement = kFile.getFirstChild();
-    do {
-      if (topLevelElement instanceof KTopLevelAssignment) {
-        final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
-        topLevelIdentifiers.add(userId);
-      }
-      topLevelElement = topLevelElement.getNextSibling();
-    } while (topLevelElement != null);
-    return topLevelIdentifiers;
+    return findIdentifiers(project, file, AnyMatcher, false);
   }
 
   @Nullable
   public static KUserId findFirstExactMatch(Project project, VirtualFile file, String targetIdentifier) {
-    final Iterator<KUserId> it = findIdentifiers(project, file, targetIdentifier, true,
-        true).iterator();
+    final Iterator<KUserId> it = findIdentifiers(project, file, new ExactMatcher(targetIdentifier), true).iterator();
     return it.hasNext() ? it.next() : null;
   }
 
-  @NotNull
-  public static Collection<KUserId> findAllIdentifiers(
-      Project project,
-      VirtualFile file,
-      String targetIdentifier,
-      boolean exactMatch) {
-    return findIdentifiers(project, file, targetIdentifier, false, exactMatch);
+  interface Matcher {
+    boolean matches(String found);
+  }
+  static class PrefixMatcher implements Matcher {
+    private final String target;
+    public PrefixMatcher(String target) {
+      this.target = target;
+    }
+    @Override
+    public boolean matches(String found) {
+      return found.startsWith(target);
+    }
   }
 
+  static class ExactMatcher implements Matcher {
+    private final String target;
+    public ExactMatcher(String target) {
+      this.target = target;
+    }
+    @Override
+    public boolean matches(String found) {
+      return target.equals(found);
+    }
+  }
 
-  @NotNull
+  static Matcher AnyMatcher = (found) -> true;
+
+    @NotNull
   static Collection<KUserId> findIdentifiers(
-      Project project,
-      VirtualFile file,
-      String targetIdentifier,
-      boolean stopAfterFirstMatch,
-      boolean exactMatch) {
+        Project project, VirtualFile file, Matcher matcher, boolean stopAfterFirstMatch) {
     final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
     if (kFile == null) {
       return Collections.emptyList();
     }
-    String currentNamespace = null;
+    String currentNamespace = ""; // default namespace
     PsiElement topLevelElement = kFile.getFirstChild();
     final Collection<KUserId> results = new ArrayList<>(0);
     do {
       if (topLevelElement instanceof KNamespaceDefinition) {
-        currentNamespace = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
+        final String newNamespace = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
+        currentNamespace = getNewNamespace(currentNamespace, newNamespace);
       } else if (topLevelElement instanceof KTopLevelAssignment) {
         final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
-        final String userIdName = userId.getName();
+        final String userIdName = userId.getText(); // don't use getName b/c it returns fully-qualified names
         final String userIdNamespace = getExplicitNamespace(userIdName);
-        if (exactMatch ? targetIdentifier.equals(userIdName) : userIdName.startsWith(targetIdentifier)) {
+        boolean match = false;
+        if (userIdNamespace == null && !currentNamespace.isEmpty()) {
+          final String fqn = generateFqn(currentNamespace, userIdName);
+          if (matcher.matches(fqn)) {
+            putFqn(userId, fqn);
+            match = true;
+          }
+        } else if (matcher.matches(userIdName)) {
+          match = true;
+        }
+        if (match) {
           results.add(userId);
           if (stopAfterFirstMatch) {
             return results;
-          }
-        } else if (userIdNamespace == null && currentNamespace != null) {
-          final String fqn = generateFqn(currentNamespace, userIdName);
-          if (exactMatch ? targetIdentifier.equals(fqn) : fqn.startsWith(targetIdentifier)) {
-            userId.putUserData(FQN, fqn);
-            results.add(userId);
-            if (stopAfterFirstMatch) {
-              return results;
-            }
           }
         }
       }
@@ -140,38 +141,25 @@ final class KUtil {
   }
 
   public static Set<String> findFileNamespaces(Project project, VirtualFile file) {
-    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
-    if (kFile == null) {
-      return Collections.emptySet();
-    }
-    final Set<String> namespaces = new LinkedHashSet<>();
-    PsiElement topLevelElement = kFile.getFirstChild();
-    do {
-      if (topLevelElement instanceof KNamespaceDefinition) {
-        final String currentNamespace = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
-        namespaces.add(currentNamespace);
-      } else if (topLevelElement instanceof KTopLevelAssignment) {
-        final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
-        final String topLevelAssignmentNamespace = getExplicitNamespace(userId.getName());
-        if (topLevelAssignmentNamespace != null) {
-          namespaces.add(topLevelAssignmentNamespace);
-        }
-      }
-      topLevelElement = topLevelElement.getNextSibling();
-    } while (topLevelElement != null);
-    return namespaces;
+    return findIdentifiers(project, file).stream()
+        .map(id -> {
+          final String ns = getExplicitNamespace(id.getName());
+          return ns == null ? "" : ns;
+        })
+        .collect(Collectors.toSet());
   }
 
   @NotNull
   static String getDescriptiveName(@NotNull KUserId element) {
+    final String fqnOrName = KUtil.getFqnOrName(element);
     return getFunctionDefinition(element).map((KLambda lambda) -> {
       final KLambdaParams lambdaParams = lambda.getLambdaParams();
       final String paramsText = Optional.ofNullable(lambdaParams)
           .map(KLambdaParams::getUserIdList)
           .map(params -> params.isEmpty() ? "" : lambdaParams.getText())
           .orElse("");
-      return element.getName() + paramsText;
-    }).orElse(element.getName());
+      return fqnOrName + paramsText;
+    }).orElse(fqnOrName);
   }
 
   static Optional<KLambda> getFunctionDefinition(@NotNull KUserId element) {
@@ -210,12 +198,99 @@ final class KUtil {
     return true;
   }
 
-  static String generateFqn(String namespace, String fnName) {
-    return namespace + "." + fnName;
+  static String generateFqn(String namespace, String identifier) {
+    if (namespace.isEmpty()) {
+      return identifier; // default namespace
+    } else if (".".equals(namespace)) {
+      return "." + identifier; // root namespace
+    }
+    return namespace + "." + identifier;
   }
 
   @Nullable
-  static String getExplicitNamespace(String fnName) {
-    return fnName.charAt(0) == '.' ? fnName.substring(0, fnName.lastIndexOf('.')) : null;
+  static String getExplicitNamespace(String identifier) {
+    return isAbsoluteId(identifier) ? identifier.substring(0, identifier.lastIndexOf('.')) : null;
   }
+
+  static boolean isAbsoluteId(String identifier) {
+    return identifier.charAt(0) == '.';
+  }
+
+  @NotNull
+  static String getCurrentNamespace(KUserId element) {
+    final Class[] potentialContainerTypes = new Class[] {KTopLevelAssignment.class, KExpression.class,
+        KNamespaceDefinition.class};
+    PsiElement topLevelAssignment = null;
+    for (Class containerType : potentialContainerTypes) {
+      topLevelAssignment = PsiTreeUtil.getTopmostParentOfType(element, containerType);
+      if(topLevelAssignment != null) {
+        break;
+      }
+    }
+    if (topLevelAssignment == null) {
+      return "";
+    }
+    final KNamespaceDefinition enclosingNsDeclaration = PsiTreeUtil.getPrevSiblingOfType(
+        topLevelAssignment, KNamespaceDefinition.class);
+    if (enclosingNsDeclaration == null) {
+      return "";
+    }
+    String currentNamespace = ""; // default namespace
+    final PsiFile containingFile = element.getContainingFile();
+    PsiElement topLevelElement = containingFile.getFirstChild();
+    do {
+      if (topLevelElement instanceof KNamespaceDefinition) {
+        final String ns = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
+        currentNamespace = getNewNamespace(currentNamespace, ns);
+      }
+      if (topLevelElement == enclosingNsDeclaration) {
+        return currentNamespace;
+      }
+      topLevelElement = topLevelElement.getNextSibling();
+    } while (topLevelElement != null);
+    throw new IllegalStateException(
+        "Cannot calculate current namespace for " + element.getName() + " (" + containingFile.getName() +
+            ")");
+  }
+
+  private static String getNewNamespace(String currentNamespace, String newNamespace) {
+    if (isAbsoluteId(newNamespace)) {
+      return newNamespace;
+    } else if (currentNamespace.isEmpty()) {
+      if ("^".equals(newNamespace)) {
+        return ""; // can't go up any further
+      }
+      // relative ns becomes absolute if we're in the default ns
+      return  "." + newNamespace;
+    } else if ("^".equals(newNamespace)) { // k3: pop up most-nested newNamespace
+      final String newNs = getExplicitNamespace(currentNamespace);
+      return (newNs == null || newNs.isEmpty()) ? "" : newNs;
+    } else {
+      return currentNamespace + '.' + newNamespace;
+    }
+  }
+
+  public static void putFqn(KUserId element, String fqn) {
+    putUserData(element, FQN, fqn);
+  }
+
+  @Nullable
+  public static String getFqn(KUserId element) {
+    return getUserData(element, FQN);
+  }
+
+  @NotNull
+  public static String getFqnOrName(KUserId element) {
+    final String fqn = getFqn(element);
+    return fqn != null ? fqn : element.getName();
+  }
+
+  private static <T> void putUserData(PsiElement element, Key<T> key, T data) {
+    element.putUserData(key, data);
+  }
+
+  private static <T> T getUserData(PsiElement element, Key<T> key) {
+    return element.getUserData(key);
+  }
+
 }

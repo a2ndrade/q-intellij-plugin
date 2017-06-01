@@ -13,9 +13,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KExpression;
 import com.appian.intellij.k.psi.KFile;
@@ -36,7 +35,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 
-public final class KUtil {
+final class KUtil {
 
   static final Key<String> FQN = Key.create("fqn");
 
@@ -44,13 +43,13 @@ public final class KUtil {
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     final Stream<KUserId> stream = virtualFiles.stream()
-        .flatMap(virtualFile -> findFileIdentifiers(project, virtualFile).stream());
+        .flatMap(file -> findIdentifiers(project, file).stream());
     List<KUserId> fnNames = stream.collect(Collectors.toList());
     return fnNames;
   }
 
-  public static Collection<KUserId> findFileIdentifiers(Project project, VirtualFile virtualFile) {
-    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(virtualFile);
+  public static Collection<KUserId> findIdentifiers(Project project, VirtualFile file) {
+    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
     if (kFile == null) {
       return Collections.emptyList();
     }
@@ -67,20 +66,30 @@ public final class KUtil {
   }
 
   @Nullable
-  public static KUserId findMatchingIdentifier(Project project, VirtualFile virtualFile, String targetName) {
-    final Iterator<KUserId> it = findAllMatchingIdentifiers(project, virtualFile, targetName, true,
+  public static KUserId findFirstExactMatch(Project project, VirtualFile file, String targetIdentifier) {
+    final Iterator<KUserId> it = findIdentifiers(project, file, targetIdentifier, true,
         true).iterator();
     return it.hasNext() ? it.next() : null;
   }
 
-  @Nullable
-  public static Collection<KUserId> findAllMatchingIdentifiers(
+  @NotNull
+  public static Collection<KUserId> findAllIdentifiers(
       Project project,
-      VirtualFile virtualFile,
-      String targetName,
-      boolean stopAfterFirst,
+      VirtualFile file,
+      String targetIdentifier,
       boolean exactMatch) {
-    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(virtualFile);
+    return findIdentifiers(project, file, targetIdentifier, false, exactMatch);
+  }
+
+
+  @NotNull
+  static Collection<KUserId> findIdentifiers(
+      Project project,
+      VirtualFile file,
+      String targetIdentifier,
+      boolean stopAfterFirstMatch,
+      boolean exactMatch) {
+    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
     if (kFile == null) {
       return Collections.emptyList();
     }
@@ -93,18 +102,18 @@ public final class KUtil {
       } else if (topLevelElement instanceof KTopLevelAssignment) {
         final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
         final String userIdName = userId.getName();
-        final String userIdNamespace = KUserIdCache.getExplicitNamespace(userIdName);
-        if (exactMatch ? targetName.equals(userIdName) : userIdName.startsWith(targetName)) {
+        final String userIdNamespace = getExplicitNamespace(userIdName);
+        if (exactMatch ? targetIdentifier.equals(userIdName) : userIdName.startsWith(targetIdentifier)) {
           results.add(userId);
-          if (stopAfterFirst) {
+          if (stopAfterFirstMatch) {
             return results;
           }
         } else if (userIdNamespace == null && currentNamespace != null) {
-          final String fqn = KUserIdCache.generateFqn(currentNamespace, userIdName);
-          if (exactMatch ? targetName.equals(fqn) : fqn.startsWith(targetName)) {
+          final String fqn = generateFqn(currentNamespace, userIdName);
+          if (exactMatch ? targetIdentifier.equals(fqn) : fqn.startsWith(targetIdentifier)) {
             userId.putUserData(FQN, fqn);
             results.add(userId);
-            if (stopAfterFirst) {
+            if (stopAfterFirstMatch) {
               return results;
             }
           }
@@ -119,19 +128,19 @@ public final class KUtil {
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     final Map<String,Set<VirtualFile>> namespaceToVirtualFile = new HashMap<>();
-    virtualFiles.forEach(virtualFile -> {
-      final Set<String> namespaces = findFileNamespaces(project, virtualFile);
+    virtualFiles.forEach(file -> {
+      final Set<String> namespaces = findFileNamespaces(project, file);
       for (String namespace : namespaces) {
         final Set<VirtualFile> filesWhereNamespace = namespaceToVirtualFile.computeIfAbsent(namespace,
             k -> new LinkedHashSet<>());
-        filesWhereNamespace.add(virtualFile);
+        filesWhereNamespace.add(file);
       }
     });
     return namespaceToVirtualFile;
   }
 
-  public static Set<String> findFileNamespaces(Project project, VirtualFile virtualFile) {
-    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(virtualFile);
+  public static Set<String> findFileNamespaces(Project project, VirtualFile file) {
+    final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
     if (kFile == null) {
       return Collections.emptySet();
     }
@@ -143,7 +152,7 @@ public final class KUtil {
         namespaces.add(currentNamespace);
       } else if (topLevelElement instanceof KTopLevelAssignment) {
         final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
-        final String topLevelAssignmentNamespace = KUserIdCache.getExplicitNamespace(userId.getName());
+        final String topLevelAssignmentNamespace = getExplicitNamespace(userId.getName());
         if (topLevelAssignmentNamespace != null) {
           namespaces.add(topLevelAssignmentNamespace);
         }
@@ -201,4 +210,12 @@ public final class KUtil {
     return true;
   }
 
+  static String generateFqn(String namespace, String fnName) {
+    return namespace + "." + fnName;
+  }
+
+  @Nullable
+  static String getExplicitNamespace(String fnName) {
+    return fnName.charAt(0) == '.' ? fnName.substring(0, fnName.lastIndexOf('.')) : null;
+  }
 }

@@ -1,104 +1,89 @@
 package com.appian.intellij.k;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KUserId;
-import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileAdapter;
 import com.intellij.openapi.vfs.VirtualFileEvent;
-import com.intellij.openapi.vfs.VirtualFileManagerListener;
-import com.intellij.openapi.vfs.VirtualFileMoveEvent;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 
 /**
  * Caches K functions information per file.
  */
-public final class KUserIdCache extends VirtualFileAdapter implements VirtualFileManagerListener {
+final class KUserIdCache extends VirtualFileAdapter {
+
+  static final Key<String[]> USER_IDS = Key.create("userIds");
+  static final Key<Trie<Boolean>> USER_IDS_TRIE = Key.create("userIdsTrie");
 
   private static final KUserIdCache INSTANCE = new KUserIdCache();
   public static final KUserIdCache getInstance() {
     return INSTANCE;
   }
 
-  private final Map<String, Collection<KUserId>> idCache = new HashMap<>();
-  private final Map<String, Collection<String>> nameCache = new HashMap<>();
-
   private KUserIdCache() {}
 
-  public String[] getAllNames(Project project) {
-    final String[] names = findNames(project);
-    return names;
+  String[] getIdentifiers(Project project, VirtualFile file) {
+    String[] userIds = file.getUserData(USER_IDS);
+    if (userIds == null) {
+      userIds = KUtil.findIdentifiers(project, file).stream().map(KUserId::getName).toArray(String[]::new);
+      file.putUserData(USER_IDS, userIds);
+    }
+    return userIds;
   }
 
-  private String[] findNames(Project project) {
-    final Collection<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE,
-        GlobalSearchScope.allScope(project));
-    return files.stream().flatMap(file -> {
-      final String filePath = file.getPath();
-      final Collection<String> kUserIds = nameCache.computeIfAbsent(filePath,
-          k -> KUtil.findFileIdentifiers(project, file)
-              .stream()
-              .map(KUserId::getName)
-              .collect(Collectors.toList()));
-      return kUserIds.stream();
-    }).toArray(String[]::new);
+  private Trie<Boolean> getIdentifiersTrie(Project project, VirtualFile file) {
+    Trie<Boolean> userIds = file.getUserData(USER_IDS_TRIE);
+    if (userIds == null) {
+      userIds = new Trie<>();
+      final Collection<KUserId> identifiers = KUtil.findIdentifiers(project, file);
+      for (KUserId userId : identifiers) {
+        userIds.put(userId.getName(), Boolean.TRUE);
+      }
+      file.putUserData(USER_IDS_TRIE, userIds);
+    }
+    return userIds;
   }
 
-  public NavigationItem[] getByName(Project project, String pattern) {
-    final NavigationItem[] byName = findByName(project, pattern);
-    return byName;
+  @NotNull
+  Collection<KUserId> findAllIdentifiers(
+      Project project, VirtualFile file, String targetIdentifier, boolean exactMatch) {
+    return findIdentifiers(project, file, targetIdentifier, false, exactMatch);
   }
 
-  private NavigationItem[] findByName(final Project project, final String pattern) {
-    final Collection<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE,
-        GlobalSearchScope.allScope(project));
-    return files.stream().flatMap(file -> {
-      final String filePath = file.getPath();
-      final Collection<KUserId> kUserIds = idCache.computeIfAbsent(filePath,
-          k -> KUtil.findFileIdentifiers(project, file));
-      return filter(kUserIds, pattern);
-    }).toArray(NavigationItem[]::new);
-  }
-
-  private Stream<KUserId> filter(Collection<KUserId> kUserIds, String pattern) {
-    return kUserIds.stream().filter(id -> id.getName().contains(pattern));
-  }
-
-  @Nullable
-  public static String getExplicitNamespace(String fnName) {
-    return fnName.charAt(0) == '.' ? fnName.substring(0, fnName.lastIndexOf('.')) : null;
-  }
-
-  static String generateFqn(String namespace, String fnName) {
-    return namespace + "." + fnName;
+  @NotNull
+  Collection<KUserId> findIdentifiers(
+      Project project,
+      VirtualFile file,
+      String targetIdentifier,
+      boolean stopAfterFirstMatch,
+      boolean exactMatch) {
+    if (exactMatch) {
+      final String[] userIds = getIdentifiers(project, file);
+      if (Arrays.binarySearch(userIds, targetIdentifier) < 0) {
+        return Collections.emptyList();
+      }
+    } else {
+      final Trie<Boolean> userIds = getIdentifiersTrie(project, file);
+      if (!userIds.containsKeyWithPrefix(targetIdentifier)) {
+        return Collections.emptyList();
+      }
+    }
+    return KUtil.findIdentifiers(project, file, targetIdentifier, stopAfterFirstMatch, exactMatch);
   }
 
   @Override
   public void contentsChanged(@NotNull VirtualFileEvent event) {
-    handleFileEvent(event);
+    remove(event.getFile());
   }
 
   @Override
   public void fileDeleted(@NotNull VirtualFileEvent event) {
-    handleFileEvent(event);
-  }
-
-  @Override
-  public void fileMoved(@NotNull VirtualFileMoveEvent event) {
-    handleFileEvent(event);
-  }
-
-  private void handleFileEvent(@NotNull VirtualFileEvent event) {
     remove(event.getFile());
   }
 
@@ -106,25 +91,7 @@ public final class KUserIdCache extends VirtualFileAdapter implements VirtualFil
     if (file == null || KFileType.INSTANCE != file.getFileType()) {
       return;
     }
-    final String filePath = file.getPath();
-    idCache.remove(filePath);
-    nameCache.remove(filePath);
-  }
-
-  final KUserIdCache clear() {
-    idCache.clear();
-    nameCache.clear();
-    return this;
-  }
-
-  @Override
-  public void beforeRefreshStart(boolean asynchronous) {
-    System.out.println();
-  }
-
-  @Override
-  public void afterRefreshFinish(boolean asynchronous) {
-    System.out.println();
+    file.putUserData(USER_IDS, null);
   }
 
 }

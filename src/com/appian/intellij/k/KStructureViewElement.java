@@ -1,8 +1,5 @@
 package com.appian.intellij.k;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import javax.swing.Icon;
@@ -66,12 +63,10 @@ final class KStructureViewElement
     }
     final Project project = element.getProject();
     final VirtualFile virtualFile = ((KFile)element).getVirtualFile();
-    final Collection<KUserId> topLevelAssignments = KUtil.findFileIdentifiers(project, virtualFile);
-    List<TreeElement> children = new ArrayList<>(topLevelAssignments.size());
-    for (KUserId topLevelAssignment : topLevelAssignments) {
-      children.add(new KStructureViewElement(topLevelAssignment));
-    }
-    return children.toArray(new TreeElement[children.size()]);
+    return KUtil.findIdentifiers(project, virtualFile)
+        .stream()
+        .map(KStructureViewElement::new)
+        .toArray(TreeElement[]::new);
   }
 
   @Override
@@ -130,7 +125,7 @@ final class KStructureViewElement
       @Override
       public TextAttributesKey getTextAttributesKey() {
         final String name = element.getName();
-        final String ns = KUserIdCache.getExplicitNamespace(name);
+        final String ns = KUtil.getExplicitNamespace(name);
         final String localName = ns != null ? name.substring(ns.length() + 1) : name;
         if (fnDefinition.isPresent() && localName.charAt(0) == '_') { // side-effect function
           return KSyntaxHighlighter.IDENTIFIER_SYS;

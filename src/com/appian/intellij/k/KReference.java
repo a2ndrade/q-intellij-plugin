@@ -53,7 +53,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
                 .filter(id -> targetName.equals(id.getName()))
                 .findFirst()
                 .orElse(null)))
-        .orElse(KUtil.findMatchingIdentifier(project, file, targetName)); // 3) check same-file globals
+        .orElse(KUtil.findFirstExactMatch(project, file, targetName)); // 3) check same-file globals
     if (foundInSameFile != null) {
       return foundInSameFile;
     }
@@ -61,7 +61,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     for (VirtualFile virtualFile : virtualFiles) {
-      final KUserId foundInOtherFile = KUtil.findMatchingIdentifier(project, virtualFile, targetName);
+      final KUserId foundInOtherFile = KUtil.findFirstExactMatch(project, virtualFile, targetName);
       if (foundInOtherFile != null) {
         return foundInOtherFile;
       }

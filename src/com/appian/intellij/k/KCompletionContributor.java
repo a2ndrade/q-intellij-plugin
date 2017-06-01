@@ -91,7 +91,7 @@ public class KCompletionContributor extends CompletionContributor {
             // globals (same file)
             final Project project = element.getProject();
             final VirtualFile sameFile = element.getContainingFile().getVirtualFile();
-            Optional.ofNullable(KUtil.findFileIdentifiers(project, sameFile).stream()
+            Optional.ofNullable(KUtil.findIdentifiers(project, sameFile).stream()
                 .filter(id -> id.getName().contains(input)))
                 .orElse(Stream.empty())
                 .forEach(global -> caseInsensitiveResultSet.addElement(LookupElementBuilder.create(global)));
@@ -99,10 +99,11 @@ public class KCompletionContributor extends CompletionContributor {
             if (caseInsensitiveResultSet.isStopped() || input.charAt(0) != '.') {
               return;
             }
+            final KUserIdCache cache = KUserIdCache.getInstance();
             final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
                 GlobalSearchScope.allScope(project));
             for (VirtualFile otherFile : otherFiles) {
-              Optional.ofNullable(KUtil.findAllMatchingIdentifiers(project, otherFile, input, false, false).stream())
+              Optional.ofNullable(cache.findAllIdentifiers(project, otherFile, input, false).stream())
                   .orElse(Stream.empty())
                   .forEach(global -> {
                     final String fqn = global.getUserData(KUtil.FQN);
@@ -122,12 +123,8 @@ public class KCompletionContributor extends CompletionContributor {
       return; // ignore
     }
     final String[] systemFnNames = KUtil.isInQFile(element) ? SYSTEM_FNS_Q : SYSTEM_FNS_K3;
-    final int startAt = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);
-    if (startAt >= systemFnNames.length) {
-      return; // no match
-    }
-    int i = startAt;
-    while (systemFnNames[i].startsWith(input)) {
+    int i = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);;
+    while (i < systemFnNames.length && systemFnNames[i].startsWith(input)) {
       resultSet.addElement(LookupElementBuilder.create(systemFnNames[i++]));
     }
   }

@@ -1,6 +1,7 @@
 package com.appian.intellij.k;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -16,35 +17,34 @@ public class ScriptsTest extends KParserTest {
   private static final String DL = System.getProperty("user.home") + "/repo/data-layer/";
 
   private static final String[] TARGET_FOLDERS = new String[] {
-    AE + "server/_lib",
-    AE + "server/process/common",
-    AE + "server/process/exec",
-    AE + "server/process/design",
-    AE + "server/process/events",
-    AE + "server/process/exec",
-    AE + "server/process/migration",
-    AE + "server/process/analytics",
-    DL + "appian-data-server/src/main/engine",
-    DL + "appian-data-server/src/main/engine/core",
-    DL + "appian-data-server/src/main/engine/lib",
-    DL + "appian-data-server/src/main/engine/debug"
+    AE + "server/",
+    DL + "appian-data-server/"
   };
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
+    try {
+      configureTestSuite(suite);
+    } catch (IOException e) {
+      // ignore
+    }
+    return suite;
+  }
+
+  private static void configureTestSuite(TestSuite suite) throws IOException {
     for(String folderPath : TARGET_FOLDERS) {
       final File folder = new File(folderPath);
       if (!folder.exists()) {
         throw new RuntimeException("Folder does not exists: " + folder);
       }
-      for(String fileName : folder.list()) {
-        final File f = new File(folder, fileName);
-        if (f.isFile() && (fileName.endsWith(".k") || fileName.endsWith(".q"))) {
-          suite.addTest(new ScriptsTest(f));
+      Files.walk(Paths.get(folder.toURI())).forEach(path -> {
+        final File file = path.toFile();
+        final String fileName = file.getName();
+        if (file.isFile() && (fileName.endsWith(".k") || fileName.endsWith(".q"))) {
+          suite.addTest(new ScriptsTest(file));
         }
-      }
+      });
     }
-    return suite;
   }
 
   private final File file;
@@ -53,6 +53,11 @@ public class ScriptsTest extends KParserTest {
     super(file.getName());
     this.file = file;
     setName("testScripts");
+  }
+
+  @Override
+  public String getName() {
+    return file.toString();
   }
 
   public void testScripts() throws Exception {

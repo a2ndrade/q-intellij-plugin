@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
-import com.appian.intellij.k.psi.KNamespaceDefinition;
+import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KUserId;
 import com.appian.intellij.k.psi.impl.KPsiImplUtil;
 import com.intellij.openapi.project.Project;
@@ -33,7 +33,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
     }
     final String sameFilePath = sameFile.getCanonicalPath();
     final PsiElement context = myElement.getContext();
-    if (context instanceof KNamespaceDefinition) {
+    if (context instanceof KNamespaceDeclaration) {
       return null;
     }
     final Project project = myElement.getProject();

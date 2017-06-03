@@ -31,7 +31,7 @@ SIMPLE_COMMAND="\\"(
  |[bBrsu\\wm]
  |[cC] //{NUMBER_VECTOR}
   )
-EVALUATION_CONTEXT=[qk]")"
+MODE=[qk]")"
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
 USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*|_[a-zA-Z]+
 
@@ -81,7 +81,8 @@ VERB=[!#$%&*+,-.<=>?@\^_|~]
 MONAD={VERB}{WHITE_SPACE}*":"
 "+-*%!&|<>=$;-%~_^$"
 ADVERB=("/" | \\ | ' | "/": | \\: | ':)+
-FLOW_CONTROL=":"|"if"|"do"|"while"|"$"|"?"|"@"|"." // union of k3 and q control flow constructs
+CONTROL="if"|"do"|"while"
+CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 
 %state ADVERB_STATE
 %state ESCAPE_STATE
@@ -115,13 +116,14 @@ FLOW_CONTROL=":"|"if"|"do"|"while"|"$"|"?"|"@"|"." // union of k3 and q control 
 <YYINITIAL> {
   {NEWLINE}+                                  { return NEWLINE; }
   ^"\\d"                                      { yybegin(COMMAND_STATE); return CURRENT_NAMESPACE; }
-  ^{SIMPLE_COMMAND}                           { yybegin(COMMAND_STATE); return SIMPLE_COMMAND; }
-  ^{COMPLEX_COMMAND}                          { return COMPLEX_COMMAND; }
-  ^{EVALUATION_CONTEXT}                       { return EVALUATION_CONTEXT; }
+  ^{SIMPLE_COMMAND}                           { yybegin(COMMAND_STATE); return COMMAND; }
+  ^{COMPLEX_COMMAND}                          { return COMMAND; }
+  ^{MODE}                                     { return MODE; }
   {NUMBER_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return NUMBER_VECTOR; }
   {NUMBER_VECTOR}                             { return NUMBER_VECTOR; }
   [0-6]":"/[^\[]                              { return VERB; }
-  {FLOW_CONTROL}/"["                          { return FLOW_CONTROL; }
+  {CONTROL}/"["                               { return CONTROL; }
+  {CONDITIONAL}/"["                           { return CONDITIONAL; }
   {SYMBOL_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
   {SYMBOL_VECTOR}                             { return SYMBOL_VECTOR; }
   {SYMBOL}/{ADVERB}                           { yybegin(ADVERB_STATE); return SYMBOL; }

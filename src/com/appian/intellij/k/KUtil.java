@@ -21,7 +21,7 @@ import com.appian.intellij.k.psi.KExpression;
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
-import com.appian.intellij.k.psi.KNamespaceDefinition;
+import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
@@ -96,8 +96,8 @@ public final class KUtil {
     PsiElement topLevelElement = kFile.getFirstChild();
     final Collection<KUserId> results = new ArrayList<>(0);
     do {
-      if (topLevelElement instanceof KNamespaceDefinition) {
-        final String newNamespace = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
+      if (topLevelElement instanceof KNamespaceDeclaration) {
+        final String newNamespace = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();
         currentNamespace = getNewNamespace(currentNamespace, newNamespace);
       } else if (isAssignment(topLevelElement)) {
         final KUserId userId = getUserId(topLevelElement);
@@ -227,7 +227,7 @@ public final class KUtil {
   @NotNull
   static String getCurrentNamespace(KUserId element) {
     final Class[] potentialContainerTypes = new Class[] {KAssignment.class, KExpression.class,
-        KNamespaceDefinition.class};
+        KNamespaceDeclaration.class};
     PsiElement topLevelAssignment = null;
     for (Class containerType : potentialContainerTypes) {
       topLevelAssignment = PsiTreeUtil.getTopmostParentOfType(element, containerType);
@@ -238,8 +238,8 @@ public final class KUtil {
     if (topLevelAssignment == null) {
       return "";
     }
-    final KNamespaceDefinition enclosingNsDeclaration = PsiTreeUtil.getPrevSiblingOfType(
-        topLevelAssignment, KNamespaceDefinition.class);
+    final KNamespaceDeclaration enclosingNsDeclaration = PsiTreeUtil.getPrevSiblingOfType(
+        topLevelAssignment, KNamespaceDeclaration.class);
     if (enclosingNsDeclaration == null) {
       return "";
     }
@@ -247,8 +247,8 @@ public final class KUtil {
     final PsiFile containingFile = element.getContainingFile();
     PsiElement topLevelElement = containingFile.getFirstChild();
     do {
-      if (topLevelElement instanceof KNamespaceDefinition) {
-        final String ns = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
+      if (topLevelElement instanceof KNamespaceDeclaration) {
+        final String ns = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();
         currentNamespace = getNewNamespace(currentNamespace, ns);
       }
       if (topLevelElement == enclosingNsDeclaration) {

@@ -52,53 +52,55 @@
     adverb="adverb"
 
     // names
-    user_identifier="user_identifier"
-    k3_system_function="k3_system_function"
-    q_system_function="q_system_function"
+    user_identifier="variable"
+    k3_system_function="k3 function"
+    q_system_function="q function"
 
     // nouns
     number="number"
     char="char"
     string="string"
-    symbol_vector="symbol_vector"
-    number_vector="number_vector"
+    symbol_vector="symbol vector"
+    number_vector="number vector"
 
     // commands
-    current_namespace="current_namespace"
-    simple_command="simple_command"
-    complex_command="complex_command"
+    current_namespace="namespace"
+    command="command"
 
     // special
     trace='\'
     signal="signal"
-    evaluation_context="evaluation_context"
+    mode="mode"
 
     // control
-    flow_control="flow_control"
+    control="control statement"
+    conditional="conditional evaluation"
 
     // punctuation
-    newline="newline"
+    newline="new line"
     comment='comment'
   ]
 }
 
 // E:E;e|e e:nve|te| t:n|v v:tA|V n:t[E]|(E)|{E}|N
 root ::= top+ separator_or_eof
-private top ::= namespace_definition
-              | command
+private top ::= namespace_declaration
+              | command_statement
               | explicit_k_or_q_eval
               | expression_list
 private expression_list ::= separator | expression (separator+ expression)*
 expression ::= Noun_or_Verb Noun_or_Verb? adverb? expression?
 private Noun_or_Verb ::= Noun | Verb
-private Noun ::= control
+private Noun ::= control_flow
             | args // there can be standalone args: e.g. (`.fn;[])
             | group_or_list
             | noun
             | any_assignment
             | id
 
-control ::= flow_control args
+private control_flow ::= control_statement | conditional_evaluation
+control_statement ::= control args
+conditional_evaluation ::= conditional args
 args ::= open_bracket expression_list* close_bracket
 
 private Verb ::= verb [colon] | system_function | signal | trace | colon
@@ -112,9 +114,9 @@ private separator ::= semicolon | newline
 private separator_or_eof ::= separator | <<eof>>
 
 // always defined at root
-command ::= simple_command (user_id|number|number_vector|caret) | complex_command (number|expression)
-namespace_definition ::= current_namespace user_id
-explicit_k_or_q_eval ::= evaluation_context expression
+command_statement ::= command [expression]
+namespace_declaration ::= current_namespace user_id
+explicit_k_or_q_eval ::= mode expression
 
 // assignment
 private any_assignment ::= assignment | compound_assignment

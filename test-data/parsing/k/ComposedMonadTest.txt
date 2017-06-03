@@ -1,3 +1,15 @@
+if[~"."=*:/$x;x:.sdl.K,x]
+------------>
+Element(EXPRESSION)
+  Element(GROUP)
+    PsiElement(KTokenType.()('(')
+    PsiElement(KTokenType.composed_monad)('--:')
+    PsiElement(KTokenType.))(')')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.number)('4')
+============|
+
+
 (--:) 4
 ------------>
 Element(EXPRESSION)

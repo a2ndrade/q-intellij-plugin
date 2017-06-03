@@ -1,3 +1,31 @@
+pause:{[] print "";/ some comment
+     :`4:"pause"}
+------------>
+Element(TOP_LEVEL_ASSIGNMENT)
+  Element(USER_ID)
+    PsiElement(KTokenType.user_identifier)('pause')
+  PsiElement(KTokenType.:)(':')
+  Element(EXPRESSION)
+    PsiElement(KTokenType.{)('{')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.[)('[')
+      PsiElement(KTokenType.])(']')
+      Element(USER_ID)
+        PsiElement(KTokenType.user_identifier)('print')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.string)('""')
+    PsiElement(KTokenType.;)(';')
+    PsiComment(KTokenType.comment)('/ some comment\n')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.:)(':')
+      PsiElement(KTokenType.symbol)('`4')
+      Element(EXPRESSION)
+        PsiElement(KTokenType.:)(':')
+        PsiElement(KTokenType.string)('"pause"')
+    PsiElement(KTokenType.})('}')
+============|
+
+
 \d .a.p.PROCESS
  / after whitespace
 ------------>

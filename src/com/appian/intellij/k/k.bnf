@@ -11,8 +11,6 @@
   elementTypeClass="com.appian.intellij.k.psi.KElementType"
   tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
 
-  implements("(local|global|top_level)_assignment") = "com.appian.intellij.k.psi.KAssignment"
-
   psiImplUtilClass="com.appian.intellij.k.psi.impl.KPsiImplUtil"
 
   tokens=[
@@ -86,8 +84,7 @@
 
 // E:E;e|e e:nve|te| t:n|v v:tA|V n:t[E]|(E)|{E}|N
 root ::= top+ separator_or_eof
-private top ::= top_level_assignment
-              | namespace_definition
+private top ::= namespace_definition
               | command
               | explicit_k_or_q_eval
               | expression_list
@@ -98,7 +95,7 @@ private Noun ::= control
             | args // there can be standalone args: e.g. (`.fn;[])
             | group_or_list
             | noun
-            | assignment
+            | any_assignment
             | id
 
 control ::= flow_control args
@@ -117,13 +114,11 @@ private separator_or_eof ::= separator | <<eof>>
 // always defined at root
 command ::= simple_command (user_id|number|number_vector|caret) | complex_command (number|expression)
 namespace_definition ::= current_namespace user_id
-top_level_assignment ::= user_id colon [colon] expression
 explicit_k_or_q_eval ::= evaluation_context expression
 
 // assignment
-private assignment ::= global_assignment | local_assignment | compound_assignment
-global_assignment ::= user_id colon colon
-local_assignment ::= user_id colon
+private any_assignment ::= assignment | compound_assignment
+assignment ::= user_id colon [colon]
 compound_assignment ::= user_id [compound_assignment_index] [verb] colon
 compound_assignment_index ::= open_bracket expression close_bracket
 

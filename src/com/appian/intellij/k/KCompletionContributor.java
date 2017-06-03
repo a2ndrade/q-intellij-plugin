@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
-import com.appian.intellij.k.psi.KLocalAssignment;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.google.common.base.Strings;
@@ -80,8 +80,8 @@ public class KCompletionContributor extends CompletionContributor {
                 .orElse(Stream.empty())
                 .forEach(param -> uniques.putIfAbsent(param.getName(), param));
             // locals
-            Optional.ofNullable(PsiTreeUtil.findChildrenOfType(enclosingLambda, KLocalAssignment.class).stream()
-                .map(KLocalAssignment::getUserId)
+            Optional.ofNullable(PsiTreeUtil.findChildrenOfType(enclosingLambda, KAssignment.class).stream()
+                .map(KAssignment::getUserId)
                 .filter(id -> id.getName().contains(input)))
                 .orElse(Stream.empty())
                 .forEach(local -> uniques.putIfAbsent(local.getName(), local));

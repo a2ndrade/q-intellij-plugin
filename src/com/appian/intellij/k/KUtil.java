@@ -16,12 +16,12 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KExpression;
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamespaceDefinition;
-import com.appian.intellij.k.psi.KTopLevelAssignment;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
@@ -99,8 +99,8 @@ public final class KUtil {
       if (topLevelElement instanceof KNamespaceDefinition) {
         final String newNamespace = ((KNamespaceDefinition)topLevelElement).getUserId().getText();
         currentNamespace = getNewNamespace(currentNamespace, newNamespace);
-      } else if (topLevelElement instanceof KTopLevelAssignment) {
-        final KUserId userId = ((KTopLevelAssignment)topLevelElement).getUserId();
+      } else if (isAssignment(topLevelElement)) {
+        final KUserId userId = getUserId(topLevelElement);
         final String userIdName = userId.getText(); // don't use getName b/c it returns fully-qualified names
         final String userIdNamespace = getExplicitNamespace(userIdName);
         boolean match = false;
@@ -123,6 +123,14 @@ public final class KUtil {
       topLevelElement = topLevelElement.getNextSibling();
     } while (topLevelElement != null);
     return results;
+  }
+
+  private static boolean isAssignment(PsiElement element) {
+    return element instanceof KExpression && element.getFirstChild() instanceof KAssignment;
+  }
+  @NotNull
+  private static KUserId getUserId(PsiElement element) {
+      return ((KAssignment)element.getFirstChild()).getUserId();
   }
 
   public static Map<String, Set<VirtualFile>> findProjectNamespaces(Project project) {
@@ -218,7 +226,7 @@ public final class KUtil {
 
   @NotNull
   static String getCurrentNamespace(KUserId element) {
-    final Class[] potentialContainerTypes = new Class[] {KTopLevelAssignment.class, KExpression.class,
+    final Class[] potentialContainerTypes = new Class[] {KAssignment.class, KExpression.class,
         KNamespaceDefinition.class};
     PsiElement topLevelAssignment = null;
     for (Class containerType : potentialContainerTypes) {

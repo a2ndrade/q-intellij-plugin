@@ -3,8 +3,8 @@ package com.appian.intellij.k;
 import java.util.Collection;
 import java.util.Optional;
 
+import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
-import com.appian.intellij.k.psi.KLocalAssignment;
 import com.appian.intellij.k.psi.KNamespaceDefinition;
 import com.appian.intellij.k.psi.KUserId;
 import com.appian.intellij.k.psi.impl.KPsiImplUtil;
@@ -50,9 +50,9 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
             .stream()
             .filter(id -> referenceName.equals(id.getName()))
             .findFirst()
-            .orElse(PsiTreeUtil.findChildrenOfType(enclosingLambda, KLocalAssignment.class) // 2) check locals
+            .orElse(PsiTreeUtil.findChildrenOfType(enclosingLambda, KAssignment.class) // 2) check locals
                 .stream()
-                .map(KLocalAssignment::getUserId)
+                .map(KAssignment::getUserId)
                 .filter(id -> referenceName.equals(id.getName()))
                 .findFirst()
                 .orElse(null)))

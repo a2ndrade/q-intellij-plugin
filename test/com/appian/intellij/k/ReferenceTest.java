@@ -1,6 +1,6 @@
 package com.appian.intellij.k;
 
-import com.appian.intellij.k.psi.KTopLevelAssignment;
+import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -52,7 +52,7 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
   }
 
   private void assertReferenceFound(String fromFile, String expectedId, String expectedFqnId) {
-    assertReferenceFound(fromFile, expectedId, expectedFqnId, KTopLevelAssignment.class);
+    assertReferenceFound(fromFile, expectedId, expectedFqnId, KAssignment.class);
   }
 
   private void assertReferenceFound(

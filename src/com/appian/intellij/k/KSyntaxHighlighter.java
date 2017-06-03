@@ -73,18 +73,13 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS)
 
     .put(KTypes.VERB, VERB_KEYS)
-    .put(KTypes.COMPOSED_MONAD, VERB_KEYS)
-    .put(KTypes.DERIVED_VERB, KEYWORD_KEYS)
     .put(KTypes.ADVERB, ADVERB_KEYS)
 
     .put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS)
     .put(KTypes.NAMESPACE_DEFINITION, IDENTIFIER_SYS_KEYS)
 
     .put(KTypes.COLON, KEYWORD_KEYS)
-    .put(KTypes.IF, KEYWORD_KEYS)
-    .put(KTypes.DO, KEYWORD_KEYS)
-    .put(KTypes.WHILE, KEYWORD_KEYS)
-    .put(KTypes.N_COLON, KEYWORD_KEYS)
+    .put(KTypes.FLOW_CONTROL, KEYWORD_KEYS)
 
     .put(KTypes.OPEN_BRACE, BRACES_KEYS)
     .put(KTypes.CLOSE_BRACE, BRACES_KEYS)

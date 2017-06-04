@@ -49,7 +49,7 @@ final class KUserIdCache extends VirtualFileAdapter {
       userIds = new Trie<>();
       final Collection<KUserId> identifiers = KUtil.findIdentifiers(project, file);
       for (KUserId userId : identifiers) {
-        userIds.put(userId.getName(), Boolean.TRUE);
+        userIds.put(KUtil.getFqnOrName(userId), Boolean.TRUE);
       }
       file.putUserData(USER_IDS_TRIE, userIds);
     }

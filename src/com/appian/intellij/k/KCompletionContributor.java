@@ -31,7 +31,7 @@ import com.intellij.util.ProcessingContext;
 
 public class KCompletionContributor extends CompletionContributor {
 
-  private static final String[] SYSTEM_FNS_Q = new String[] {"abs", "acos", "aj", "aj0", "all", "and", "any",
+  static final String[] SYSTEM_FNS_Q = new String[] {"abs", "acos", "aj", "aj0", "all", "and", "any",
       "asc", "asin", "asof", "atan", "attr", "avg", "avgs", "bin", "binr", "by", "ceiling", "cols", "cor",
       "cos", "count", "cov", "cross", "csv", "cut", "delete", "deltas", "desc", "dev", "differ", "distinct",
       "div", "dsave", "each", "ej", "ema", "enlist", "eval", "except", "exec", "exit", "exp", "fby", "fills",
@@ -99,10 +99,14 @@ public class KCompletionContributor extends CompletionContributor {
             if (caseInsensitiveResultSet.isStopped() || input.charAt(0) != '.') {
               return;
             }
+            final String sameFilePath = sameFile.getCanonicalPath();
             final KUserIdCache cache = KUserIdCache.getInstance();
             final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
                 GlobalSearchScope.allScope(project));
             for (VirtualFile otherFile : otherFiles) {
+              if (sameFilePath.equals(otherFile.getCanonicalPath())) {
+                continue; // already processed above
+              }
               Optional.ofNullable(cache.findAllIdentifiers(project, otherFile, input, new KUtil.PrefixMatcher(input)).stream())
                   .orElse(Stream.empty())
                   .forEach(global -> {
@@ -123,7 +127,7 @@ public class KCompletionContributor extends CompletionContributor {
       return; // ignore
     }
     final String[] systemFnNames = KUtil.isInQFile(element) ? SYSTEM_FNS_Q : SYSTEM_FNS_K3;
-    int i = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);;
+    int i = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);
     while (i < systemFnNames.length && systemFnNames[i].startsWith(input)) {
       resultSet.addElement(LookupElementBuilder.create(systemFnNames[i++]));
     }

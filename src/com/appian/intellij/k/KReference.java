@@ -1,7 +1,10 @@
 package com.appian.intellij.k;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
@@ -28,7 +31,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
   @Override
   public PsiElement resolve() {
     final VirtualFile sameFile = myElement.getContainingFile().getOriginalFile().getVirtualFile();
-    if (sameFile == null) {
+    if (sameFile == null || sameFile.getCanonicalPath() == null) {
       return null;
     }
     final String sameFilePath = sameFile.getCanonicalPath();
@@ -38,10 +41,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
     }
     final Project project = myElement.getProject();
     final KUserId reference = (KUserId)this.myElement;
-    final String referenceName = reference.getName();
-    if (referenceName == null) {
-      return null;
-    }
+    final String referenceName = getEffectiveName(sameFile, reference);
     final KUserIdCache cache = KUserIdCache.getInstance();
     final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(this.myElement, KLambda.class);
     final KUserId foundInSameFile = Optional.ofNullable(enclosingLambda)
@@ -70,18 +70,28 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
       return foundInSameFile;
     }
     // 4) check other sameFile's globals
-    final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
+    final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
-    for (VirtualFile virtualFile : virtualFiles) {
-      if (sameFilePath.equals(virtualFile.getCanonicalPath())) {
+    for (VirtualFile otherFile : otherFiles) {
+      if (sameFilePath.equals(otherFile.getCanonicalPath())) {
         continue; // already processed above
       }
-      final KUserId foundInOtherFile = cache.findFirstExactMatch(project, virtualFile, referenceName);
+      final KUserId foundInOtherFile = cache.findFirstExactMatch(project, otherFile, referenceName);
       if (foundInOtherFile != null) {
         return foundInOtherFile;
       }
     }
     return null;
+  }
+
+  @NotNull
+  private String getEffectiveName(VirtualFile file, KUserId reference) {
+    final String referenceName = reference.getName();
+    // trying to resolve a built-in q function
+    if (Arrays.binarySearch(KCompletionContributor.SYSTEM_FNS_Q, referenceName) > 0 && KUtil.isQFile(file)) {
+      return ".q." + referenceName;
+    }
+    return referenceName;
   }
 
   @Override

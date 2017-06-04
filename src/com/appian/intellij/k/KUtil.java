@@ -21,6 +21,7 @@ import com.appian.intellij.k.psi.KExpression;
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
+import com.appian.intellij.k.psi.KModeDirective;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
@@ -99,24 +100,26 @@ public final class KUtil {
       if (topLevelElement instanceof KNamespaceDeclaration) {
         final String newNamespace = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();
         currentNamespace = getNewNamespace(currentNamespace, newNamespace);
-      } else if (isAssignment(topLevelElement)) {
-        final KUserId userId = getUserId(topLevelElement);
-        final String userIdName = userId.getText(); // don't use getName b/c it returns fully-qualified names
-        final String userIdNamespace = getExplicitNamespace(userIdName);
-        boolean match = false;
-        if (userIdNamespace == null && !currentNamespace.isEmpty()) {
-          final String fqn = generateFqn(currentNamespace, userIdName);
-          if (matcher.matches(fqn)) {
-            putFqn(userId, fqn);
+      } else {
+        final KUserId userId = getTopLevelAssignmentId(topLevelElement);
+        if (userId != null) {
+          final String userIdName = userId.getName();
+          final String userIdNamespace = getExplicitNamespace(userIdName);
+          boolean match = false;
+          if (userIdNamespace == null && !currentNamespace.isEmpty()) {
+            final String fqn = generateFqn(currentNamespace, userIdName);
+            if (matcher.matches(fqn)) {
+              putFqn(userId, fqn);
+              match = true;
+            }
+          } else if (matcher.matches(userIdName)) {
             match = true;
           }
-        } else if (matcher.matches(userIdName)) {
-          match = true;
-        }
-        if (match) {
-          results.add(userId);
-          if (stopAfterFirstMatch) {
-            return results;
+          if (match) {
+            results.add(userId);
+            if (stopAfterFirstMatch) {
+              return results;
+            }
           }
         }
       }
@@ -125,12 +128,15 @@ public final class KUtil {
     return results;
   }
 
-  private static boolean isAssignment(PsiElement element) {
-    return element instanceof KExpression && element.getFirstChild() instanceof KAssignment;
-  }
-  @NotNull
-  private static KUserId getUserId(PsiElement element) {
+  @Nullable
+  private static KUserId getTopLevelAssignmentId(PsiElement element) {
+    if (element instanceof KModeDirective) { // q) or k)
+      element = ((KModeDirective)element).getExpression();
+    }
+    if (element instanceof KExpression && element.getFirstChild() instanceof KAssignment) {
       return ((KAssignment)element.getFirstChild()).getUserId();
+    }
+    return null;
   }
 
   public static Map<String, Set<VirtualFile>> findProjectNamespaces(Project project) {
@@ -178,10 +184,6 @@ public final class KUtil {
     return Optional.empty();
   }
 
-  static boolean isInKFile(PsiElement element) {
-    return isInFileWithExt(element, "k");
-  }
-
   static boolean isInQFile(PsiElement element) {
     return isInFileWithExt(element, "q");
   }
@@ -189,8 +191,14 @@ public final class KUtil {
   private static boolean isInFileWithExt(PsiElement element, String extension) {
     return Optional.ofNullable(element.getContainingFile())
         .map(PsiFile::getVirtualFile)
+        .map(KUtil::isQFile)
+        .isPresent();
+  }
+
+  static boolean isQFile(VirtualFile file) {
+    return Optional.ofNullable(file)
         .map(VirtualFile::getExtension)
-        .filter(ext -> ext.equals(extension))
+        .filter(ext -> ext.equals("q"))
         .isPresent();
   }
 

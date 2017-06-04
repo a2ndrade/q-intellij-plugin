@@ -1,4 +1,6 @@
-1
+\
+all these
+are comments
 ------------>
 Element(EXPRESSION)
   PsiElement(KTokenType.number)('1')

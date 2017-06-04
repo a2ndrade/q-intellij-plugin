@@ -6,10 +6,34 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class RenameTest extends LightCodeInsightFixtureTestCase {
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+
+  public static Test suite() {
+    final TestSuite suite = new TestSuite();
+    for (String context : new String[]{"top", "fn"}) {
+      for (String fromType : new String[]{"local"}) {
+        for (String toType : new String[]{"local", "global"}) {
+          for (String from : new String[]{"def", "usage"}) {
+            final String fileNamePrefix = context + "_" + fromType + "_to_" + toType + "_from_" + from;
+            final String renameTo = "local".equals(toType) ? "test2" : ".g.test";
+            suite.addTest(new RenameTest(fileNamePrefix, renameTo));
+          }
+        }
+      }
+    }
+    return suite;
+  }
+
+  private final String fileNamePrefix;
+  private final String targetName;
+
+  public RenameTest(String fileNamePrefix, String targetName) {
+    this.fileNamePrefix = fileNamePrefix;
+    this.targetName = targetName;
+    setName("testRename");
   }
 
   @Override
@@ -17,24 +41,19 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
     return "test-data/renaming";
   }
 
-  public void testRenameAll() {
-    for (String context : new String[]{"top", "fn"}) {
-      for (String fromType : new String[]{"local"}) {
-        for (String toType : new String[]{"global"}) {
-          for (String from : new String[]{"def", "usage"}) {
-            final String fileNamePrefix = context + "_" + fromType + "_to_" + toType + "_from_" + from;
-            final String inputFileName = fileNamePrefix + ".k";
-            final String outputFileName = fileNamePrefix + "_after.k";
-            final String renameTo = "local".equals(toType) ? "test2" : ".g.test";
-            myFixture.configureByFile(inputFileName);
-            final PsiFile virtualFile = myFixture.getFile();
-            assertReferences(virtualFile);
-            myFixture.renameElementAtCaret(renameTo);
-            myFixture.checkResultByFile(outputFileName, false);
-          }
-        }
-      }
-    }
+  @Override
+  public String getName() {
+    return fileNamePrefix + ".k";
+  }
+
+  public void testRename() {
+    final String inputFileName = fileNamePrefix + ".k";
+    final String outputFileName = fileNamePrefix + "_after.k";
+    myFixture.configureByFile(inputFileName);
+    final PsiFile virtualFile = myFixture.getFile();
+    assertReferences(virtualFile);
+    myFixture.renameElementAtCaret(targetName);
+    myFixture.checkResultByFile(outputFileName, false);
   }
 
   private void assertReferences(PsiFile file) {

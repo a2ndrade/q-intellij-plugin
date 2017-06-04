@@ -83,7 +83,7 @@
 }
 
 // E:E;e|e e:nve|te| t:n|v v:tA|V n:t[E]|(E)|{E}|N
-root ::= top+ separator_or_eof
+root ::= top* separator_or_eof
 private top ::= namespace_declaration
               | command_statement
               | explicit_k_or_q_eval
@@ -95,7 +95,7 @@ private Noun ::= control_flow
             | args // there can be standalone args: e.g. (`.fn;[])
             | group_or_list
             | noun
-            | any_assignment
+            | assignment
             | id
 
 private control_flow ::= control_statement | conditional_evaluation
@@ -118,11 +118,8 @@ command_statement ::= command [expression]
 namespace_declaration ::= current_namespace user_id
 explicit_k_or_q_eval ::= mode expression
 
-// assignment
-private any_assignment ::= assignment | compound_assignment
-assignment ::= user_id colon [colon]
-compound_assignment ::= user_id [compound_assignment_index] [verb] colon
-compound_assignment_index ::= open_bracket expression close_bracket
+// simple & compound assignment; local & global
+assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression
 
 // all data are syntactically nouns
 private noun ::= vector | atom | lambda

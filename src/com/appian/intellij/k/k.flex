@@ -77,8 +77,8 @@ CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR})?
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
-VERB=[!#$%&*+,-.<=>?@\^_|~]
-MONAD={VERB}{WHITE_SPACE}*":"
+PRIMITIVE_VERB=[!#$%&*+,-.<=>?@\^_|~]
+MONAD={PRIMITIVE_VERB}{WHITE_SPACE}*":"
 "+-*%!&|<>=$;-%~_^$"
 ADVERB=("/" | \\ | ' | "/": | \\: | ':)+
 CONTROL="if"|"do"|"while"
@@ -121,7 +121,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   ^{MODE}                                     { return MODE; }
   {NUMBER_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return NUMBER_VECTOR; }
   {NUMBER_VECTOR}                             { return NUMBER_VECTOR; }
-  [0-6]":"/[^\[]                              { return VERB; }
+  [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
   {CONTROL}/"["                               { return CONTROL; }
   {CONDITIONAL}/"["                           { return CONDITIONAL; }
   {SYMBOL_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
@@ -133,10 +133,10 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {COMMENT2}/{NEWLINE}                        { return COMMENT; }
   {COMMENT2}                                  { return COMMENT; }
 
-  "_"/{K3_SYSTEM_FUNCTION}                    { return VERB;} // __sqrt 3 -> 1
-  "-"/-[0-9]                                  { return VERB;} // --6 -> 6
-  {VERB}/{ADVERB}                             { yybegin(ADVERB_STATE); return VERB;}
-  {VERB}                                      { return VERB;}
+  "_"/{K3_SYSTEM_FUNCTION}                    { return PRIMITIVE_VERB;} // __sqrt 3 -> 1
+  "-"/-[0-9]                                  { return PRIMITIVE_VERB;} // --6 -> 6
+  {PRIMITIVE_VERB}/{ADVERB}                   { yybegin(ADVERB_STATE); return PRIMITIVE_VERB;}
+  {PRIMITIVE_VERB}                            { return PRIMITIVE_VERB;}
 
   "("                                         { return OPEN_PAREN; }
   ")"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_PAREN; }

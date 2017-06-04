@@ -46,7 +46,7 @@
     close_brace='}'
     tilde='~'
 
-    verb="verb"
+    primitive_verb="primitive verb"
 
     // adverbs
     adverb="adverb"
@@ -70,7 +70,7 @@
     // special
     trace='\'
     signal="signal"
-    mode="mode"
+    mode="mode" // either k) or q)
 
     // control
     control="control statement"
@@ -86,15 +86,18 @@
 root ::= top* separator_or_eof
 private top ::= namespace_declaration
               | command_statement
-              | explicit_k_or_q_eval
+              | mode_directive
               | expression_list
-private expression_list ::= separator | expression (separator+ expression)*
-expression ::= Noun_or_Verb Noun_or_Verb? adverb? expression?
-private Noun_or_Verb ::= Noun | Verb
-private Noun ::= control_flow
+private expression_list ::= separator
+                          | expression (separator+ expression)*
+expression ::= noun_or_verb noun_or_verb? adverb? expression?
+private noun_or_verb ::= noun
+                       | primitive_verb [colon]
+                       | system_function
+private noun ::= control_flow
             | args // there can be standalone args: e.g. (`.fn;[])
             | group_or_list
-            | noun
+            | primitive_noun
             | assignment
             | id
 
@@ -103,8 +106,7 @@ control_statement ::= control args
 conditional_evaluation ::= conditional args
 args ::= open_bracket expression_list* close_bracket
 
-private Verb ::= verb [colon] | system_function | signal | trace | colon
-private system_function ::= k3_system_function | q_system_function
+private system_function ::= k3_system_function | q_system_function | signal | trace | colon // ":" is return
 group_or_list ::= open_paren expression_list* close_paren
 
 lambda ::= open_brace [lambda_params] expression_list* close_brace
@@ -116,13 +118,13 @@ private separator_or_eof ::= separator | <<eof>>
 // always defined at root
 command_statement ::= command [expression]
 namespace_declaration ::= current_namespace user_id
-explicit_k_or_q_eval ::= mode expression
+mode_directive ::= mode expression
 
 // simple & compound assignment; local & global
 assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression
 
 // all data are syntactically nouns
-private noun ::= vector | atom | lambda
+private primitive_noun ::= vector | atom | lambda
 private vector ::= symbol_vector | number_vector | string
 private atom ::= symbol | number | char
 

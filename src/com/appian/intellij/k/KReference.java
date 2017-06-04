@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
@@ -41,7 +39,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
     }
     final Project project = myElement.getProject();
     final KUserId reference = (KUserId)this.myElement;
-    final String referenceName = getEffectiveName(sameFile, reference);
+    final String referenceName = reference.getName();
     final KUserIdCache cache = KUserIdCache.getInstance();
     final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(this.myElement, KLambda.class);
     final KUserId foundInSameFile = Optional.ofNullable(enclosingLambda)
@@ -70,13 +68,16 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
       return foundInSameFile;
     }
     // 4) check other sameFile's globals
+    final String fqnOrName = isBuiltinQFunction(sameFile, referenceName) ?
+        ".q." + referenceName : // defined under .q namespace inside q.k
+        KUtil.getFqnOrName(reference);
     final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     for (VirtualFile otherFile : otherFiles) {
       if (sameFilePath.equals(otherFile.getCanonicalPath())) {
         continue; // already processed above
       }
-      final KUserId foundInOtherFile = cache.findFirstExactMatch(project, otherFile, referenceName);
+      final KUserId foundInOtherFile = cache.findFirstExactMatch(project, otherFile, fqnOrName);
       if (foundInOtherFile != null) {
         return foundInOtherFile;
       }
@@ -84,14 +85,9 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
     return null;
   }
 
-  @NotNull
-  private String getEffectiveName(VirtualFile file, KUserId reference) {
-    final String referenceName = reference.getName();
-    // trying to resolve a built-in q function
-    if (Arrays.binarySearch(KCompletionContributor.SYSTEM_FNS_Q, referenceName) > 0 && KUtil.isQFile(file)) {
-      return ".q." + referenceName;
-    }
-    return referenceName;
+  private boolean isBuiltinQFunction(VirtualFile file, String referenceName) {
+    return Arrays.binarySearch(KCompletionContributor.SYSTEM_FNS_Q, referenceName) > 0 &&
+        KUtil.isFileWithExt(file, "q");
   }
 
   @Override

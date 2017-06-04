@@ -101,8 +101,8 @@ public final class KUtil {
         final String newNamespace = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();
         currentNamespace = getNewNamespace(currentNamespace, newNamespace);
       } else {
-        final KUserId userId = getTopLevelAssignmentId(topLevelElement);
-        if (userId != null) {
+        // there are multiple ids if they are chained i.e. x:y:z:1
+        for (KUserId userId : getTopLevelAssignmentIds(topLevelElement)) {
           final String userIdName = userId.getName();
           final String userIdNamespace = getExplicitNamespace(userIdName);
           boolean match = false;
@@ -128,15 +128,19 @@ public final class KUtil {
     return results;
   }
 
-  @Nullable
-  private static KUserId getTopLevelAssignmentId(PsiElement element) {
-    if (element instanceof KModeDirective) { // q) or k)
-      element = ((KModeDirective)element).getExpression();
+  @NotNull
+  private static List<KUserId> getTopLevelAssignmentIds(PsiElement topLevelElement) {
+    if (topLevelElement instanceof KModeDirective) { // q) or k)
+      topLevelElement = ((KModeDirective)topLevelElement).getExpression();
     }
-    if (element instanceof KExpression && element.getFirstChild() instanceof KAssignment) {
-      return ((KAssignment)element.getFirstChild()).getUserId();
+    final List<KUserId> ids = new ArrayList<>();
+    PsiElement currentElement = topLevelElement;
+    while(currentElement instanceof KExpression && currentElement.getFirstChild() instanceof KAssignment) {
+      final KAssignment assignment = (KAssignment)currentElement.getFirstChild();
+      ids.add(assignment.getUserId());
+      currentElement = assignment.getExpression();
     }
-    return null;
+    return ids;
   }
 
   public static Map<String, Set<VirtualFile>> findProjectNamespaces(Project project) {
@@ -189,17 +193,12 @@ public final class KUtil {
   }
 
   private static boolean isInFileWithExt(PsiElement element, String extension) {
-    return Optional.ofNullable(element.getContainingFile())
-        .map(PsiFile::getVirtualFile)
-        .map(KUtil::isQFile)
-        .isPresent();
+    final PsiFile file = element.getContainingFile();
+    return file == null || isFileWithExt(file.getVirtualFile(), extension);
   }
 
-  static boolean isQFile(VirtualFile file) {
-    return Optional.ofNullable(file)
-        .map(VirtualFile::getExtension)
-        .filter(ext -> ext.equals("q"))
-        .isPresent();
+  static boolean isFileWithExt(VirtualFile file, String extension) {
+    return file == null || extension.equals(file.getExtension());
   }
 
   public static boolean isValidIdentifier(PsiElement element) {
@@ -234,8 +233,7 @@ public final class KUtil {
 
   @NotNull
   static String getCurrentNamespace(KUserId element) {
-    final Class[] potentialContainerTypes = new Class[] {KAssignment.class, KExpression.class,
-        KNamespaceDeclaration.class};
+    final Class[] potentialContainerTypes = new Class[] {KExpression.class, KNamespaceDeclaration.class};
     PsiElement topLevelAssignment = null;
     for (Class containerType : potentialContainerTypes) {
       topLevelAssignment = PsiTreeUtil.getTopmostParentOfType(element, containerType);

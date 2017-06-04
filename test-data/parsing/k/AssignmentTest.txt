@@ -186,4 +186,19 @@ Element(TOP_LEVEL_ASSIGNMENT)
         PsiElement(KTokenType.verb)('-')
       Element(MONAD_ARG)
         PsiElement(KTokenType.:)(':')
+============|
+
+
+x:y:z:1
+------------>
+Element(TOP_LEVEL_ASSIGNMENT)
+  Element(USER_ID)
+    PsiElement(KTokenType.q_system_function)('neg')
+  PsiElement(KTokenType.:)(':')
+  Element(EXPRESSION)
+    Element(MONAD_FN_CALL)
+      Element(MONAD_FN)
+        PsiElement(KTokenType.verb)('-')
+      Element(MONAD_ARG)
+        PsiElement(KTokenType.:)(':')
 

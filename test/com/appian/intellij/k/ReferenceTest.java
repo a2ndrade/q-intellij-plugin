@@ -20,6 +20,9 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
   public void testNoNs() {
     assertReferenceFound("usage_no_ns.k", "noNs", null);
   }
+  public void testUsageUnderNs() {
+    assertReferenceFound("usage_under_ns.k", "noNs", null);
+  }
   public void testImplicitNs() {
     assertReferenceFound("usage_implicit_ns.k", "implicitNs", ".a.b.implicitNs");
   }
@@ -44,25 +47,31 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
   public void testImplicitRootNs() {
     assertReferenceFound("usage_implicit_root_ns.k", "implicitRootNs", ".implicitRootNs");
   }
-  public void testOtherNoNs() {
+  public void testOtherNoNs(){
     assertReferenceFound("usage_other_no_ns.k", "otherNoNs", null);
   }
   public void testNotFound() {
     assertReferenceNotFound("usage_only_ns_found.k");
   }
 
+  public void testDefWithImplicitNs() {
+    assertReferenceFound("def_with_implicit_ns.k", "noNs", ".same.file.noNs", "def_with_implicit_ns.k");
+  }
+
   private void assertReferenceFound(String fromFile, String expectedId, String expectedFqnId) {
-    assertReferenceFound(fromFile, expectedId, expectedFqnId, KAssignment.class);
+    assertReferenceFound(fromFile, expectedId, expectedFqnId, "references.k");
   }
 
   private void assertReferenceFound(
-      String fromFile, String expectedId, String expectedFqnId, Class context) {
+      String fromFile, String expectedId, String expectedFqnId, String expectedFile) {
     myFixture.configureByFiles(fromFile, "references.k");
     final PsiReference from = myFixture.getReferenceAtCaretPosition(fromFile);
     final PsiElement to = from.resolve();
     assertNotNull("Unresolved Reference: " + from.getElement().getText() + " (" +fromFile +")", to);
     assertInstanceOf(to, KUserId.class);
-    assertInstanceOf(to.getContext(), context);
+    assertInstanceOf(to.getContext(), KAssignment.class);
+    assertEquals("Resolved to unexpected file: ", expectedFile,
+        to.getContainingFile().getVirtualFile().getName());
     final String toId = to.getText();
     final String toFqnId= KUtil.getFqn((KUserId)to);
     assertEquals("explicit id", expectedId, toId);

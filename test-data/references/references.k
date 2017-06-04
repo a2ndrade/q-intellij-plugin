@@ -4,7 +4,7 @@ noNs:{x+x}
 
 implicitNs:{x+x}
 
-.a.b.explicitNs:{x+x}
+q).a.b.explicitNs:{x+x}
 
 .x.otherExplicitNs:{x+x}
 
@@ -28,7 +28,7 @@ implicitRootNs:{x+x}
 
 \d ^
 
-otherNoNs:{x+x}
+k)chained:otherNoNs:{x+x}
 
 \d .empty
 

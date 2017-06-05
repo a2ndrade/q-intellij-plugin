@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KAssignment;
+import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
@@ -27,7 +28,7 @@ public final class KFindUsagesProvider implements FindUsagesProvider {
   public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
     if (psiElement instanceof KUserId) {
       final PsiElement context = psiElement.getContext();
-      return context instanceof KAssignment;
+      return context instanceof KAssignment || context instanceof KLambdaParams;
     }
     return false;
   }

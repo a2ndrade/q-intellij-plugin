@@ -1,53 +1,53 @@
 1
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('1')
+  PsiElement(number)('1')
 ============|
 
 
 -2
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('-2')
+  PsiElement(number)('-2')
 ============|
 
 
 -1.5
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('-1.5')
+  PsiElement(number)('-1.5')
 ============|
 
 
 2.1
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('2.1')
+  PsiElement(number)('2.1')
 ============|
 
 
 0i
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('0i')
+  PsiElement(number)('0i')
 ============|
 
 
 0n
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('0n')
+  PsiElement(number)('0n')
 ============|
 
 
 0N
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('0N')
+  PsiElement(number)('0N')
 ============|
 
 
 0I
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('0I')
+  PsiElement(number)('0I')

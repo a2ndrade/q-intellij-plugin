@@ -1,21 +1,21 @@
 ""
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.string)('""')
+  PsiElement(string)('""')
 ============|
 
 
 "ab"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.string)('"ab"')
+  PsiElement(string)('"ab"')
 ============|
 
 
 "\" \t \n \r \b \\ \a"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.string)('"\" \t \n \r \b \\ \a"')
+  PsiElement(string)('"\" \t \n \r \b \\ \a"')
 ============|
 
 
@@ -23,7 +23,7 @@ Element(EXPRESSION)
  "
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.string)('"\n "')
+  PsiElement(string)('"\n "')
 ============|
 
 
@@ -31,4 +31,4 @@ Element(EXPRESSION)
  line"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.string)('" \"multi\"-\n line"')
+  PsiElement(string)('" \"multi\"-\n line"')

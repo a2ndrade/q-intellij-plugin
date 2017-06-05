@@ -1,30 +1,25 @@
 '"a"
 ------------>
 Element(EXPRESSION)
-  Element(SIGNAL)
-    PsiElement(KTokenType.')(''')
-    Element(EXPRESSION)
-      PsiElement(KTokenType.char)('"a"')
+  PsiElement(signal)(''')
+  PsiElement(char)('"a"')
 ============|
 
 
 if[1;'2;0]
 ------------>
 Element(EXPRESSION)
-  Element(PREFIX_FN_CALL)
-    Element(PREFIX_FN)
-      PsiElement(KTokenType.if)('if')
-    Element(PREFIX_FN_ARGS)
-      PsiElement(KTokenType.[)('[')
+  Element(CONTROL_STATEMENT)
+    PsiElement(control statement)('if')
+    Element(ARGS)
+      PsiElement([)('[')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('1')
-      PsiElement(KTokenType.;)(';')
+        PsiElement(number)('1')
+      PsiElement(;)(';')
       Element(EXPRESSION)
-        Element(SIGNAL)
-          PsiElement(KTokenType.')(''')
-          Element(EXPRESSION)
-            PsiElement(KTokenType.number)('2')
-      PsiElement(KTokenType.;)(';')
+        PsiElement(signal)(''')
+        PsiElement(number)('2')
+      PsiElement(;)(';')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('0')
-      PsiElement(KTokenType.])(']')
+        PsiElement(number)('0')
+      PsiElement(])(']')

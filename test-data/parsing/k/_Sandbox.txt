@@ -1,6 +1,4 @@
-\
-all these
-are comments
+1
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.number)('1')
+  PsiElement(number)('1')

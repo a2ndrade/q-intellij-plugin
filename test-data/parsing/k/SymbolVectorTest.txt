@@ -1,47 +1,45 @@
 0#`
 ------------>
 Element(EXPRESSION)
-  Element(INFIX_FN_CALL)
-    PsiElement(KTokenType.number)('0')
-    Element(INFIX_FN)
-      PsiElement(KTokenType.verb)('#')
-    Element(EXPRESSION)
-      PsiElement(KTokenType.symbol)('`')
+  PsiElement(number)('0')
+  PsiElement(primitive verb)('#')
+  Element(EXPRESSION)
+    PsiElement(symbol)('`')
 ============|
 
 
 ``
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('``')
+  PsiElement(symbol vector)('``')
 ============|
 
 
 ` ` `
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('` ` `')
+  PsiElement(symbol vector)('` ` `')
 ============|
 
 
 ``abc
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('``abc')
+  PsiElement(symbol vector)('``abc')
 ============|
 
 
 `"ab"`
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('`"ab"`')
+  PsiElement(symbol vector)('`"ab"`')
 ============|
 
 
 `a`b`c
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('`a`b`c')
+  PsiElement(symbol vector)('`a`b`c')
 ============|
 
 
@@ -49,18 +47,18 @@ Element(EXPRESSION)
  line"`b`
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('`" \"multi\"-\n line"`b`')
+  PsiElement(symbol vector)('`" \"multi\"-\n line"`b`')
 ============|
 
 
 `a`"bc"`cd`z
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('`a`"bc"`cd`z')
+  PsiElement(symbol vector)('`a`"bc"`cd`z')
 ============|
 
 
 `a `"bc" `cd `z
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol_vector)('`a `"bc" `cd `z')
+  PsiElement(symbol vector)('`a `"bc" `cd `z')

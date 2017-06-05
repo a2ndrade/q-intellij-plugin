@@ -2,17 +2,15 @@
 ------------>
 Element(EXPRESSION)
   Element(LAMBDA)
-    PsiElement(KTokenType.{)('{')
+    PsiElement({)('{')
     Element(EXPRESSION)
       Element(USER_ID)
-        PsiElement(KTokenType.user_identifier)('x')
-      Element(INFIX_FN)
-        PsiElement(KTokenType.verb)('-')
+        PsiElement(variable)('x')
+      PsiElement(primitive verb)('-')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('2')
-    PsiElement(KTokenType.})('}')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number)('5')
+        PsiElement(number)('2')
+    PsiElement(})('}')
+  PsiElement(number)('5')
 ============|
 
 
@@ -20,85 +18,77 @@ Element(EXPRESSION)
 ------------>
 Element(EXPRESSION)
   Element(LAMBDA)
-    PsiElement(KTokenType.{)('{')
+    PsiElement({)('{')
     Element(EXPRESSION)
       Element(USER_ID)
-        PsiElement(KTokenType.user_identifier)('x')
-      Element(INFIX_FN)
-        PsiElement(KTokenType.verb)('-')
+        PsiElement(variable)('x')
+      PsiElement(primitive verb)('-')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('2')
-    PsiElement(KTokenType.})('}')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number_vector)('5 6')
+        PsiElement(number)('2')
+    PsiElement(})('}')
+  PsiElement(number vector)('5 6')
 ============|
 
 
 (4; "a") 1
 ------------>
 Element(EXPRESSION)
-  Element(LIST)
-    PsiElement(KTokenType.()('(')
+  Element(GROUP_OR_LIST)
+    PsiElement(()('(')
     Element(EXPRESSION)
-      PsiElement(KTokenType.number)('4')
-    PsiElement(KTokenType.;)(';')
+      PsiElement(number)('4')
+    PsiElement(;)(';')
     Element(EXPRESSION)
-      PsiElement(KTokenType.char)('"a"')
-    PsiElement(KTokenType.))(')')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+      PsiElement(char)('"a"')
+    PsiElement())(')')
+  PsiElement(number)('1')
 ============|
 
 
 a[1 2] 0 1
 ------------>
 Element(EXPRESSION)
-  Element(PREFIX_FN_CALL)
-    Element(PREFIX_FN)
-      Element(USER_ID)
-        PsiElement(KTokenType.user_identifier)('a')
-    Element(PREFIX_FN_ARGS)
-      PsiElement(KTokenType.[)('[')
-      Element(EXPRESSION)
-        PsiElement(KTokenType.number_vector)('1 2')
-      PsiElement(KTokenType.])(']')
+  Element(USER_ID)
+    PsiElement(variable)('a')
+  Element(ARGS)
+    PsiElement([)('[')
+    Element(EXPRESSION)
+      PsiElement(number vector)('1 2')
+    PsiElement(])(']')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number_vector)('0 1')
+    PsiElement(number vector)('0 1')
 ============|
 
 
 :[1;1 2;0] 0 1
 ------------>
 Element(EXPRESSION)
-  Element(PREFIX_FN_CALL)
-    Element(PREFIX_FN)
-      PsiElement(KTokenType.:)(':')
-    Element(PREFIX_FN_ARGS)
-      PsiElement(KTokenType.[)('[')
+  Element(CONDITIONAL_EVALUATION)
+    PsiElement(conditional evaluation)(':')
+    Element(ARGS)
+      PsiElement([)('[')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('1')
-      PsiElement(KTokenType.;)(';')
+        PsiElement(number)('1')
+      PsiElement(;)(';')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number_vector)('1 2')
-      PsiElement(KTokenType.;)(';')
+        PsiElement(number vector)('1 2')
+      PsiElement(;)(';')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('0')
-      PsiElement(KTokenType.])(']')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number_vector)('0 1')
+        PsiElement(number)('0')
+      PsiElement(])(']')
+  PsiElement(number vector)('0 1')
 ============|
 
 
 (1 2) 0 1
 ------------>
 Element(EXPRESSION)
-  Element(GROUP)
-    PsiElement(KTokenType.()('(')
+  Element(GROUP_OR_LIST)
+    PsiElement(()('(')
     Element(EXPRESSION)
-      PsiElement(KTokenType.number_vector)('1 2')
-    PsiElement(KTokenType.))(')')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number_vector)('0 1')
+      PsiElement(number vector)('1 2')
+    PsiElement())(')')
+  PsiElement(number vector)('0 1')
 ============|
 
 
@@ -106,37 +96,34 @@ a 1
 ------------>
 Element(EXPRESSION)
   Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('a')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(variable)('a')
+  PsiElement(number)('1')
 ============|
 
 
 .[x;1;:] 1
 ------------>
 Element(EXPRESSION)
-  Element(PREFIX_FN_CALL)
-    Element(PREFIX_FN)
-      PsiElement(KTokenType.verb)('.')
-    Element(PREFIX_FN_ARGS)
-      PsiElement(KTokenType.[)('[')
+  Element(CONDITIONAL_EVALUATION)
+    PsiElement(conditional evaluation)('.')
+    Element(ARGS)
+      PsiElement([)('[')
       Element(EXPRESSION)
         Element(USER_ID)
-          PsiElement(KTokenType.user_identifier)('x')
-      PsiElement(KTokenType.;)(';')
+          PsiElement(variable)('x')
+      PsiElement(;)(';')
       Element(EXPRESSION)
-        PsiElement(KTokenType.number)('1')
-      PsiElement(KTokenType.;)(';')
-      PsiElement(KTokenType.:)(':')
-      PsiElement(KTokenType.])(']')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+        PsiElement(number)('1')
+      PsiElement(;)(';')
+      Element(EXPRESSION)
+        PsiElement(:)(':')
+      PsiElement(])(']')
+  PsiElement(number)('1')
 ============|
 
 
 `abc 1
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.symbol)('`abc')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+  PsiElement(symbol)('`abc')
+  PsiElement(number)('1')

@@ -1,27 +1,18 @@
 k)!10
 ------------>
-Element(FILE)
-  PsiElement(KTokenType.()('(')
-  PsiElement(KTokenType.[)('[')
-  PsiElement(KTokenType.])(']')
-  PsiErrorElement:<table cols> expected, got ')'
-    PsiElement(KTokenType.))(')')
+Element(MODE_DIRECTIVE)
+  PsiElement(mode)('k)')
+  Element(EXPRESSION)
+    PsiElement(primitive verb)('!')
+    PsiElement(number)('10')
 ============|
 
 
 q)til 10
 ------------>
-Element(EXPRESSION)
-  Element(TABLE)
-    PsiElement(KTokenType.()('(')
-    Element(TABLE_PKS)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.])(']')
-    Element(TABLE_COLS)
-      Element(TABLE_COL)
-        Element(USER_ID)
-          PsiElement(KTokenType.user_identifier)('a')
-        PsiElement(KTokenType.:)(':')
-        Element(EXPRESSION)
-          PsiElement(KTokenType.number_vector)('1 2 3')
-    PsiElement(KTokenType.))(')')
+Element(MODE_DIRECTIVE)
+  PsiElement(mode)('q)')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(q function)('til')
+    PsiElement(number)('10')

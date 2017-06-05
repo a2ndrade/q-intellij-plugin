@@ -1,28 +1,30 @@
 pause:{[] print "";/ some comment
      :`4:"pause"}
 ------------>
-Element(TOP_LEVEL_ASSIGNMENT)
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('pause')
-  PsiElement(KTokenType.:)(':')
-  Element(EXPRESSION)
-    PsiElement(KTokenType.{)('{')
+Element(EXPRESSION)
+  Element(ASSIGNMENT)
+    Element(USER_ID)
+      PsiElement(variable)('pause')
+    PsiElement(:)(':')
     Element(EXPRESSION)
-      PsiElement(KTokenType.[)('[')
-      PsiElement(KTokenType.])(']')
-      Element(USER_ID)
-        PsiElement(KTokenType.user_identifier)('print')
-      Element(EXPRESSION)
-        PsiElement(KTokenType.string)('""')
-    PsiElement(KTokenType.;)(';')
-    PsiComment(KTokenType.comment)('/ some comment\n')
-    Element(EXPRESSION)
-      PsiElement(KTokenType.:)(':')
-      PsiElement(KTokenType.symbol)('`4')
-      Element(EXPRESSION)
-        PsiElement(KTokenType.:)(':')
-        PsiElement(KTokenType.string)('"pause"')
-    PsiElement(KTokenType.})('}')
+      Element(LAMBDA)
+        PsiElement({)('{')
+        Element(LAMBDA_PARAMS)
+          PsiElement([)('[')
+          PsiElement(])(']')
+        Element(EXPRESSION)
+          Element(USER_ID)
+            PsiElement(variable)('print')
+          PsiElement(string)('""')
+        PsiElement(;)(';')
+        PsiComment(comment)('/ some comment\n')
+        Element(EXPRESSION)
+          PsiElement(:)(':')
+          PsiElement(symbol)('`4')
+          Element(EXPRESSION)
+            PsiElement(:)(':')
+            PsiElement(string)('"pause"')
+        PsiElement(})('}')
 ============|
 
 
@@ -30,12 +32,12 @@ Element(TOP_LEVEL_ASSIGNMENT)
  / after whitespace
 ------------>
 Element(FILE)
-  Element(NAMESPACE_DEFINITION)
-    PsiElement(KTokenType.\\d)('\d')
+  Element(NAMESPACE_DECLARATION)
+    PsiElement(namespace)('\d')
     Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('.a.p.PROCESS')
-  PsiElement(KTokenType.newline)('\n')
-  PsiComment(KTokenType.comment)(' / after whitespace')
+      PsiElement(variable)('.a.p.PROCESS')
+  PsiElement(new line)('\n')
+  PsiComment(comment)(' / after whitespace')
 ============|
 
 
@@ -43,8 +45,8 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
-  PsiComment(KTokenType.comment)(' / end of line')
+    PsiElement(number)('1')
+  PsiComment(comment)(' / end of line')
 ============|
 
 
@@ -53,11 +55,11 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
-  PsiComment(KTokenType.comment)(' / end of line')
-  PsiElement(KTokenType.newline)('\n')
+    PsiElement(number)('1')
+  PsiComment(comment)(' / end of line')
+  PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(number)('1')
 ============|
 
 
@@ -66,11 +68,11 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    PsiElement(KTokenType.symbol)('`')
-  PsiComment(KTokenType.comment)(' / after symbol')
-  PsiElement(KTokenType.newline)('\n')
+    PsiElement(symbol)('`')
+  PsiComment(comment)(' / after symbol')
+  PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(number)('1')
 ============|
 
 
@@ -79,11 +81,11 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    PsiElement(KTokenType.symbol_vector)('` ` ` `')
-  PsiComment(KTokenType.comment)(' / after symbol vector')
-  PsiElement(KTokenType.newline)('\n')
+    PsiElement(symbol vector)('` ` ` `')
+  PsiComment(comment)(' / after symbol vector')
+  PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(number)('1')
 ============|
 
 
@@ -91,11 +93,12 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.verb)('-')
-  PsiComment(KTokenType.comment)(' / after verb')
-  PsiElement(KTokenType.newline)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(primitive verb)('-')
+  PsiComment(comment)(' / after verb')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')
 ============|
 
 
@@ -103,11 +106,13 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.composed_monad)('*:')
-  PsiComment(KTokenType.comment)(' / after composed monad')
-  PsiElement(KTokenType.newline)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(primitive verb)('*')
+    PsiElement(:)(':')
+  PsiComment(comment)(' / after composed monad')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')
 ============|
 
 
@@ -115,11 +120,13 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.derived_verb)('+/')
-  PsiComment(KTokenType.comment)(' / after derived verb')
-  PsiElement(KTokenType.newline)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(primitive verb)('+')
+    PsiElement(adverb)('/')
+  PsiComment(comment)(' / after derived verb')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')
 ============|
 
 
@@ -127,11 +134,12 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  PsiElement(KTokenType.:)(':')
-  PsiComment(KTokenType.comment)(' / after colon')
-  PsiElement(KTokenType.newline)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(:)(':')
+  PsiComment(comment)(' / after colon')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')
 ============|
 
 
@@ -140,15 +148,12 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    Element(MONAD_FN_CALL)
-      Element(MONAD_FN)
-        PsiElement(KTokenType.:)(':')
-      Element(MONAD_ARG)
-        PsiElement(KTokenType.:)(':')
-  PsiComment(KTokenType.comment)(' / after double colon')
-  PsiElement(KTokenType.newline)('\n')
+    PsiElement(:)(':')
+    PsiElement(:)(':')
+  PsiComment(comment)(' / after double colon')
+  PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(number)('1')
 ============|
 
 
@@ -157,7 +162,5 @@ all these
 are comments
 ------------>
 Element(FILE)
-  PsiErrorElement:<command>, <expression>, <top level assignment>, KTokenType.:, KTokenType.;, KTokenType.\\d, KTokenType.composed_monad, KTokenType.derived_verb, KTokenType.n_colon, KTokenType.newline or KTokenType.verb expected, unexpected end of file
-    <empty list>
-  PsiComment(KTokenType.comment)('\')
-  PsiComment(KTokenType.comment)('\nall these\nare comments')
+  PsiComment(comment)('\')
+  PsiComment(comment)('\nall these\nare comments')

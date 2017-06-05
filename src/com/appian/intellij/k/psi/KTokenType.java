@@ -11,7 +11,7 @@ public final class KTokenType extends IElementType {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "." + super.toString();
+    return super.toString();
   }
 
 }

@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
-import com.appian.intellij.k.psi.KLocalAssignment;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.google.common.base.Strings;
@@ -31,7 +31,7 @@ import com.intellij.util.ProcessingContext;
 
 public class KCompletionContributor extends CompletionContributor {
 
-  private static final String[] SYSTEM_FNS_Q = new String[] {"abs", "acos", "aj", "aj0", "all", "and", "any",
+  static final String[] SYSTEM_FNS_Q = new String[] {"abs", "acos", "aj", "aj0", "all", "and", "any",
       "asc", "asin", "asof", "atan", "attr", "avg", "avgs", "bin", "binr", "by", "ceiling", "cols", "cor",
       "cos", "count", "cov", "cross", "csv", "cut", "delete", "deltas", "desc", "dev", "differ", "distinct",
       "div", "dsave", "each", "ej", "ema", "enlist", "eval", "except", "exec", "exit", "exp", "fby", "fills",
@@ -80,8 +80,8 @@ public class KCompletionContributor extends CompletionContributor {
                 .orElse(Stream.empty())
                 .forEach(param -> uniques.putIfAbsent(param.getName(), param));
             // locals
-            Optional.ofNullable(PsiTreeUtil.findChildrenOfType(enclosingLambda, KLocalAssignment.class).stream()
-                .map(KLocalAssignment::getUserId)
+            Optional.ofNullable(PsiTreeUtil.findChildrenOfType(enclosingLambda, KAssignment.class).stream()
+                .map(KAssignment::getUserId)
                 .filter(id -> id.getName().contains(input)))
                 .orElse(Stream.empty())
                 .forEach(local -> uniques.putIfAbsent(local.getName(), local));
@@ -91,21 +91,26 @@ public class KCompletionContributor extends CompletionContributor {
             // globals (same file)
             final Project project = element.getProject();
             final VirtualFile sameFile = element.getContainingFile().getVirtualFile();
-            Optional.ofNullable(KUtil.findFileIdentifiers(project, sameFile).stream()
+            Optional.ofNullable(KUtil.findIdentifiers(project, sameFile).stream()
                 .filter(id -> id.getName().contains(input)))
                 .orElse(Stream.empty())
                 .forEach(global -> caseInsensitiveResultSet.addElement(LookupElementBuilder.create(global)));
             // globals (other files)
-            if (caseInsensitiveResultSet.isStopped() || input.charAt(0) != '.') {
+            if (caseInsensitiveResultSet.isStopped() || !KUtil.isAbsoluteId(input)) {
               return;
             }
+            final String sameFilePath = sameFile.getCanonicalPath();
+            final KUserIdCache cache = KUserIdCache.getInstance();
             final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
                 GlobalSearchScope.allScope(project));
             for (VirtualFile otherFile : otherFiles) {
-              Optional.ofNullable(KUtil.findAllMatchingIdentifiers(project, otherFile, input, false, false).stream())
+              if (sameFilePath.equals(otherFile.getCanonicalPath())) {
+                continue; // already processed above
+              }
+              Optional.ofNullable(cache.findAllIdentifiers(project, otherFile, input, new KUtil.PrefixMatcher(input)).stream())
                   .orElse(Stream.empty())
                   .forEach(global -> {
-                    final String fqn = global.getUserData(KUtil.FQN);
+                    final String fqn = KUtil.getFqn(global);
                     final LookupElementBuilder lookup = fqn == null ?
                         LookupElementBuilder.create(global) :
                         LookupElementBuilder.create(global, fqn);
@@ -122,12 +127,8 @@ public class KCompletionContributor extends CompletionContributor {
       return; // ignore
     }
     final String[] systemFnNames = KUtil.isInQFile(element) ? SYSTEM_FNS_Q : SYSTEM_FNS_K3;
-    final int startAt = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);
-    if (startAt >= systemFnNames.length) {
-      return; // no match
-    }
-    int i = startAt;
-    while (systemFnNames[i].startsWith(input)) {
+    int i = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);
+    while (i < systemFnNames.length && systemFnNames[i].startsWith(input)) {
       resultSet.addElement(LookupElementBuilder.create(systemFnNames[i++]));
     }
   }

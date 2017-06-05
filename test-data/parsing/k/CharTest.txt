@@ -1,56 +1,56 @@
 "a"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"a"')
+  PsiElement(char)('"a"')
 ============|
 
 
 " "
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('" "')
+  PsiElement(char)('" "')
 ============|
 
 
 "\""
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\""')
+  PsiElement(char)('"\""')
 ============|
 
 
 "\t"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\t"')
+  PsiElement(char)('"\t"')
 ============|
 
 
 "\n"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\n"')
+  PsiElement(char)('"\n"')
 ============|
 
 
 "\r"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\r"')
+  PsiElement(char)('"\r"')
 ============|
 
 
 "\b"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\b"')
+  PsiElement(char)('"\b"')
 ============|
 
 
 "\\"
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\\"')
+  PsiElement(char)('"\\"')
 ============|
 
 
@@ -58,4 +58,4 @@ Element(EXPRESSION)
 "
 ------------>
 Element(EXPRESSION)
-  PsiElement(KTokenType.char)('"\n"')
+  PsiElement(char)('"\n"')

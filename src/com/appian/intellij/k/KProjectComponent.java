@@ -19,18 +19,12 @@ public final class KProjectComponent implements ProjectComponent {
 
   @Override
   public void initComponent() {
-    final KUserIdCache cache = KUserIdCache.getInstance().clear();
-    final VirtualFileManager virtualFileManager = VirtualFileManager.getInstance();
-    virtualFileManager.addVirtualFileListener(cache);
-    virtualFileManager.addVirtualFileManagerListener(cache);
+    VirtualFileManager.getInstance().addVirtualFileListener(KUserIdCache.getInstance());
   }
 
   @Override
   public void disposeComponent() {
-    final KUserIdCache cache = KUserIdCache.getInstance().clear();
-    final VirtualFileManager virtualFileManager = VirtualFileManager.getInstance();
-    virtualFileManager.removeVirtualFileListener(cache);
-    virtualFileManager.removeVirtualFileManagerListener(cache);
+    VirtualFileManager.getInstance().removeVirtualFileListener(KUserIdCache.getInstance());
   }
 
   @NotNull

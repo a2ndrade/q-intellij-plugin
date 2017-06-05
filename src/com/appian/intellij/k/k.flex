@@ -15,7 +15,6 @@ import com.intellij.psi.tree.IElementType;
 %eof{  return NEWLINE;
 %eof}
 
-//EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WHITE_SPACE={LINE_WS}+
 NEWLINE=\r|\n|\r\n
@@ -32,11 +31,9 @@ SIMPLE_COMMAND="\\"(
  |[bBrsu\\wm]
  |[cC] //{NUMBER_VECTOR}
   )
+MODE=[qk]")"
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
 USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*|_[a-zA-Z]+
-N_COLON=[0-6] ":"
-ID={USER_IDENTIFIER}|{K3_SYSTEM_FUNCTION}|{Q_SYSTEM_FUNCTION}
-ID_START=[_.][a-zA-Z]
 
 K3_SYSTEM_FUNCTION=(_a|_abs|_acos|_asin|_atan|_bd|_bin|_binl|_ci|_cos|_cosh|_d|_db|_di|_div|_dj|_dot|_draw|_dv
         |_dvl|_exit|_exp|_f|_floor|_getenv|_gtime|_h|_host|_i|_ic|_in|_inv|_jd|_k|_lin|_log|_lsq|_lt|_mul|_n
@@ -78,109 +75,99 @@ NUMBER_VECTOR={NUMBER_NO_TYPE}({WHITE_SPACE}{NUMBER_NO_TYPE})+{TYPE}?|{BINARY_VE
 C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
-SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR}|({NEWLINE}|{WHITE_SPACE}*)+)
+SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR})?
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
-VERB=[!#$%&*+,-.<=>?@\^_|~]
-MONADIC_AND_DYADIC_ADVERB="/" | \\ | '
-DYADIC_ONLY_ADVERB="/": | \\: | ':
-ADVERB={MONADIC_AND_DYADIC_ADVERB}|{DYADIC_ONLY_ADVERB}
+PRIMITIVE_VERB=[!#$%&*+,-.<=>?@\^_|~]
+MONAD={PRIMITIVE_VERB}{WHITE_SPACE}*":"
+"+-*%!&|<>=$;-%~_^$"
+ADVERB=("/" | \\ | ' | "/": | \\: | ':)+
+CONTROL="if"|"do"|"while"
+CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 
-// function composition
-SIMPLE_COMPOSED_MONAD=(({VERB}{WHITE_SPACE}*)+|{N_COLON}){WHITE_SPACE}* ":"
-COMPOSED_MONAD={SIMPLE_COMPOSED_MONAD} {MONADIC_AND_DYADIC_ADVERB}*
+%state ADVERB_STATE
+%state ESCAPE_STATE
+%state COMMAND_STATE
+%state COMMENT_STATE
 
-// higher-order functions
-DERIVED_VERB=({ID}|({VERB}|{N_COLON}|":")){ADVERB}+
-
-%state INFIX
-%state DERIVED_LAMBDA
-%state ESCAPE
-%state COMMAND
 
 %%
 
-<INFIX> {
-  {DERIVED_VERB}               { yybegin(YYINITIAL); return DERIVED_VERB;}
-  {VERB}/":["                  { yybegin(YYINITIAL); return VERB;}
-  {VERB}/{COMPOSED_MONAD}      { yybegin(YYINITIAL); return VERB;}
-  {VERB}                       { yybegin(YYINITIAL); return VERB;}
+<ADVERB_STATE> {
+  {ADVERB}                                    { yybegin(YYINITIAL); return ADVERB;}
 }
 
-<DERIVED_LAMBDA> {
-  {ADVERB}                     { yybegin(YYINITIAL); return ADVERB;}
+<ESCAPE_STATE> {
+  {ANY}                                       { yybegin(YYINITIAL); return COMMENT; }
 }
 
-<ESCAPE> {
-  {ANY}                        { yybegin(YYINITIAL); return COMMENT; }
+<COMMAND_STATE> {
+  // root, parent & attributes directory
+  [.~\^]                                      { yybegin(YYINITIAL); return USER_IDENTIFIER; }
+  {WHITE_SPACE}                               { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  {USER_IDENTIFIER}                           { yybegin(YYINITIAL); return USER_IDENTIFIER; }
+  {NUMBER}                                    { yybegin(YYINITIAL); return NUMBER; }
+  {NUMBER_VECTOR}                             { yybegin(YYINITIAL); return NUMBER_VECTOR; }
 }
 
-<COMMAND> {
-  "^"                          { yybegin(YYINITIAL); return USER_IDENTIFIER; }
-  "."                          { yybegin(YYINITIAL); return USER_IDENTIFIER; }
-  {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
-  {USER_IDENTIFIER}            { yybegin(YYINITIAL); return USER_IDENTIFIER; }
-  {NUMBER}                     { yybegin(YYINITIAL); return NUMBER; }
-  {NUMBER_VECTOR}              { yybegin(YYINITIAL); return NUMBER_VECTOR; }
+<COMMENT_STATE> {
+  {COMMENT1}                                  { yybegin(YYINITIAL); return COMMENT;}
 }
 
 <YYINITIAL> {
-  {NEWLINE}+                   { return NEWLINE; }
-  ^"\\d"                       { yybegin(COMMAND); return CURRENT_NAMESPACE; }
-  ^{SIMPLE_COMMAND}            { yybegin(COMMAND); return SIMPLE_COMMAND; }
-  ^{COMPLEX_COMMAND}           { return COMPLEX_COMMAND; }
-  {NUMBER_VECTOR}              { return NUMBER_VECTOR; }
-  {N_COLON}/[^\[]              { return N_COLON; }
-  ":"/"["                      { return COLON; }
-  "if"/"["                     { return IF; }
-  "do"/"["                     { return DO; }
-  "while"/"["                  { return WHILE; }
-  {ADVERB}+/"["                { return ADVERB; }
-  {DERIVED_VERB}               { return DERIVED_VERB; }
-  {COMPOSED_MONAD}/[^\[]       { return COMPOSED_MONAD; }
-  {SYMBOL_VECTOR}/{LINE_WS}"/" { return SYMBOL_VECTOR; }
-  {SYMBOL_VECTOR}              { return SYMBOL_VECTOR; }
-  {SYMBOL}/{LINE_WS}"/"        { return SYMBOL; }
-  {SYMBOL}                     { return SYMBOL; }
-  {WHITE_SPACE}                { return com.intellij.psi.TokenType.WHITE_SPACE; }
-  ^{COMMENT1}                  { return COMMENT; }
-  {COMMENT2}/{NEWLINE}         { return COMMENT; }
-  {COMMENT2}                   { return COMMENT; }
+  {NEWLINE}+                                  { return NEWLINE; }
+  ^"\\d"                                      { yybegin(COMMAND_STATE); return CURRENT_NAMESPACE; }
+  ^{SIMPLE_COMMAND}                           { yybegin(COMMAND_STATE); return COMMAND; }
+  ^{COMPLEX_COMMAND}                          { return COMMAND; }
+  ^{MODE}                                     { return MODE; }
+  {NUMBER_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return NUMBER_VECTOR; }
+  {NUMBER_VECTOR}                             { return NUMBER_VECTOR; }
+  [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
+  {CONTROL}/"["                               { return CONTROL; }
+  {CONDITIONAL}/"["                           { return CONDITIONAL; }
+  {SYMBOL_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
+  {SYMBOL_VECTOR}                             { return SYMBOL_VECTOR; }
+  {SYMBOL}/{ADVERB}                           { yybegin(ADVERB_STATE); return SYMBOL; }
+  {SYMBOL}                                    { return SYMBOL; }
+  {WHITE_SPACE}                               { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  ^{COMMENT1}                                 { return COMMENT; }
+  {COMMENT2}/{NEWLINE}                        { return COMMENT; }
+  {COMMENT2}                                  { return COMMENT; }
 
-  {VERB}/{ID_START}            { return VERB;}
-  {VERB}/-[0-9]                { return VERB;}
-  {VERB}                       { return VERB;}
+  "_"/{K3_SYSTEM_FUNCTION}                    { return PRIMITIVE_VERB;} // __sqrt 3 -> 1
+  "-"/-[0-9]                                  { return PRIMITIVE_VERB;} // --6 -> 6
+  {PRIMITIVE_VERB}/{ADVERB}                   { yybegin(ADVERB_STATE); return PRIMITIVE_VERB;}
+  {PRIMITIVE_VERB}                            { return PRIMITIVE_VERB;}
 
-  "("                          { return OPEN_PAREN; }
-  ")"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_PAREN; }
-  ")"/{VERB}                   { yybegin(INFIX); return CLOSE_PAREN; }
-  ")"                          { return CLOSE_PAREN; }
-  ";"                          { return SEMICOLON; }
-  "["                          { return OPEN_BRACKET; }
-  "]"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACKET; }
-  "]"/{VERB}                   { yybegin(INFIX); return CLOSE_BRACKET; }
-  "]"                          { return CLOSE_BRACKET; }
-  "{"                          { return OPEN_BRACE; }
-  "}"/{ADVERB}                 { yybegin(DERIVED_LAMBDA); return CLOSE_BRACE; }
-  "}"                          { return CLOSE_BRACE; }
+  "("                                         { return OPEN_PAREN; }
+  ")"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_PAREN; }
+  ")"                                         { return CLOSE_PAREN; }
+  ";"/{COMMENT1}                              { yybegin(COMMENT_STATE); return SEMICOLON; }
+  ";"                                         { return SEMICOLON; }
+  "["                                         { return OPEN_BRACKET; }
+  "]"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_BRACKET; }
+  "]"                                         { return CLOSE_BRACKET; }
+  "{"                                         { return OPEN_BRACE; }
+  "}"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_BRACE; }
+  "}"                                         { return CLOSE_BRACE; }
 
-  {K3_SYSTEM_FUNCTION}/{VERB}  { yybegin(INFIX); return K3_SYSTEM_FUNCTION; }
-  {K3_SYSTEM_FUNCTION}         { return K3_SYSTEM_FUNCTION; }
-  {Q_SYSTEM_FUNCTION}/{VERB}   { yybegin(INFIX); return Q_SYSTEM_FUNCTION; }
-  {Q_SYSTEM_FUNCTION}          { return Q_SYSTEM_FUNCTION; }
-  {USER_IDENTIFIER}/{VERB}     { yybegin(INFIX); return USER_IDENTIFIER; }
-  {USER_IDENTIFIER}            { return USER_IDENTIFIER; }
-  {NUMBER}/{VERB}              { yybegin(INFIX); return NUMBER; }
-  {NUMBER}                     { return NUMBER; }
-  {CHAR}/{VERB}                { yybegin(INFIX); return CHAR; }
-  {CHAR}                       { return CHAR; }
-  {CHAR_VECTOR}/{VERB}         { yybegin(INFIX); return STRING; }
-  {CHAR_VECTOR}                { return STRING; }
+  {K3_SYSTEM_FUNCTION}/{ADVERB}               { yybegin(ADVERB_STATE); return K3_SYSTEM_FUNCTION; }
+  {K3_SYSTEM_FUNCTION}                        { return K3_SYSTEM_FUNCTION; }
+  {Q_SYSTEM_FUNCTION}/{ADVERB}                { yybegin(ADVERB_STATE); return Q_SYSTEM_FUNCTION; }
+  {Q_SYSTEM_FUNCTION}                         { return Q_SYSTEM_FUNCTION; }
+  {USER_IDENTIFIER}/{ADVERB}                  { yybegin(ADVERB_STATE); return USER_IDENTIFIER; }
+  {USER_IDENTIFIER}                           { return USER_IDENTIFIER; }
+  {NUMBER}/{ADVERB}                           { yybegin(ADVERB_STATE); return NUMBER; }
+  {NUMBER}                                    { return NUMBER; }
+  {CHAR}/{ADVERB}                             { yybegin(ADVERB_STATE); return CHAR; }
+  {CHAR}                                      { return CHAR; }
+  {CHAR_VECTOR}/{ADVERB}                      { yybegin(ADVERB_STATE); return STRING; }
+  {CHAR_VECTOR}                               { return STRING; }
 
-  ":"                          { return COLON; }
-  "'"                          { return TICK; }
-  "\\"/{NEWLINE}               { yybegin(ESCAPE); return COMMENT; }
-  "\\"                         { return BACK_SLASH; }
-  "`"                          { return SYMBOL; }
+  ":"/{ADVERB}                                { yybegin(ADVERB_STATE); return COLON; }
+  ":"                                         { return COLON; }
+  "'"                                         { return SIGNAL; }
+  "\\"/{NEWLINE}                              { yybegin(ESCAPE_STATE); return COMMENT; }
+  "\\"                                        { return TRACE; }
 
-  [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
+  [^] { return com.intellij.psi               .TokenType.BAD_CHARACTER; }
 }

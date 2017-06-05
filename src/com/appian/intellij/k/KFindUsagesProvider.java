@@ -4,16 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KAssignment;
+import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
-import com.google.common.base.Strings;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
 
-public class KFindUsagesProvider implements FindUsagesProvider {
+public final class KFindUsagesProvider implements FindUsagesProvider {
 
   @Nullable
   @Override
@@ -28,7 +28,7 @@ public class KFindUsagesProvider implements FindUsagesProvider {
   public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
     if (psiElement instanceof KUserId) {
       final PsiElement context = psiElement.getContext();
-      return context instanceof KAssignment;
+      return context instanceof KAssignment || context instanceof KLambdaParams;
     }
     return false;
   }
@@ -60,6 +60,10 @@ public class KFindUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-    return Strings.nullToEmpty(element instanceof KUserId ? ((KUserId)element).getName() : null);
+    if (!(element instanceof KUserId)) {
+      return "";
+    }
+    final KUserId userId = (KUserId)element;
+    return useFullName ? KUtil.getFqnOrName(userId) : userId.getName();
   }
 }

@@ -1,0 +1,18 @@
+k)!10
+------------>
+Element(MODE_DIRECTIVE)
+  PsiElement(mode)('k)')
+  Element(EXPRESSION)
+    PsiElement(primitive verb)('!')
+    PsiElement(number)('10')
+============|
+
+
+q)til 10
+------------>
+Element(MODE_DIRECTIVE)
+  PsiElement(mode)('q)')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(q function)('til')
+    PsiElement(number)('10')

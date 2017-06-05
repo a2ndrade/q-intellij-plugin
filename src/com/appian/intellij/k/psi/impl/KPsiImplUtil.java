@@ -2,9 +2,11 @@ package com.appian.intellij.k.psi.impl;
 
 import javax.swing.Icon;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.KIcons;
+import com.appian.intellij.k.KUtil;
 import com.appian.intellij.k.psi.KElementFactory;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.ASTNode;
@@ -14,35 +16,22 @@ import com.intellij.psi.PsiFile;
 
 public final class KPsiImplUtil {
 
-  public static String getIdentifier(KUserId element) {
-    final ASTNode keyNode = element.getNode().getFirstChildNode();
-    if (keyNode != null) {
-      return keyNode.getText();
-    }
-    return null;
-  }
-
+  @NotNull
   public static String getName(KUserId element) {
-    return getIdentifier(element);
+    return element.getNode().getFirstChildNode().getText();
   }
 
   public static PsiElement setName(KUserId element, String newName) {
     final ASTNode keyNode = element.getNode().getFirstChildNode();
-    if (keyNode != null) {
-      KUserId property = KElementFactory.createProperty(element.getProject(), newName);
-      ASTNode newKeyNode = property.getFirstChild().getNode();
-      element.getNode().replaceChild(keyNode, newKeyNode);
-    }
+    KUserId property = KElementFactory.createProperty(element.getProject(), newName);
+    ASTNode newKeyNode = property.getFirstChild().getNode();
+    element.getNode().replaceChild(keyNode, newKeyNode);
+    KUtil.putFqn(element, null); // clear so it's recalculated next time
     return element;
   }
 
   public static PsiElement getNameIdentifier(KUserId element) {
-    final ASTNode keyNode = element.getNode().getFirstChildNode();
-    if (keyNode != null) {
-      return keyNode.getPsi();
-    } else {
-      return null;
-    }
+    return element.getNode().getFirstChildNode().getPsi();
   }
 
   public static ItemPresentation getPresentation(final KUserId element) {
@@ -50,7 +39,7 @@ public final class KPsiImplUtil {
       @Nullable
       @Override
       public String getPresentableText() {
-        return getIdentifier(element);
+        return KUtil.getFqnOrName(element);
       }
 
       @Nullable

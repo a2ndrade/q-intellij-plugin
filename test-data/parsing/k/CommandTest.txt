@@ -1,27 +1,41 @@
 \d .some.dir
 ------------>
-Element(NAMESPACE_DEFINITION)
-  PsiElement(KTokenType.\\d)('\d')
+Element(NAMESPACE_DECLARATION)
+  PsiElement(namespace)('\d')
   Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('.some.dir')
+    PsiElement(variable)('.some.dir')
 ============|
 
 
 \d ^
+\d ~
+\d .
 ------------>
-Element(NAMESPACE_DEFINITION)
-  PsiElement(KTokenType.\\d)('\d')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('^')
+Element(FILE)
+  Element(NAMESPACE_DECLARATION)
+    PsiElement(namespace)('\d')
+    Element(USER_ID)
+      PsiElement(variable)('^')
+  PsiElement(new line)('\n')
+  Element(NAMESPACE_DECLARATION)
+    PsiElement(namespace)('\d')
+    Element(USER_ID)
+      PsiElement(variable)('~')
+  PsiElement(new line)('\n')
+  Element(NAMESPACE_DECLARATION)
+    PsiElement(namespace)('\d')
+    Element(USER_ID)
+      PsiElement(variable)('.')
 ============|
 
 
 \l db
 ------------>
-Element(COMMAND)
-  PsiElement(KTokenType.simple_command)('\l')
-  Element(USER_ID)
-    PsiElement(KTokenType.user_identifier)('db')
+Element(COMMAND_STATEMENT)
+  PsiElement(command)('\l')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(variable)('db')
 ============|
 
 
@@ -29,13 +43,13 @@ Element(COMMAND)
 1
 ------------>
 Element(FILE)
-  Element(NAMESPACE_DEFINITION)
-    PsiElement(KTokenType.\\d)('\d')
+  Element(NAMESPACE_DECLARATION)
+    PsiElement(namespace)('\d')
     Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('.some.dir')
-  PsiElement(KTokenType.newline)('\n')
+      PsiElement(variable)('.some.dir')
+  PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(number)('1')
 ============|
 
 
@@ -43,10 +57,11 @@ Element(FILE)
 1
 ------------>
 Element(FILE)
-  Element(COMMAND)
-    PsiElement(KTokenType.simple_command)('\l')
-    Element(USER_ID)
-      PsiElement(KTokenType.user_identifier)('db')
-  PsiElement(KTokenType.newline)('\n')
+  Element(COMMAND_STATEMENT)
+    PsiElement(command)('\l')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(variable)('db')
+  PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(KTokenType.number)('1')
+    PsiElement(number)('1')

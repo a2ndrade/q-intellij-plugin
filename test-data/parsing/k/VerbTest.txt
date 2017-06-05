@@ -52,3 +52,15 @@ Element(EXPRESSION)
         Element(MONAD_ARG)
           Element(EXPRESSION)
             PsiElement(KTokenType.number)('3')
+============|
+
+
+-1_0
+------------>
+Element(EXPRESSION)
+  Element(INFIX_FN_CALL)
+    PsiElement(KTokenType.number)('-1')
+    Element(INFIX_FN)
+      PsiElement(KTokenType.verb)('_')
+    Element(EXPRESSION)
+      PsiElement(KTokenType.number)('0')

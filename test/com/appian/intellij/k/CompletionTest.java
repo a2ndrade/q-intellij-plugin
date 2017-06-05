@@ -1,6 +1,5 @@
 package com.appian.intellij.k;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionType;
@@ -14,15 +13,31 @@ public class CompletionTest extends LightCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return "test-data";
+    return "test-data/completion";
   }
 
-  public void testCompletion() {
-    myFixture.configureByFiles("CompletionTest.k");
+  public void testGlobals() {
+    testCompletion("globals.k", "square", "sum"); // none expected
+  }
+
+  public void testSystemFns_k_k() {
+    testCompletion("system_fns_k.k", "_bd", "_bin", "_binl");
+  }
+  public void testSystemFns_k_q() {
+    testCompletion("system_fns_k.q"); // none expected
+  }
+  public void testSystemFns_q_q() {
+    testCompletion("system_fns_q.q", "cols", "cor", "cos", "count", "cov");
+  }
+  public void testSystemFns_q_k() {
+    testCompletion("system_fns_q.k"); // none expected
+  }
+
+  private void testCompletion(String fileName, String... expectedSuggestions) {
+    myFixture.configureByFiles(fileName);
     myFixture.complete(CompletionType.BASIC, 1);
-    List<String> strings = myFixture.getLookupElementStrings();
-    assertTrue(strings.containsAll(Arrays.asList("sum", "power", "product", "square")));
-    assertEquals(4, strings.size());
+    final List<String> strings = myFixture.getLookupElementStrings();
+    assertOrderedEquals(strings, expectedSuggestions);
   }
 
 }

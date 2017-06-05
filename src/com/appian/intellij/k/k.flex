@@ -33,14 +33,14 @@ SIMPLE_COMMAND="\\"(
  |[cC] //{NUMBER_VECTOR}
   )
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
-USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
+USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*|_[a-zA-Z]+
 N_COLON=[0-6] ":"
 ID={USER_IDENTIFIER}|{K3_SYSTEM_FUNCTION}|{Q_SYSTEM_FUNCTION}
 ID_START=[_.][a-zA-Z]
 
-K3_SYSTEM_FUNCTION=(_a|_abs|_acos|_asin|_atan|_bd|_bin|_binl|_ci|_cos|_cosh|_d|_db|_di|_div|_dot|_draw|_dv
+K3_SYSTEM_FUNCTION=(_a|_abs|_acos|_asin|_atan|_bd|_bin|_binl|_ci|_cos|_cosh|_d|_db|_di|_div|_dj|_dot|_draw|_dv
         |_dvl|_exit|_exp|_f|_floor|_getenv|_gtime|_h|_host|_i|_ic|_in|_inv|_jd|_k|_lin|_log|_lsq|_lt|_mul|_n
-        |_p|_sin|_sinh|_sm|_sqr|_sqrt|_ss|_ssr|_sv|_T|_t|_t|_tan|_tanh|_u|_v|_w)
+        |_p|_setenv|_s|_sin|_sinh|_size|_sm|_sqr|_sqrt|_ss|_ssr|_sv|_T|_t|_tan|_tanh|_u|_vs|_v|_w)
 
 // q functions
 Q_SYSTEM_FUNCTION=(abs|acos|aj|aj0|all|and|any|asc|asin|asof|atan|attr|avg|avgs|bin|binr|by|ceiling|cols|cor|cos|count

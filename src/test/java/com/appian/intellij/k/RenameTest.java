@@ -38,7 +38,7 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return "test-data/renaming";
+    return "src/test/resources/" + getClass().getName().replace('.', '/');
   }
 
   @Override

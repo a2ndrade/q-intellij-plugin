@@ -38,16 +38,6 @@
     </option>
     <option name="PREFERRED_PROJECT_CODE_STYLE" value="Appian" />
   </component>
-  <component name="ProjectDictionaryState">
-    <dictionary name="antonio.andrade">
-      <words>
-        <w>andrade</w>
-        <w>monad</w>
-        <w>parens</w>
-        <w>sysfunction</w>
-      </words>
-    </dictionary>
-  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />

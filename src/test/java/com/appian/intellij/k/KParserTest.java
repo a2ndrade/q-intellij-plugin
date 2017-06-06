@@ -30,14 +30,19 @@ public class KParserTest extends ParsingTestCase {
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);
 
-  static final String TEST_DATA_FOLDERS_PATH = "test-data/parsing/k";
+  static final String TEST_DATA_FOLDERS_PATH =
+      "src/test/resources/" + KParserTest.class.getName().replace('.', '/');
   static final String INPUT_OUTPUT_SEPARATOR = "------------>";
   static final String TEST_CASE_SEPARATOR = "============|";
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
     final File folder = new File(TEST_DATA_FOLDERS_PATH);
-    for(String fileName : folder.list()) {
+    final String[] fileNames = folder.list();
+    if (fileNames == null) {
+      throw new RuntimeException("Folder not found: " + folder);
+    }
+    for(String fileName : fileNames) {
       if (fileName.startsWith("_")) { // e.g. sandboxØ
         continue;
       }

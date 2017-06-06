@@ -13,7 +13,7 @@ public class CompletionTest extends LightCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return "test-data/completion";
+    return "src/test/resources/" + getClass().getName().replace('.', '/');
   }
 
   public void testGlobals() {

@@ -18,7 +18,7 @@ public class ScriptsTest extends KParserTest {
 
   private static final String[] TARGET_FOLDERS = new String[] {
     AE + "server/",
-    DL + "appian-data-server/"
+    DL + "appian-data-server/src"
   };
 
   public static Test suite() {
@@ -35,7 +35,7 @@ public class ScriptsTest extends KParserTest {
     for(String folderPath : TARGET_FOLDERS) {
       final File folder = new File(folderPath);
       if (!folder.exists()) {
-        throw new RuntimeException("Folder does not exists: " + folder);
+        throw new RuntimeException("Folder not found: " + folder);
       }
       Files.walk(Paths.get(folder.toURI())).forEach(path -> {
         final File file = path.toFile();

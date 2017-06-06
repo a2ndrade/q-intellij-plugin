@@ -14,7 +14,7 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return "test-data/references";
+    return "src/test/resources/" + getClass().getName().replace('.', '/');
   }
 
   public void testNoNs() {

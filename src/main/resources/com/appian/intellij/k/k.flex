@@ -109,6 +109,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {USER_IDENTIFIER}                           { yybegin(YYINITIAL); return USER_IDENTIFIER; }
   {NUMBER}                                    { yybegin(YYINITIAL); return NUMBER; }
   {NUMBER_VECTOR}                             { yybegin(YYINITIAL); return NUMBER_VECTOR; }
+  {NEWLINE}+                                  { yybegin(YYINITIAL); return NEWLINE; }
 }
 
 <COMMENT_STATE> {

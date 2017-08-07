@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.9.3</strong><br/>
+      <ul>
+        <li>Fixes lexer bug with namespace declarations</li>
+      </ul>
       <strong>0.9.2</strong><br/>
       <ul>
         <li>k4/q partial block comments support</li>

@@ -1,0 +1,46 @@
+\
+this is a
+block comment
+/
+a:1
+------------>
+Element(FILE)
+  PsiComment(comment)('\\n')
+  PsiComment(comment)('this is a')
+  PsiComment(comment)('\n')
+  PsiComment(comment)('block comment')
+  PsiComment(comment)('\n')
+  PsiComment(comment)('/\n')
+  Element(EXPRESSION)
+    Element(ASSIGNMENT)
+      Element(USER_ID)
+        PsiElement(variable)('a')
+      PsiElement(:)(':')
+      Element(EXPRESSION)
+        PsiElement(number)('1')
+============|
+/
+this is another
+block comment
+\
+a:1
+------------>
+Element(FILE)
+  PsiComment(comment)('/\n')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(variable)('this')
+    Element(USER_ID)
+      PsiElement(variable)('is')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(variable)('another')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    Element(USER_ID)
+      PsiElement(variable)('block')
+    Element(USER_ID)
+      PsiElement(variable)('comment')
+  PsiElement(new line)('\n')
+  PsiComment(comment)('\\n')
+  PsiComment(comment)('a:1')

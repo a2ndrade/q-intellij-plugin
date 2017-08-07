@@ -85,7 +85,7 @@ CONTROL="if"|"do"|"while"
 CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 
 %state ADVERB_STATE
-%state ESCAPE_STATE
+%state BLOCK_COMMENT_1
 %state COMMAND_STATE
 %state COMMENT_STATE
 
@@ -96,8 +96,10 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {ADVERB}                                    { yybegin(YYINITIAL); return ADVERB;}
 }
 
-<ESCAPE_STATE> {
-  {ANY}                                       { yybegin(YYINITIAL); return COMMENT; }
+<BLOCK_COMMENT_1> {
+  ^"/"{NEWLINE}                               { yybegin(YYINITIAL); return COMMENT; }
+  {NEWLINE}+                                  { return COMMENT; }
+  .*                                          { return COMMENT; }
 }
 
 <COMMAND_STATE> {
@@ -166,7 +168,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   ":"/{ADVERB}                                { yybegin(ADVERB_STATE); return COLON; }
   ":"                                         { return COLON; }
   "'"                                         { return SIGNAL; }
-  "\\"/{NEWLINE}                              { yybegin(ESCAPE_STATE); return COMMENT; }
+  ^"\\"{NEWLINE}                              { yybegin(BLOCK_COMMENT_1); return COMMENT; }
   "\\"                                        { return TRACE; }
 
   [^] { return com.intellij.psi               .TokenType.BAD_CHARACTER; }

@@ -1,9 +1,9 @@
 # k-intellij-plugin
-K/Q language (kx.com) plugin for IntelliJ IDEA.
+k/q language (kx.com) plugin for IntelliJ IDEA.
 
 ## Features
 
-This plugin supports K3, K4 and Q syntax. Features include:
+This plugin supports k3, k4 and q syntax. Features include:
 
 - Syntax highlighting
 - Navigate to declaration
@@ -24,4 +24,7 @@ This plugin supports K3, K4 and Q syntax. Features include:
 0. Open `src/main/resources/com/appian/intellij/k/k.bnf` file and generate the parser code (*)
 0. Build the project. Make sure the project is configured to use the IntelliJ Platform SDK configured in step 1.
 
-(*) either from a context menu or by keyboard shortcut ⇧⌘G
+(*) either from a context menu or using the keyboard shortcut ⇧⌘G
+
+## Known Limitations
+- k4/q block comments starting with `/` are not supported b/c of k3 incompatibility

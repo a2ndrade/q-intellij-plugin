@@ -1,11 +1,11 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>K</name>
-  <version>0.9.0</version>
+  <version>0.9.2</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
-      K/Q Language Support (kx.com). Features:
+      k/q Language Support (kx.com). Features:
       <ul>
         <li>Syntax highlighting</li>
         <li>Navigate to declaration</li>
@@ -18,9 +18,15 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.9.2</strong><br/>
+      <ul>
+        <li>k4/q partial block comments support</li>
+        <li>Fixes NPE on windows while resolving references</li>
+        <li>Other small fixes</li>
+      </ul>
       <strong>0.9.0</strong><br/>
       <ul>
-        <li>New, more flexible grammar. Supports K3,K4 and Q</li>
+        <li>New, more flexible grammar. Supports k3,k4 and q</li>
         <li>New unit tests for completion, references, renaming & parsing</li>
       </ul>
       <strong>0.8.1</strong><br/>
@@ -29,7 +35,7 @@
       </ul>
       <strong>0.8</strong><br/>
       <ul>
-        <li>Q support</li>
+        <li>q support</li>
         <li>Structure View</li>
         <li>Auto-complete</li>
         <li>Find usages</li>

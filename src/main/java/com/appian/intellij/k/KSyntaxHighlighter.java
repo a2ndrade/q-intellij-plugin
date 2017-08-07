@@ -76,7 +76,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     .put(KTypes.ADVERB, ADVERB_KEYS)
 
     .put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS)
-    .put(KTypes.NAMESPACE_DECLARATION, IDENTIFIER_SYS_KEYS)
+    .put(KTypes.CURRENT_NAMESPACE, IDENTIFIER_SYS_KEYS)
 
     .put(KTypes.COLON, KEYWORD_KEYS)
     .put(KTypes.CONTROL, KEYWORD_KEYS)

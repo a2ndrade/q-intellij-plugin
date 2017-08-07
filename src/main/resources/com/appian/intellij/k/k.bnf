@@ -109,7 +109,7 @@ args ::= open_bracket expression_list* close_bracket
 private system_function ::= k3_system_function | q_system_function | signal | trace | colon // ":" is return
 group_or_list ::= open_paren expression_list* close_paren
 
-lambda ::= open_brace [lambda_params] expression_list* close_brace
+lambda ::= open_brace [lambda_params] adverb? expression_list* close_brace // including adverb? here is a hack to make {[error]'error} work.
 lambda_params ::= open_bracket [user_id (separator user_id)*] close_bracket
 
 private separator ::= semicolon | newline

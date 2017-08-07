@@ -162,5 +162,7 @@ all these
 are comments
 ------------>
 Element(FILE)
-  PsiComment(comment)('\')
-  PsiComment(comment)('\nall these\nare comments')
+  PsiComment(comment)('\\n')
+  PsiComment(comment)('all these')
+  PsiComment(comment)('\n')
+  PsiComment(comment)('are comments')

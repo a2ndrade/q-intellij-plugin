@@ -96,6 +96,9 @@ public final class KUtil {
     String currentNamespace = ""; // default namespace
     PsiElement topLevelElement = kFile.getFirstChild();
     final Collection<KUserId> results = new ArrayList<>(0);
+    if (topLevelElement == null) {
+      return results;
+    }
     do {
       if (topLevelElement instanceof KNamespaceDeclaration) {
         final String newNamespace = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();

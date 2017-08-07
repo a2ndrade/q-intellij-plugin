@@ -106,3 +106,26 @@ Element(EXPRESSION)
   Element(EXPRESSION)
     Element(USER_ID)
       PsiElement(variable)('LOG')
+============|
+
+
+.throwError:{[error]'error}
+------------>
+Element(EXPRESSION)
+  Element(ASSIGNMENT)
+    Element(USER_ID)
+      PsiElement(variable)('.throwError')
+    PsiElement(:)(':')
+    Element(EXPRESSION)
+      Element(LAMBDA)
+        PsiElement({)('{')
+        Element(LAMBDA_PARAMS)
+          PsiElement([)('[')
+          Element(USER_ID)
+            PsiElement(variable)('error')
+          PsiElement(])(']')
+        PsiElement(adverb)(''')
+        Element(EXPRESSION)
+          Element(USER_ID)
+            PsiElement(variable)('error')
+        PsiElement(})('}')

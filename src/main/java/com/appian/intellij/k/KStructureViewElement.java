@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KUserId;
-import com.google.common.base.Strings;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.java.AccessLevelProvider;
@@ -42,8 +41,11 @@ final class KStructureViewElement
   @NotNull
   @Override
   public String getAlphaSortKey() {
-    return Strings.nullToEmpty(
-        element instanceof PsiNamedElement ? ((PsiNamedElement)element).getName() : null);
+    return Optional.ofNullable(element)
+        .filter(PsiNamedElement.class::isInstance)
+        .map(PsiNamedElement.class::cast)
+        .map(PsiNamedElement::getName)
+        .orElse("");
   }
 
   @NotNull
@@ -127,7 +129,7 @@ final class KStructureViewElement
         final String name = element.getName();
         final String ns = KUtil.getExplicitNamespace(name);
         final String localName = ns != null ? name.substring(ns.length() + 1) : name;
-        if (fnDefinition.isPresent() && localName.charAt(0) == '_') { // side-effect function
+        if (fnDefinition.isPresent() && localName.charAt(0) == '_') { // convention for side-effect functions
           return KSyntaxHighlighter.IDENTIFIER_SYS;
         }
         return null;

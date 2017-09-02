@@ -13,7 +13,6 @@ import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
-import com.google.common.base.Strings;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -66,7 +65,7 @@ public class KCompletionContributor extends CompletionContributor {
           public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet resultSet) {
             final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive();
             final PsiElement element = parameters.getOriginalPosition();
-            final String input = Strings.nullToEmpty(element.getText());
+            final String input = element.getText() == null ? "" : element.getText();
             final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(element, KLambda.class);
             // system functions
             contributeSystemFunctions(resultSet, element, input);

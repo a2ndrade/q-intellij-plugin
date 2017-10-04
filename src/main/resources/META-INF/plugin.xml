@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>K</name>
-  <version>0.9.3</version>
+  <version>0.9.4</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.9.4</strong><br/>
+      <ul>
+        <li>Maintenance release</li>
+      </ul>
       <strong>0.9.3</strong><br/>
       <ul>
         <li>Fixes lexer bug with namespace declarations</li>

@@ -5,10 +5,11 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 import java.awt.Color;
 import java.awt.Font;
 import java.io.Reader;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.appian.intellij.k.psi.KTypes;
-import com.google.common.collect.ImmutableMap;
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -57,42 +58,44 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     return new FlexAdapter(new KLexer((Reader)null));
   }
 
-  private static final Map<IElementType, TextAttributesKey[]> M = ImmutableMap.<IElementType, TextAttributesKey[]>builder()
+  private static final Map<IElementType, TextAttributesKey[]> M = buildMappings();
 
-    .put(KTypes.USER_IDENTIFIER, IDENTIFIER_KEYS)
-    .put(KTypes.K3_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS)
-    .put(KTypes.Q_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS)
+  private static Map<IElementType,TextAttributesKey[]> buildMappings() {
+    final Map<IElementType, TextAttributesKey[]> m = new HashMap<>();
+    m.put(KTypes.USER_IDENTIFIER, IDENTIFIER_KEYS);
+    m.put(KTypes.K3_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS);
+    m.put(KTypes.Q_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS);
 
-    .put(KTypes.NUMBER, NUMBER_KEYS)
-    .put(KTypes.NUMBER_VECTOR, NUMBER_KEYS)
+    m.put(KTypes.NUMBER, NUMBER_KEYS);
+    m.put(KTypes.NUMBER_VECTOR, NUMBER_KEYS);
 
-    .put(KTypes.CHAR, STRING_KEYS)
-    .put(KTypes.STRING, STRING_KEYS)
+    m.put(KTypes.CHAR, STRING_KEYS);
+    m.put(KTypes.STRING, STRING_KEYS);
 
-    .put(KTypes.SYMBOL, SYMBOL_KEYS)
-    .put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS)
+    m.put(KTypes.SYMBOL, SYMBOL_KEYS);
+    m.put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS);
 
-    .put(KTypes.VERB, VERB_KEYS)
-    .put(KTypes.ADVERB, ADVERB_KEYS)
+    m.put(KTypes.VERB, VERB_KEYS);
+    m.put(KTypes.ADVERB, ADVERB_KEYS);
 
-    .put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS)
-    .put(KTypes.CURRENT_NAMESPACE, IDENTIFIER_SYS_KEYS)
+    m.put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS);
+    m.put(KTypes.CURRENT_NAMESPACE, IDENTIFIER_SYS_KEYS);
 
-    .put(KTypes.COLON, KEYWORD_KEYS)
-    .put(KTypes.CONTROL, KEYWORD_KEYS)
-    .put(KTypes.CONDITIONAL, KEYWORD_KEYS)
+    m.put(KTypes.COLON, KEYWORD_KEYS);
+    m.put(KTypes.CONTROL, KEYWORD_KEYS);
+    m.put(KTypes.CONDITIONAL, KEYWORD_KEYS);
 
-    .put(KTypes.OPEN_BRACE, BRACES_KEYS)
-    .put(KTypes.CLOSE_BRACE, BRACES_KEYS)
-    .put(KTypes.OPEN_BRACKET, BRACKETS_KEYS)
-    .put(KTypes.CLOSE_BRACKET, BRACKETS_KEYS)
-    .put(KTypes.OPEN_PAREN, PARENS_KEYS)
-    .put(KTypes.CLOSE_PAREN, PARENS_KEYS)
+    m.put(KTypes.OPEN_BRACE, BRACES_KEYS);
+    m.put(KTypes.CLOSE_BRACE, BRACES_KEYS);
+    m.put(KTypes.OPEN_BRACKET, BRACKETS_KEYS);
+    m.put(KTypes.CLOSE_BRACKET, BRACKETS_KEYS);
+    m.put(KTypes.OPEN_PAREN, PARENS_KEYS);
+    m.put(KTypes.CLOSE_PAREN, PARENS_KEYS);
 
-    .put(KTypes.COMMENT, COMMENT_KEYS)
-    .put(TokenType.BAD_CHARACTER, BAD_CHAR_KEYS)
-
-    .build();
+    m.put(KTypes.COMMENT, COMMENT_KEYS);
+    m.put(TokenType.BAD_CHARACTER, BAD_CHAR_KEYS);
+    return Collections.unmodifiableMap(m);
+  }
 
   @Override
   public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {

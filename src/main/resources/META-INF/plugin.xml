@@ -18,7 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
-      <strong>0.9.4</strong><br/>
+      <strong>0.9.5</strong><br/>
+      <ul>
+        <li>MIT license</li>
+      </ul>
       <ul>
         <li>Maintenance release</li>
       </ul>

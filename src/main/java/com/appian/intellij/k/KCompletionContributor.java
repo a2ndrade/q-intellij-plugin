@@ -95,7 +95,7 @@ public class KCompletionContributor extends CompletionContributor {
                 .orElse(Stream.empty())
                 .forEach(global -> caseInsensitiveResultSet.addElement(LookupElementBuilder.create(global)));
             // globals (other files)
-            if (caseInsensitiveResultSet.isStopped() || !KUtil.isAbsoluteId(input)) {
+            if (caseInsensitiveResultSet.isStopped()) {
               return;
             }
             final String sameFilePath = sameFile.getCanonicalPath();

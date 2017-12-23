@@ -17,7 +17,7 @@ public class CompletionTest extends LightCodeInsightFixtureTestCase {
   }
 
   public void testGlobals() {
-    testCompletion("globals.k", "square", "sum"); // none expected
+    testCompletion(new String[]{"globals1.k","globals2.k"}, "square", "sum", "someFnInDefaultNsInAnotherFile");
   }
 
   public void testSystemFns_k_k() {
@@ -34,7 +34,11 @@ public class CompletionTest extends LightCodeInsightFixtureTestCase {
   }
 
   private void testCompletion(String fileName, String... expectedSuggestions) {
-    myFixture.configureByFiles(fileName);
+    testCompletion(new String[]{fileName}, expectedSuggestions);
+  }
+
+  private void testCompletion(String[] fileNames, String... expectedSuggestions) {
+    myFixture.configureByFiles(fileNames);
     myFixture.complete(CompletionType.BASIC, 1);
     final List<String> strings = myFixture.getLookupElementStrings();
     assertOrderedEquals(strings, expectedSuggestions);

@@ -21,6 +21,7 @@
       <strong>0.9.6</strong><br/>
       <ul>
         <li>Enables completion of cross-file var/fns in default namespace</li>
+        <li>Fixes k.png icon lookup on some Intellij versions</li>
       </ul>
       <ul>
         <li>Maintenance release</li>

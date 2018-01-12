@@ -65,3 +65,48 @@ Element(FILE)
   PsiElement(new line)('\n')
   Element(EXPRESSION)
     PsiElement(number)('1')
+============|
+
+
+\l /some/path.q
+1
+------------>
+Element(FILE)
+  Element(COMMAND_STATEMENT)
+    PsiElement(command)('\l')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(variable)('/some/path.q')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')
+============|
+
+
+\l db/tickdata
+1
+------------>
+Element(FILE)
+  Element(COMMAND_STATEMENT)
+    PsiElement(command)('\l')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(variable)('db/tickdata')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')
+============|
+
+
+\l .
+1
+------------>
+Element(FILE)
+  Element(COMMAND_STATEMENT)
+    PsiElement(command)('\l')
+    Element(EXPRESSION)
+      Element(USER_ID)
+        PsiElement(variable)('.')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('1')

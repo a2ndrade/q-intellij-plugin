@@ -19,8 +19,6 @@ LINE_WS=[\ \t\f]
 WHITE_SPACE={LINE_WS}+
 NEWLINE=\r|\n|\r\n
 
-ANY=({NEWLINE}|.)*
-
 COMMENT1="/" [^\r\n]* {NEWLINE}?
 COMMENT2={WHITE_SPACE}+ {COMMENT1}
 
@@ -34,6 +32,7 @@ SIMPLE_COMMAND="\\"(
 MODE=[qk]")"
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
 USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*|_[a-zA-Z]+
+PATH=[.a-zA-Z/][._a-zA-Z0-9/]*
 
 K3_SYSTEM_FUNCTION=(_a|_abs|_acos|_asin|_atan|_bd|_bin|_binl|_ci|_cos|_cosh|_d|_db|_di|_div|_dj|_dot|_draw|_dv
         |_dvl|_exit|_exp|_f|_floor|_getenv|_gtime|_h|_host|_i|_ic|_in|_inv|_jd|_k|_lin|_log|_lsq|_lt|_mul|_n
@@ -78,8 +77,6 @@ CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR})?
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
 PRIMITIVE_VERB=[!#$%&*+,-.<=>?@\^_|~]
-MONAD={PRIMITIVE_VERB}{WHITE_SPACE}*":"
-"+-*%!&|<>=$;-%~_^$"
 ADVERB=("/" | \\ | ' | "/": | \\: | ':)+
 CONTROL="if"|"do"|"while"
 CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
@@ -88,7 +85,6 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 %state BLOCK_COMMENT_1
 %state COMMAND_STATE
 %state COMMENT_STATE
-
 
 %%
 
@@ -107,6 +103,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   [.~\^]                                      { yybegin(YYINITIAL); return USER_IDENTIFIER; }
   {WHITE_SPACE}                               { return com.intellij.psi.TokenType.WHITE_SPACE; }
   {USER_IDENTIFIER}                           { yybegin(YYINITIAL); return USER_IDENTIFIER; }
+  {PATH}                                      { yybegin(YYINITIAL); return USER_IDENTIFIER; }
   {NUMBER}                                    { yybegin(YYINITIAL); return NUMBER; }
   {NUMBER_VECTOR}                             { yybegin(YYINITIAL); return NUMBER_VECTOR; }
   {NEWLINE}+                                  { yybegin(YYINITIAL); return NEWLINE; }
@@ -172,5 +169,6 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   ^"\\"{NEWLINE}                              { yybegin(BLOCK_COMMENT_1); return COMMENT; }
   "\\"                                        { return TRACE; }
 
-  [^] { return com.intellij.psi               .TokenType.BAD_CHARACTER; }
 }
+
+[^] { return com.intellij.psi               .TokenType.BAD_CHARACTER; }

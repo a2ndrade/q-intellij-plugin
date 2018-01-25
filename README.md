@@ -14,6 +14,12 @@ This plugin supports k3, k4 and q syntax. Features include:
 - Go to symbol
 - Color settings
 
+## Installation
+
+0. Go to `Preferences` -> `Plugins`
+0. Click on `Browse Repositories...` and select the `Languages` category
+0. Look for the `K` plugin and click `Install`
+
 ## Building from sources
 
 0. Configure an IntelliJ Platform SDK following [these instructions](http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/setting_up_environment.html).

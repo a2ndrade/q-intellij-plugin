@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>K</name>
-  <version>0.9.7</version>
+  <version>0.9.8</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -18,6 +18,12 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.9.8</strong><br/>
+      <ul>
+        <li>Fixes NPE in completion (issue #13)</li>
+        <li>New highlighting for primitive verbs</li>
+        <li>Commenter now uses double slash (instead of single slash)</li>
+      </ul>
       <strong>0.9.7</strong><br/>
       <ul>
         <li>Fixes resolution of references when implicit lambda params are used</li>

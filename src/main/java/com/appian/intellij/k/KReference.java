@@ -3,7 +3,6 @@ package com.appian.intellij.k;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import com.appian.intellij.k.psi.KAssignment;
@@ -31,6 +30,12 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
 
   @Override
   public PsiElement resolve() {
+    final PsiElement reference = resolve0();
+    // avoid including a variable declaration as a reference to itself
+    return reference == myElement ? null : reference;
+  }
+
+  private PsiElement resolve0() {
     final VirtualFile sameFile = myElement.getContainingFile().getOriginalFile().getVirtualFile();
     if (sameFile == null || sameFile.getCanonicalPath() == null) {
       return null;

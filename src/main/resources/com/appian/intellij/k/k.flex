@@ -49,6 +49,8 @@ Q_SYSTEM_FUNCTION=(abs|acos|aj|aj0|all|and|any|asc|asin|asof|atan|attr|avg|avgs|
        |svar|system|tables|tan|til|trim|type|uj|ungroup|union|update|upper|upsert|value|var|view|views|vs
        |wavg|where|within|wj|wj1|wsum|ww|xasc|xbar|xcol|xcols|xdesc|xexp|xgroup|xkey|xlog|xprev|xrank)
 
+Q_SQL_TEMPLATE=(select|exec|update|delete)
+
 INT_TYPE=[ihjepuvt]
 FLOAT_TYPE=[fen]
 Q_DATETIME_TYPE=[mdz]
@@ -85,6 +87,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 %state BLOCK_COMMENT_1
 %state COMMAND_STATE
 %state COMMENT_STATE
+%state DROP_CUT_STATE
 
 %%
 
@@ -113,6 +116,13 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {COMMENT1}                                  { yybegin(YYINITIAL); return COMMENT;}
 }
 
+<DROP_CUT_STATE> {
+  {K3_SYSTEM_FUNCTION}/{ADVERB}               { yybegin(ADVERB_STATE); return K3_SYSTEM_FUNCTION; }
+  {K3_SYSTEM_FUNCTION}                        { yybegin(YYINITIAL); return K3_SYSTEM_FUNCTION; }
+  "_"/{ADVERB}                                { yybegin(ADVERB_STATE); return PRIMITIVE_VERB;}
+  "_"                                         { yybegin(YYINITIAL); return PRIMITIVE_VERB;}
+}
+
 <YYINITIAL> {
   {NEWLINE}+                                  { return NEWLINE; }
   ^"\\d"                                      { yybegin(COMMAND_STATE); return CURRENT_NAMESPACE; }
@@ -120,6 +130,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   ^{COMPLEX_COMMAND}                          { return COMMAND; }
   ^{MODE}                                     { return MODE; }
   {NUMBER_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return NUMBER_VECTOR; }
+  {NUMBER_VECTOR}/"_"                         { yybegin(DROP_CUT_STATE); return NUMBER_VECTOR; }
   {NUMBER_VECTOR}                             { return NUMBER_VECTOR; }
   [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
   {CONTROL}/"["                               { return CONTROL; }
@@ -140,11 +151,13 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 
   "("                                         { return OPEN_PAREN; }
   ")"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_PAREN; }
+  ")"/"_"                                     { yybegin(DROP_CUT_STATE); return CLOSE_PAREN; }
   ")"                                         { return CLOSE_PAREN; }
   ";"/{COMMENT1}                              { yybegin(COMMENT_STATE); return SEMICOLON; }
   ";"                                         { return SEMICOLON; }
   "["                                         { return OPEN_BRACKET; }
   "]"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_BRACKET; }
+  "]"/"_"                                     { yybegin(DROP_CUT_STATE); return CLOSE_BRACKET; }
   "]"                                         { return CLOSE_BRACKET; }
   "{"                                         { return OPEN_BRACE; }
   "}"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_BRACE; }
@@ -157,6 +170,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {USER_IDENTIFIER}/{ADVERB}                  { yybegin(ADVERB_STATE); return USER_IDENTIFIER; }
   {USER_IDENTIFIER}                           { return USER_IDENTIFIER; }
   {NUMBER}/{ADVERB}                           { yybegin(ADVERB_STATE); return NUMBER; }
+  {NUMBER}/"_"                                { yybegin(DROP_CUT_STATE); return NUMBER; }
   {NUMBER}                                    { return NUMBER; }
   {CHAR}/{ADVERB}                             { yybegin(ADVERB_STATE); return CHAR; }
   {CHAR}                                      { return CHAR; }

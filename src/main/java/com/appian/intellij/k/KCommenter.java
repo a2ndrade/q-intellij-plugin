@@ -6,7 +6,7 @@ public final class KCommenter implements Commenter {
 
   @Override
   public String getLineCommentPrefix() {
-    return "/";
+    return "//";
   }
 
 

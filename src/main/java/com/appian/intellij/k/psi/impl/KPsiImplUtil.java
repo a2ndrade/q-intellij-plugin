@@ -7,7 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.KIcons;
 import com.appian.intellij.k.KUtil;
+import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KElementFactory;
+import com.appian.intellij.k.psi.KLambdaParams;
+import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -55,6 +58,21 @@ public final class KPsiImplUtil {
         return KIcons.FILE;
       }
     };
+  }
+
+  public static boolean isCompound(final KAssignment element) {
+    return element.getArgs() != null;
+  }
+
+  public static boolean isDeclaration(final KUserId element) {
+    final PsiElement parent = element.getParent();
+    if (parent instanceof KLambdaParams || parent instanceof KNamespaceDeclaration) {
+      return true;
+    }
+    if (parent instanceof KAssignment) {
+      return !((KAssignment)parent).isCompound();
+    }
+    return false;
   }
 
 }

@@ -21,7 +21,6 @@ import com.intellij.psi.tree.IElementType;
 
 public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
 
-  public static final TextAttributesKey VERB = createTextAttributesKey("K_OPERATOR", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey ADVERB = createTextAttributesKey("K_ADVERB", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("K_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
   public static final TextAttributesKey IDENTIFIER_SYS = createTextAttributesKey("K_SYSFUNCTION", DefaultLanguageHighlighterColors.KEYWORD);
@@ -37,7 +36,6 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("K_BAD_CHARACTER",
     new TextAttributes(Color.RED, null, null, null, Font.BOLD));
 
-  private static final TextAttributesKey[] VERB_KEYS = new TextAttributesKey[]{VERB};
   private static final TextAttributesKey[] ADVERB_KEYS = new TextAttributesKey[]{ADVERB};
   private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{IDENTIFIER};
   private static final TextAttributesKey[] IDENTIFIER_SYS_KEYS = new TextAttributesKey[]{IDENTIFIER_SYS};
@@ -65,6 +63,8 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     m.put(KTypes.USER_IDENTIFIER, IDENTIFIER_KEYS);
     m.put(KTypes.K3_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS);
     m.put(KTypes.Q_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS);
+    m.put(KTypes.Q_SQL_TEMPLATE, IDENTIFIER_SYS_KEYS);
+    m.put(KTypes.Q_SQL_FROM, IDENTIFIER_SYS_KEYS);
 
     m.put(KTypes.NUMBER, NUMBER_KEYS);
     m.put(KTypes.NUMBER_VECTOR, NUMBER_KEYS);
@@ -75,7 +75,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     m.put(KTypes.SYMBOL, SYMBOL_KEYS);
     m.put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS);
 
-    m.put(KTypes.VERB, VERB_KEYS);
+    m.put(KTypes.PRIMITIVE_VERB, NUMBER_KEYS);
     m.put(KTypes.ADVERB, ADVERB_KEYS);
 
     m.put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS);

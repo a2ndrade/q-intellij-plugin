@@ -55,6 +55,8 @@
     user_identifier="variable"
     k3_system_function="k3 function"
     q_system_function="q function"
+    q_sql_template="q-sql template"
+    q_sql_from="from"
 
     // nouns
     number="number"
@@ -91,6 +93,7 @@ private top ::= namespace_declaration
 private expression_list ::= separator
                           | expression (separator+ expression)*
 expression ::= noun_or_verb noun_or_verb? adverb? expression?
+
 private noun_or_verb ::= noun
                        | primitive_verb [colon]
                        | system_function
@@ -121,7 +124,9 @@ namespace_declaration ::= current_namespace user_id
 mode_directive ::= mode expression
 
 // simple & compound assignment; local & global
-assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression
+assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression {
+ methods=[isCompound]
+}
 
 // all data are syntactically nouns
 private primitive_noun ::= vector | atom | lambda
@@ -132,5 +137,5 @@ private id ::= user_id | k3_system_function
 user_id ::= (user_identifier | q_system_function) {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
   implements="com.appian.intellij.k.psi.KNamedElement"
-  methods=[getName setName getNameIdentifier getPresentation]
+  methods=[getName setName getNameIdentifier getPresentation isDeclaration]
 }

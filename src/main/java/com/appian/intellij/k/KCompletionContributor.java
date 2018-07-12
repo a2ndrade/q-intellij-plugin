@@ -58,6 +58,16 @@ public class KCompletionContributor extends CompletionContributor {
     Arrays.sort(SYSTEM_FNS_K3);
   }
 
+  public static boolean isSystemFn(String fnName) {
+    if (Arrays.binarySearch(SYSTEM_FNS_Q, fnName) >= 0) {
+      return true;
+    }
+    if (Arrays.binarySearch(SYSTEM_FNS_K3, fnName) >= 0) {
+      return true;
+    }
+    return false;
+  }
+
   public KCompletionContributor() {
     extend(CompletionType.BASIC,
         PlatformPatterns.psiElement(KTypes.USER_IDENTIFIER).withLanguage(KLanguage.INSTANCE),
@@ -65,6 +75,9 @@ public class KCompletionContributor extends CompletionContributor {
           public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet resultSet) {
             final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive();
             final PsiElement element = parameters.getOriginalPosition();
+            if (element == null) {
+              return;
+            }
             final String input = element.getText() == null ? "" : element.getText();
             final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(element, KLambda.class);
             // system functions

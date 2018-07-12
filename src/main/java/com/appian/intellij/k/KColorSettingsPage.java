@@ -17,7 +17,6 @@ public final class KColorSettingsPage implements ColorSettingsPage {
     new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
     new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
     new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
-    new AttributesDescriptor("Verb", KSyntaxHighlighter.VERB),
     new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
     new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
     new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
@@ -44,7 +43,7 @@ public final class KColorSettingsPage implements ColorSettingsPage {
       "\n" +
       "identifier\n" +
       "\n" +
-      "(+;*:;~=) / verbs\n" +
+      "(+;*:;~=) / primitive verbs\n" +
       "\n" +
       "+/ / derived verb\n" +
       "\n" +

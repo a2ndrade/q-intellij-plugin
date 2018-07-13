@@ -19,8 +19,8 @@ LINE_WS=[\ \t\f]
 WHITE_SPACE={LINE_WS}+
 NEWLINE=\r|\n|\r\n
 
-COMMENT1="/" [^\r\n]* {NEWLINE}?
-COMMENT2={WHITE_SPACE}+ {COMMENT1}
+COMMENT1="/" [^\r\n]+ {NEWLINE}?
+COMMENT2={WHITE_SPACE}+ "/" [^\r\n]* {NEWLINE}?
 
 SIMPLE_COMMAND="\\"(
   [dafv_ib] // ({WHITE_SPACE}+{USER_IDENTIFIER})?
@@ -40,13 +40,13 @@ K3_SYSTEM_FUNCTION=(_a|_abs|_acos|_asin|_atan|_bd|_bin|_binl|_ci|_cos|_cosh|_d|_
 
 // q functions
 Q_SYSTEM_FUNCTION=(abs|acos|aj|aj0|all|and|any|asc|asin|asof|atan|attr|avg|avgs|bin|binr|by|ceiling|cols|cor|cos|count
-       |cov|cross|csv|cut|delete|deltas|desc|dev|differ|distinct|div|dsave|each|ej|ema|enlist|eval|except
-       |exec|exit|exp|fby|fills|first|fkeys|flip|floor|from|get|getenv|group|gtime|hclose|hcount|hdel|hopen
+       |cov|cross|csv|cut|deltas|desc|dev|differ|distinct|div|dsave|each|ej|ema|enlist|eval|except
+       |exit|exp|fby|fills|first|fkeys|flip|floor|get|getenv|group|gtime|hclose|hcount|hdel|hopen
        |hsym|iasc|idesc|ij|in|insert|inter|inv|key|keys|last|like|lj|ljf|load|log|lower|lsq|ltime|ltrim|mavg
        |max|maxs|mcount|md5|mdev|med|meta|min|mins|mmax|mmin|mmu|mod|msum|neg|next|not|null|or|over|parse
        |peach|pj|prd|prds|prev|prior|rand|rank|ratios|raze|read0|read1|reciprocal|reverse|rload|rotate|rsave
-       |rtrim|save|scan|scov|sdev|select|set|setenv|show|signum|sin|sqrt|ss|ssr|string|sublist|sum|sums|sv
-       |svar|system|tables|tan|til|trim|type|uj|ungroup|union|update|upper|upsert|value|var|view|views|vs
+       |rtrim|save|scan|scov|sdev|set|setenv|show|signum|sin|sqrt|ss|ssr|string|sublist|sum|sums|sv
+       |svar|system|tables|tan|til|trim|type|uj|ungroup|union|upper|upsert|value|var|view|views|vs
        |wavg|where|within|wj|wj1|wsum|ww|xasc|xbar|xcol|xcols|xdesc|xexp|xgroup|xkey|xlog|xprev|xrank)
 
 Q_SQL_TEMPLATE=(select|exec|update|delete)
@@ -85,7 +85,9 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 
 %state ADVERB_STATE
 %state BLOCK_COMMENT_1
+%state BLOCK_COMMENT_2
 %state COMMAND_STATE
+%state COMMAND_STATE_COMMENT
 %state COMMENT_STATE
 %state DROP_CUT_STATE
 
@@ -101,14 +103,25 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   .*                                          { return COMMENT; }
 }
 
+<BLOCK_COMMENT_2> {
+  ^"\\"{NEWLINE}                              { yybegin(YYINITIAL); return COMMENT; }
+  {NEWLINE}+                                  { return COMMENT; }
+  .*                                          { return COMMENT; }
+}
+
 <COMMAND_STATE> {
   // root, parent & attributes directory
   [.~\^]                                      { yybegin(YYINITIAL); return USER_IDENTIFIER; }
   {WHITE_SPACE}                               { return com.intellij.psi.TokenType.WHITE_SPACE; }
-  {USER_IDENTIFIER}                           { yybegin(YYINITIAL); return USER_IDENTIFIER; }
-  {PATH}                                      { yybegin(YYINITIAL); return USER_IDENTIFIER; }
-  {NUMBER}                                    { yybegin(YYINITIAL); return NUMBER; }
-  {NUMBER_VECTOR}                             { yybegin(YYINITIAL); return NUMBER_VECTOR; }
+  {USER_IDENTIFIER}                           { yybegin(COMMAND_STATE_COMMENT); return USER_IDENTIFIER; }
+  {PATH}                                      { yybegin(COMMAND_STATE_COMMENT); return USER_IDENTIFIER; }
+  {NUMBER}                                    { yybegin(COMMAND_STATE_COMMENT); return NUMBER; }
+  {NUMBER_VECTOR}                             { yybegin(COMMAND_STATE_COMMENT); return NUMBER_VECTOR; }
+  {NEWLINE}+                                  { yybegin(YYINITIAL); return NEWLINE; }
+}
+
+<COMMAND_STATE_COMMENT> {
+  [^\r\n]+                                    { return COMMENT;}
   {NEWLINE}+                                  { yybegin(YYINITIAL); return NEWLINE; }
 }
 
@@ -167,6 +180,8 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {K3_SYSTEM_FUNCTION}                        { return K3_SYSTEM_FUNCTION; }
   {Q_SYSTEM_FUNCTION}/{ADVERB}                { yybegin(ADVERB_STATE); return Q_SYSTEM_FUNCTION; }
   {Q_SYSTEM_FUNCTION}                         { return Q_SYSTEM_FUNCTION; }
+  {Q_SQL_TEMPLATE}                            { return Q_SQL_TEMPLATE; }
+  "from"                                      { return Q_SQL_FROM; }
   {USER_IDENTIFIER}/{ADVERB}                  { yybegin(ADVERB_STATE); return USER_IDENTIFIER; }
   {USER_IDENTIFIER}                           { return USER_IDENTIFIER; }
   {NUMBER}/{ADVERB}                           { yybegin(ADVERB_STATE); return NUMBER; }
@@ -181,6 +196,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   ":"                                         { return COLON; }
   "'"                                         { return SIGNAL; }
   ^"\\"{NEWLINE}                              { yybegin(BLOCK_COMMENT_1); return COMMENT; }
+  ^"/"{NEWLINE}                               { yybegin(BLOCK_COMMENT_2); return COMMENT; }
   "\\"                                        { return TRACE; }
 
 }

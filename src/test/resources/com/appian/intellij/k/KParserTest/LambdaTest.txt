@@ -91,14 +91,14 @@ Element(EXPRESSION)
 ============|
 
 
-{exec y}/LOG
+{myFn y}/LOG
 ------------>
 Element(EXPRESSION)
   Element(LAMBDA)
     PsiElement({)('{')
     Element(EXPRESSION)
       Element(USER_ID)
-        PsiElement(q function)('exec')
+        PsiElement(variable)('myFn')
       Element(USER_ID)
         PsiElement(variable)('y')
     PsiElement(})('}')

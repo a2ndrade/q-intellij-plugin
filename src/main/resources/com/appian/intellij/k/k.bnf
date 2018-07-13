@@ -92,7 +92,8 @@ private top ::= namespace_declaration
               | expression_list
 private expression_list ::= separator
                           | expression (separator+ expression)*
-expression ::= noun_or_verb noun_or_verb? adverb? expression?
+expression ::= q_sql | noun_or_verb noun_or_verb? adverb? expression?
+q_sql ::= q_sql_template [expression] q_sql_from [expression]
 
 private noun_or_verb ::= noun
                        | primitive_verb [colon]

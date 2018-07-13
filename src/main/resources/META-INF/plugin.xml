@@ -106,5 +106,6 @@
     <lang.findUsagesProvider language="q" implementationClass="com.appian.intellij.k.KFindUsagesProvider"/>
     <lang.psiStructureViewFactory language="q" implementationClass="com.appian.intellij.k.KStructureViewFactory"/>
     <completion.contributor language="q" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
+    <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
   </extensions>
 </idea-plugin>

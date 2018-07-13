@@ -12,7 +12,7 @@ public final class KLanguage extends Language {
   public static final KLanguage INSTANCE = new KLanguage();
 
   private KLanguage() {
-    super("k");
+    super("q");
   }
 
 }

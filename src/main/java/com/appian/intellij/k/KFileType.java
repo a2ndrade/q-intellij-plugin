@@ -14,17 +14,17 @@ public final class KFileType extends LanguageFileType {
 
   @Override
   public String getName() {
-    return "k file";
+    return "q file";
   }
 
   @Override
   public String getDescription() {
-    return "k language file";
+    return "q language file";
   }
 
   @Override
   public String getDefaultExtension() {
-    return "k";
+    return "q";
   }
 
   @Override

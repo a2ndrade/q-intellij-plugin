@@ -13,11 +13,9 @@ import junit.framework.TestSuite;
 
 public class ScriptsTest extends KParserTest {
   
-  private static final String AE = System.getProperty("user.home") + "/repo/ae/";
   private static final String DL = System.getProperty("user.home") + "/repo/data-layer/";
 
   private static final String[] TARGET_FOLDERS = new String[] {
-    AE + "server/",
     DL + "appian-data-server/src"
   };
 

@@ -30,10 +30,10 @@ import com.intellij.util.ProcessingContext;
 
 public class KCompletionContributor extends CompletionContributor {
 
-  static final String[] SYSTEM_FNS_Q = new String[] {"abs", "acos", "aj", "aj0", "all", "and", "any",
-      "asc", "asin", "asof", "atan", "attr", "avg", "avgs", "bin", "binr", "by", "ceiling", "cols", "cor",
-      "cos", "count", "cov", "cross", "csv", "cut", "delete", "deltas", "desc", "dev", "differ", "distinct",
-      "div", "dsave", "each", "ej", "ema", "enlist", "eval", "except", "exec", "exit", "exp", "fby", "fills",
+  static final String[] SYSTEM_FNS_Q = new String[] {"abs", "acos", "aj", "aj0", "all", "and", "any", "asc",
+      "asin", "asof", "atan", "attr", "avg", "avgs", "bin", "binr", "by", "ceiling", "cols", "cor", "cos",
+      "count", "cov", "cross", "csv", "cut", "delete", "deltas", "desc", "dev", "differ", "distinct", "div",
+      "dsave", "each", "ej", "ema", "enlist", "eval", "except", "exec", "exit", "exp", "fby", "fills",
       "first", "fkeys", "flip", "floor", "from", "get", "getenv", "group", "gtime", "hclose", "hcount",
       "hdel", "hopen", "hsym", "iasc", "idesc", "ij", "in", "insert", "inter", "inv", "key", "keys", "last",
       "like", "lj", "ljf", "load", "log", "lower", "lsq", "ltime", "ltrim", "mavg", "max", "maxs", "mcount",
@@ -46,23 +46,15 @@ public class KCompletionContributor extends CompletionContributor {
       "within", "wj", "wj1", "wsum", "ww", "xasc", "xbar", "xcol", "xcols", "xdesc", "xexp", "xgroup", "xkey",
       "xlog", "xprev", "xrank"};
 
-  private static final String[] SYSTEM_FNS_K3 = new String[] {"_a", "_abs", "_acos", "_asin", "_atan", "_bd",
-      "_bin", "_binl", "_ci", "_cos", "_cosh", "_d", "_db", "_di", "_div", "_dj", "_dot", "_draw", "_dv",
-      "_dvl", "_exit", "_exp", "_f", "_floor", "_getenv", "_gtime", "_h", "_host", "_i", "_ic", "_in", "_inv",
-      "_jd", "_k", "_lin", "_log", "_lsq", "_lt", "_mul", "_n", "_p", "_setenv", "_sin", "_sinh", "_size",
-      "_s", "_sm", "_sqr", "_sqrt", "_ss", "_ssr", "_sv", "_T", "_t", "_tan", "_tanh", "_u", "_v", "_vs",
-      "_w"};
-
   static {
     Arrays.sort(SYSTEM_FNS_Q);
-    Arrays.sort(SYSTEM_FNS_K3);
   }
 
   public static boolean isSystemFn(String fnName) {
     if (Arrays.binarySearch(SYSTEM_FNS_Q, fnName) >= 0) {
       return true;
     }
-    if (Arrays.binarySearch(SYSTEM_FNS_K3, fnName) >= 0) {
+    if (fnName.startsWith(".z.")) {
       return true;
     }
     return false;
@@ -81,7 +73,7 @@ public class KCompletionContributor extends CompletionContributor {
             final String input = element.getText() == null ? "" : element.getText();
             final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(element, KLambda.class);
             // system functions
-            contributeSystemFunctions(resultSet, element, input);
+            contributeSystemFunctions(resultSet, input);
             // params
             final Map<String,KUserId> uniques = new LinkedHashMap<>();
             Optional.ofNullable(enclosingLambda)
@@ -134,14 +126,13 @@ public class KCompletionContributor extends CompletionContributor {
     );
   }
 
-  private void contributeSystemFunctions(CompletionResultSet resultSet, PsiElement element, String input) {
+  private void contributeSystemFunctions(CompletionResultSet resultSet, String input) {
     if (input.charAt(0) == '.') {
-      return; // ignore
+     return; // ignore for completion b/c real declarations are in q.k or in app code as handle fns
     }
-    final String[] systemFnNames = KUtil.isInQFile(element) ? SYSTEM_FNS_Q : SYSTEM_FNS_K3;
-    int i = Math.abs(Arrays.binarySearch(systemFnNames, input) + 1);
-    while (i < systemFnNames.length && systemFnNames[i].startsWith(input)) {
-      resultSet.addElement(LookupElementBuilder.create(systemFnNames[i++]));
+    int i = Math.abs(Arrays.binarySearch(SYSTEM_FNS_Q, input) + 1);
+    while (i < SYSTEM_FNS_Q.length && SYSTEM_FNS_Q[i].startsWith(input)) {
+      resultSet.addElement(LookupElementBuilder.create(SYSTEM_FNS_Q[i++]));
     }
   }
 

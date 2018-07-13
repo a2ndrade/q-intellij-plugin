@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>0.9.8</version>
+  <version>0.9.9</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -15,9 +15,15 @@
         <li>File structure</li>
         <li>Go to symbol</li>
         <li>Color settings</li>
+        <li>Code folding</li>
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>0.9.9</strong><br/>
+      <ul>
+        <li>Code folding</li>
+        <li>Better `enter` handling between braces/brackets/parens</li>
+      </ul>
       <strong>0.9.8</strong><br/>
       <ul>
         <li>Fixes NPE in completion (issue #13)</li>
@@ -107,5 +113,7 @@
     <lang.psiStructureViewFactory language="q" implementationClass="com.appian.intellij.k.KStructureViewFactory"/>
     <completion.contributor language="q" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
+    <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
+    <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
   </extensions>
 </idea-plugin>

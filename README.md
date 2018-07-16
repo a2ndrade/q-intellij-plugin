@@ -1,9 +1,9 @@
-# k-intellij-plugin
-k/q language (kx.com) plugin for IntelliJ IDEA.
+# q-intellij-plugin
+q/k4 language (kx.com) plugin for IntelliJ IDEA. For k3 support, see [k3-intellij-plugin](https://github.com/a2ndrade/k3-intellij-plugin)
 
 ## Features
 
-This plugin supports k3, k4 and q syntax. Features include:
+This plugin supports q/k4 syntax. Features include:
 
 - Syntax highlighting
 - Navigate to declaration
@@ -13,12 +13,13 @@ This plugin supports k3, k4 and q syntax. Features include:
 - File structure
 - Go to symbol
 - Color settings
+- Code folding
 
 ## Installation
 
 0. Go to `Preferences` -> `Plugins`
 0. Click on `Browse Repositories...` and select the `Languages` category
-0. Look for the `K` plugin and click `Install`
+0. Look for the `q` plugin and click `Install`
 
 ## Building from sources
 
@@ -31,6 +32,3 @@ This plugin supports k3, k4 and q syntax. Features include:
 0. Build the project. Make sure the project is configured to use the IntelliJ Platform SDK configured in step 1.
 
 (*) either from a context menu or using the keyboard shortcut ⇧⌘G
-
-## Known Limitations
-- k4/q block comments starting with `/` are not supported b/c of k3 incompatibility

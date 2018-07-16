@@ -30,7 +30,7 @@ public final class KProjectComponent implements ProjectComponent {
   @NotNull
   @Override
   public String getComponentName() {
-    return "k-intellij-plugin";
+    return "q-intellij-plugin";
   }
 
 }

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ClojureProjectResolveSettings">
-    <currentScheme>IDE</currentScheme>
-  </component>
   <component name="CompilerConfiguration">
     <option name="BUILD_PROCESS_HEAP_SIZE" value="1024" />
   </component>
@@ -61,7 +58,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/k-intellij-plugin.iml" filepath="$PROJECT_DIR$/k-intellij-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/q-intellij-plugin.iml" filepath="$PROJECT_DIR$/q-intellij-plugin.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="IntelliJ IDEA Community Edition IC-171.4249.39" project-jdk-type="IDEA JDK">

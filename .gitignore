@@ -5,8 +5,8 @@ gen/
 idea-flex.skeleton
 JFlex.jar
 KLexer.java
-k-intellij-plugin.zip
-k-intellij-plugin.jar
-k-intellij-plugin.iws
+q-intellij-plugin.zip
+q-intellij-plugin.jar
+q-intellij-plugin.iws
 _KLexer.flex
 *.hsp

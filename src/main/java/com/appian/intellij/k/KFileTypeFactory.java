@@ -7,6 +7,6 @@ public final class KFileTypeFactory extends FileTypeFactory {
 
   @Override
   public void createFileTypes(FileTypeConsumer consumer) {
-    consumer.consume(KFileType.INSTANCE, "k;q");
+    consumer.consume(KFileType.INSTANCE, "q;k");
   }
 }

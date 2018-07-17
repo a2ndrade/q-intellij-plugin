@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>0.9.9</version>
+  <version>1.0</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@me.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -19,8 +19,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
-      <strong>0.9.9</strong><br/>
+      <strong>1.0</strong><br/>
       <ul>
+        <li>Drops k3 to better support q/k4 syntax</li>
+        <li>Renames plugin (k -> q)</li>
         <li>Code folding</li>
         <li>Better `enter` handling between braces/brackets/parens</li>
       </ul>

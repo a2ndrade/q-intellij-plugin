@@ -57,12 +57,18 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
   }
 
   private void assertReferences(PsiFile file) {
-    final PsiElement userIdToken = file.findElementAt(myFixture.getCaretOffset());
-    final PsiElement userId = userIdToken.getContext();
-    assertInstanceOf(userId, KUserId.class);
+    final PsiElement elementAt = file.findElementAt(myFixture.getCaretOffset());
+    final PsiElement userIdElement = elementAt.getContext();
+    assertInstanceOf(userIdElement, KUserId.class);
+    final KUserId userId = (KUserId)userIdElement;
     final PsiReference[] references = userId.getReferences();
     assertEquals(1, references.length);
-    assertNotNull(references[0].resolve());
+    final PsiElement resolved = references[0].resolve();
+    if (userId.isDeclaration()) {
+      assertNull("Declaration should not resolve to itself",resolved);
+    } else {
+      assertNotNull("Declaration not found",resolved);
+    }
   }
 
 }

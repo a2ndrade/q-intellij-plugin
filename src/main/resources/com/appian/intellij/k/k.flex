@@ -31,12 +31,8 @@ SIMPLE_COMMAND="\\"(
   )
 MODE=[qk]")"
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
-USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*|_[a-zA-Z]+
+USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
 PATH=[.a-zA-Z/][._a-zA-Z0-9/]*
-
-K3_SYSTEM_FUNCTION=(_a|_abs|_acos|_asin|_atan|_bd|_bin|_binl|_ci|_cos|_cosh|_d|_db|_di|_div|_dj|_dot|_draw|_dv
-        |_dvl|_exit|_exp|_f|_floor|_getenv|_gtime|_h|_host|_i|_ic|_in|_inv|_jd|_k|_lin|_log|_lsq|_lt|_mul|_n
-        |_p|_setenv|_s|_sin|_sinh|_size|_sm|_sqr|_sqrt|_ss|_ssr|_sv|_T|_t|_tan|_tanh|_u|_vs|_v|_w)
 
 // q functions
 Q_SYSTEM_FUNCTION=(abs|acos|aj|aj0|all|and|any|asc|asin|asof|atan|attr|avg|avgs|bin|binr|by|ceiling|cols|cor|cos|count
@@ -130,8 +126,6 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 }
 
 <DROP_CUT_STATE> {
-  {K3_SYSTEM_FUNCTION}/{ADVERB}               { yybegin(ADVERB_STATE); return K3_SYSTEM_FUNCTION; }
-  {K3_SYSTEM_FUNCTION}                        { yybegin(YYINITIAL); return K3_SYSTEM_FUNCTION; }
   "_"/{ADVERB}                                { yybegin(ADVERB_STATE); return PRIMITIVE_VERB;}
   "_"                                         { yybegin(YYINITIAL); return PRIMITIVE_VERB;}
 }
@@ -157,7 +151,6 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {COMMENT2}/{NEWLINE}                        { return COMMENT; }
   {COMMENT2}                                  { return COMMENT; }
 
-  "_"/{K3_SYSTEM_FUNCTION}                    { return PRIMITIVE_VERB;} // __sqrt 3 -> 1
   "-"/-[0-9]                                  { return PRIMITIVE_VERB;} // --6 -> 6
   {PRIMITIVE_VERB}/{ADVERB}                   { yybegin(ADVERB_STATE); return PRIMITIVE_VERB;}
   {PRIMITIVE_VERB}                            { return PRIMITIVE_VERB;}
@@ -176,8 +169,6 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   "}"/{ADVERB}                                { yybegin(ADVERB_STATE); return CLOSE_BRACE; }
   "}"                                         { return CLOSE_BRACE; }
 
-  {K3_SYSTEM_FUNCTION}/{ADVERB}               { yybegin(ADVERB_STATE); return K3_SYSTEM_FUNCTION; }
-  {K3_SYSTEM_FUNCTION}                        { return K3_SYSTEM_FUNCTION; }
   {Q_SYSTEM_FUNCTION}/{ADVERB}                { yybegin(ADVERB_STATE); return Q_SYSTEM_FUNCTION; }
   {Q_SYSTEM_FUNCTION}                         { return Q_SYSTEM_FUNCTION; }
   {Q_SQL_TEMPLATE}                            { return Q_SQL_TEMPLATE; }

@@ -53,7 +53,6 @@
 
     // names
     user_identifier="variable"
-    k3_system_function="k3 function"
     q_system_function="q function"
     q_sql_template="q-sql template"
     q_sql_from="from"
@@ -103,14 +102,14 @@ private noun ::= control_flow
             | group_or_list
             | primitive_noun
             | assignment
-            | id
+            | user_id
 
 private control_flow ::= control_statement | conditional_evaluation
 control_statement ::= control args
 conditional_evaluation ::= conditional args
 args ::= open_bracket expression_list* close_bracket
 
-private system_function ::= k3_system_function | q_system_function | signal | trace | colon // ":" is return
+private system_function ::= q_system_function | signal | trace | colon // ":" is return
 group_or_list ::= open_paren expression_list* close_paren
 
 lambda ::= open_brace [lambda_params] adverb? expression_list* close_brace // including adverb? here is a hack to make {[error]'error} work.
@@ -134,7 +133,6 @@ private primitive_noun ::= vector | atom | lambda
 private vector ::= symbol_vector | number_vector | string
 private atom ::= symbol | number | char
 
-private id ::= user_id | k3_system_function
 user_id ::= (user_identifier | q_system_function) {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
   implements="com.appian.intellij.k.psi.KNamedElement"

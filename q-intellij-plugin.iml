@@ -12,14 +12,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="PROVIDED">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" scope="TEST" name="APPLICATIONS_INTELLIJ_IDEA_CONTENTS_LIB" level="application" />
   </component>
 </module>

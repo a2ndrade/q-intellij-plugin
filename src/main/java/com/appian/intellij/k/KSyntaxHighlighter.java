@@ -61,7 +61,6 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   private static Map<IElementType,TextAttributesKey[]> buildMappings() {
     final Map<IElementType, TextAttributesKey[]> m = new HashMap<>();
     m.put(KTypes.USER_IDENTIFIER, IDENTIFIER_KEYS);
-    m.put(KTypes.K3_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS);
     m.put(KTypes.Q_SYSTEM_FUNCTION, IDENTIFIER_SYS_KEYS);
     m.put(KTypes.Q_SQL_TEMPLATE, IDENTIFIER_SYS_KEYS);
     m.put(KTypes.Q_SQL_FROM, IDENTIFIER_SYS_KEYS);

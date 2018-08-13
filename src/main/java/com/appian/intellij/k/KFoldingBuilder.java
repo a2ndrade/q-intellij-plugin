@@ -39,7 +39,7 @@ public class KFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
       if (isOpenBracket(elementType)) {
         openBracketStack.push(child);
-      } else if (isCloseBracket(elementType)) {
+      } else if (isCloseBracket(elementType) && !openBracketStack.empty()) {
         PsiElement matchingOpenBracket = openBracketStack.pop();
         addIfValidFoldingRegion(matchingOpenBracket, child, descriptors);
       }

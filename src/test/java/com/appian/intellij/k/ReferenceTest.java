@@ -65,9 +65,17 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
   private void assertReferenceFound(
       String fromFile, String expectedId, String expectedFqnId, String expectedFile) {
     myFixture.configureByFiles(fromFile, "references.k");
-    final PsiReference from = myFixture.getReferenceAtCaretPosition(fromFile);
-    final PsiElement to = from.resolve();
-    assertNotNull("Unresolved Reference: " + from.getElement().getText() + " (" +fromFile +")", to);
+    final PsiReference fromRef = myFixture.getReferenceAtCaretPosition(fromFile);
+    final PsiElement from = fromRef.getElement();
+    PsiElement to = fromRef.resolve();
+    assertInstanceOf(from, KUserId.class);
+    KUserId fromId = (KUserId)from;
+    if (fromId.isDeclaration()) {
+      assertNull("Declaration should not resolve to itself: " + fromRef.getElement().getText() + " (" +fromFile +")", to);
+      to = from;
+    } else {
+      assertNotNull("Unresolved Reference: " + fromRef.getElement().getText() + " (" +fromFile +")", to);
+    }
     assertInstanceOf(to, KUserId.class);
     assertInstanceOf(to.getContext(), KAssignment.class);
     assertEquals("Resolved to unexpected file: ", expectedFile,

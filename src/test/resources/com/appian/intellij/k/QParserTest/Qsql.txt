@@ -184,3 +184,31 @@ Element(EXPRESSION)
         PsiElement(primitive verb)('=')
         Element(EXPRESSION)
           PsiElement(number)('1')
+============|
+
+
+c: select a, b
+        from
+        b;
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    Element(ASSIGNMENT)
+      Element(USER_ID)
+        PsiElement(variable)('c')
+      PsiElement(:)(':')
+      Element(EXPRESSION)
+        Element(Q_SQL)
+          PsiElement(q-sql template)('select')
+          Element(EXPRESSION)
+            Element(USER_ID)
+              PsiElement(variable)('a')
+            PsiElement(primitive verb)(',')
+            Element(EXPRESSION)
+              Element(USER_ID)
+                PsiElement(variable)('b')
+          PsiElement(from)('from')
+          Element(EXPRESSION)
+            Element(USER_ID)
+              PsiElement(variable)('b')
+  PsiElement(;)(';')

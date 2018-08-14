@@ -1,0 +1,83 @@
+a: 47,
+48
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    Element(ASSIGNMENT)
+      Element(USER_ID)
+        PsiElement(variable)('a')
+      PsiElement(:)(':')
+      Element(EXPRESSION)
+        PsiElement(number)('47')
+        PsiElement(primitive verb)(',')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number)('48')
+============|
+
+
+a: 47,
+  48
+------------>
+Element(EXPRESSION)
+  Element(ASSIGNMENT)
+    Element(USER_ID)
+      PsiElement(variable)('a')
+    PsiElement(:)(':')
+    Element(EXPRESSION)
+      PsiElement(number)('47')
+      PsiElement(primitive verb)(',')
+      Element(EXPRESSION)
+        PsiElement(number)('48')
+============|
+
+
+a: 47
+ 48
+------------>
+Element(EXPRESSION)
+  Element(ASSIGNMENT)
+    Element(USER_ID)
+      PsiElement(variable)('a')
+    PsiElement(:)(':')
+    Element(EXPRESSION)
+      PsiElement(number vector)('47\n 48')
+============|
+
+
+a
+ :
+ 47,
+  48
+ 49
+------------>
+Element(EXPRESSION)
+  Element(ASSIGNMENT)
+    Element(USER_ID)
+      PsiElement(variable)('a')
+    PsiElement(:)(':')
+    Element(EXPRESSION)
+      PsiElement(number)('47')
+      PsiElement(primitive verb)(',')
+      Element(EXPRESSION)
+        PsiElement(number vector)('48\n 49')
+============|
+
+
+a:
+ 47,
+48
+ 49
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    Element(ASSIGNMENT)
+      Element(USER_ID)
+        PsiElement(variable)('a')
+      PsiElement(:)(':')
+      Element(EXPRESSION)
+        PsiElement(number)('47')
+        PsiElement(primitive verb)(',')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('48\n 49')

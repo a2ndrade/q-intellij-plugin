@@ -16,8 +16,8 @@ import com.intellij.psi.tree.IElementType;
 %eof}
 
 LINE_WS=[\ \t\f]
-WHITE_SPACE={LINE_WS}+
 NEWLINE=\r|\n|\r\n
+WHITE_SPACE=({LINE_WS}|{NEWLINE})*{LINE_WS}+
 
 COMMENT1="/" [^\r\n]+ {NEWLINE}?
 COMMENT2={WHITE_SPACE}+ "/" [^\r\n]* {NEWLINE}?

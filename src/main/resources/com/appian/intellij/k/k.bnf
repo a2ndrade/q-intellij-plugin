@@ -98,7 +98,7 @@ private noun_or_verb ::= noun
                        | primitive_verb [colon]
                        | system_function
 private noun ::= control_flow
-            | args // there can be standalone args: e.g. (`.fn;[])
+            | args // there can be standalone args: e.g. (`.fn;[]) or select[1]
             | group_or_list
             | primitive_noun
             | assignment

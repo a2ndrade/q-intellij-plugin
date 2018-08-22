@@ -139,6 +139,7 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {NUMBER_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return NUMBER_VECTOR; }
   {NUMBER_VECTOR}/"_"                         { yybegin(DROP_CUT_STATE); return NUMBER_VECTOR; }
   {NUMBER_VECTOR}                             { return NUMBER_VECTOR; }
+  [0-6]":"/{ADVERB}                           { yybegin(ADVERB_STATE); return PRIMITIVE_VERB; }
   [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
   {CONTROL}/"["                               { return CONTROL; }
   {CONDITIONAL}/"["                           { return CONDITIONAL; }

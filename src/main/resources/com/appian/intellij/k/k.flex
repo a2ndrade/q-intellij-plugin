@@ -31,7 +31,7 @@ SIMPLE_COMMAND="\\"(
   )
 MODE=[qk]")"
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
-USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
+USER_IDENTIFIER=([a-zA-Z]|\.[a-zA-Z])([_a-zA-Z0-9]|\.[a-zA-Z])*
 PATH=[.a-zA-Z/][._a-zA-Z0-9/]*
 
 // q functions

@@ -31,7 +31,7 @@ SIMPLE_COMMAND="\\"(
   )
 MODE=[qk]")"
 COMPLEX_COMMAND="\\"{USER_IDENTIFIER} // takes OS command and/or arbitrary expression as argument
-USER_IDENTIFIER=[.a-zA-Z][._a-zA-Z0-9]*
+USER_IDENTIFIER=([a-zA-Z]|\.[a-zA-Z])([_a-zA-Z0-9]|\.[a-zA-Z])*
 PATH=[.a-zA-Z/][._a-zA-Z0-9/]*
 
 // q functions
@@ -47,28 +47,51 @@ Q_SYSTEM_FUNCTION=(abs|acos|aj|aj0|all|and|any|asc|asin|asof|atan|attr|avg|avgs|
 
 Q_SQL_TEMPLATE=(select|exec|update|delete)
 
-INT_TYPE=[ihjepuvt]
-FLOAT_TYPE=[fen]
+INT_TYPE=[ihjfepnuvt]
+FLOAT_TYPE=[fe]
+TIMESPAN_STAMP_TYPE=[pn]
 Q_DATETIME_TYPE=[mdz]
-TYPE={INT_TYPE}|{FLOAT_TYPE}|{Q_DATETIME_TYPE}
+Q_TIME_TYPE=[uvt]
 // only positive numbers
-Q_NIL_POSITIVE="0N"({INT_TYPE}|{FLOAT_TYPE}|"g")
+Q_NIL=-?0[Nn]
 Q_BINARY=[01]"b"
 Q_HEX_CHAR=[[:digit:]A-Fa-f]
 Q_HEX_NUMBER="0x"{Q_HEX_CHAR}{Q_HEX_CHAR}?
-NUMBER_POSITIVE={Q_NIL_POSITIVE}|{Q_BINARY}|{Q_HEX_NUMBER}
+NUMBER_POSITIVE={Q_BINARY}|{Q_HEX_NUMBER}
 // positive & negative
-NIL_OR_INFINITY=0[iInNwW] // iI are from k3; wW are from k4; nN are from both
-Q_MONTH=[:digit:]+\.[:digit:]{2}
-Q_DATE={Q_MONTH}+\.[:digit:]{2}
+INFINITY=-?0[iIwW] // iI are from k3; wW are from k4; nN are from both
+Q_MONTH=[:digit:]{4}\.[:digit:]{2}
+Q_DATE={Q_MONTH}\.[:digit:]{2}
+Q_MINUTE=[:digit:]{2,3}\:[0-5][:digit:]
+Q_SECOND={Q_MINUTE}\:[0-5][:digit:]
 Q_TIME=[:digit:]+(\:[:digit:]{2}(\:[0-5][:digit:](\.[:digit:]+)?)?)?
 Q_DATETIME={Q_DATE}"T"{Q_TIME}
-NUMBER_POSITIVE_NEGATIVE=(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?|{NIL_OR_INFINITY}
+Q_TIMESTAMP=-?{Q_DATE}("D"{Q_TIME})?
+NUMBER_INTEGER=-?(0|[1-9][0-9]*)
+Q_TIMESPAN={NUMBER_INTEGER}"D"({Q_TIME})?
+NUMBER_FLOAT={NUMBER_INTEGER}(\.[0-9]*)|(\.[0-9]+)
+NUMBER_EXP={NUMBER_INTEGER}(\.[0-9]+)?([eE][+-]?[0-9]*)
 // all numbers
-NUMBER_NO_TYPE=-?({NUMBER_POSITIVE_NEGATIVE})|{NUMBER_POSITIVE}|-?({Q_DATE}|{Q_TIME}|{Q_DATETIME}|{Q_MONTH})
-NUMBER={NUMBER_NO_TYPE}{TYPE}?
+NUMBER={NUMBER_INTEGER}{INT_TYPE}?|({NUMBER_FLOAT}|{NUMBER_EXP}){FLOAT_TYPE}?|
+       ({INFINITY}|{Q_NIL})({INT_TYPE}|{Q_DATETIME_TYPE})?|{Q_NIL}"g"|
+       ({Q_TIMESTAMP}|{Q_TIMESPAN}|{NUMBER_FLOAT}){TIMESPAN_STAMP_TYPE}?|
+       {NUMBER_POSITIVE}|({Q_MINUTE}|{Q_SECOND}|{Q_TIME}){Q_TIME_TYPE}?|{Q_DATE}[dz]?|{Q_DATETIME}"z"?|{Q_MONTH}"m"?
 BINARY_VECTOR=[01][01]+"b"|"0x"{Q_HEX_CHAR}{2}{Q_HEX_CHAR}+
-NUMBER_VECTOR={NUMBER_NO_TYPE}({WHITE_SPACE}{NUMBER_NO_TYPE})+{TYPE}?|{BINARY_VECTOR}
+VECTOR_INT={NUMBER_INTEGER}|{Q_NIL}|{INFINITY}
+VECTOR_FLOAT={NUMBER_INTEGER}|{NUMBER_FLOAT}|{NUMBER_EXP}|{Q_NIL}|{INFINITY}
+VECTOR_TIME={NUMBER_INTEGER}|{Q_NIL}|{Q_MINUTE}|{Q_SECOND}|{Q_TIME}|{INFINITY}
+VECTOR_MONTH={Q_MONTH}|{Q_NIL}|{INFINITY}
+VECTOR_DATE={Q_DATE}|{Q_NIL}|{INFINITY}
+VECTOR_DATETIME={Q_DATETIME}|{Q_DATE}|{Q_NIL}|{INFINITY}
+VECTOR_TIMESTAMP={Q_TIMESTAMP}|{Q_TIMESPAN}|{NUMBER_FLOAT}|{VECTOR_TIME}
+NUMBER_VECTOR={VECTOR_INT}({WHITE_SPACE}{VECTOR_INT})+{INT_TYPE}?|
+              {VECTOR_FLOAT}({WHITE_SPACE}{VECTOR_FLOAT})+{FLOAT_TYPE}?|
+              {VECTOR_TIMESTAMP}({WHITE_SPACE}{VECTOR_TIMESTAMP})+{TIMESPAN_STAMP_TYPE}?|
+              {VECTOR_TIME}({WHITE_SPACE}{VECTOR_TIME})+{Q_TIME_TYPE}?|
+              {VECTOR_MONTH}({WHITE_SPACE}{VECTOR_MONTH})+"m"?|
+              {VECTOR_DATE}({WHITE_SPACE}{VECTOR_DATE})+"d"?|
+              {VECTOR_DATETIME}({WHITE_SPACE}{VECTOR_DATETIME})+"z"?|
+              {BINARY_VECTOR}
 C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"

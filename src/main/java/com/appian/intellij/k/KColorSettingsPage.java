@@ -2,7 +2,7 @@ package com.appian.intellij.k;
 
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -14,13 +14,17 @@ public final class KColorSettingsPage implements ColorSettingsPage {
 
   private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
     new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
+    new AttributesDescriptor("Number Vector", KSyntaxHighlighter.NUMBER_VECTOR),
+    new AttributesDescriptor("Char", KSyntaxHighlighter.CHAR),
     new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
     new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
+    new AttributesDescriptor("Symbol Vector", KSyntaxHighlighter.SYMBOL_VECTOR),
+    new AttributesDescriptor("Operator", KSyntaxHighlighter.OPERATOR),
     new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
     new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
     new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
     new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
-    new AttributesDescriptor("Command", KSyntaxHighlighter.IDENTIFIER_SYS)
+    new AttributesDescriptor("Command", KSyntaxHighlighter.COMMAND)
   };
 
   @Override
@@ -35,24 +39,17 @@ public final class KColorSettingsPage implements ColorSettingsPage {
 
   @Override
   public String getDemoText() {
-    return "1 2 2.4 0N 3 43 0i / numbers\n" +
-      "\n" +
+    return "3.5\n" +
+      "1 2 2.4 0N 3 43 0i / numbers\n" +
+      "\"c\"\n" +
       "\"string\"\n" +
-      "\n" +
       "`symbol\n" +
-      "\n" +
+      "`a`b`c\n" +
       "identifier\n" +
-      "\n" +
-      "(+;*:;~=) / primitive verbs\n" +
-      "\n" +
-      "+/ / derived verb\n" +
-      "\n" +
-      "_in / system function\n" +
-      "\n" +
-      "/:\\:' / adverb\n" +
-      "\n" +
-      "(:[];if[];do[];while[];0:)  / keywords and io commands\n" +
-      "\n" +
+      "(+;*;<;>;~=)\n" +
+      "count\n" +
+      "a ,/:\\\\: b\n" +
+      "(if[];?[];$[])\n" +
       "\\d .some.dir";
   }
 
@@ -73,6 +70,6 @@ public final class KColorSettingsPage implements ColorSettingsPage {
 
   @Override
   public String getDisplayName() {
-    return "K";
+    return "q";
   }
 }

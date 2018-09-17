@@ -24,9 +24,14 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   public static final TextAttributesKey ADVERB = createTextAttributesKey("K_ADVERB", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("K_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
   public static final TextAttributesKey IDENTIFIER_SYS = createTextAttributesKey("K_SYSFUNCTION", DefaultLanguageHighlighterColors.KEYWORD);
+  public static final TextAttributesKey COMMAND = createTextAttributesKey("K_COMMAND", DefaultLanguageHighlighterColors.KEYWORD);
+  public static final TextAttributesKey OPERATOR = createTextAttributesKey("K_OPERATOR", DefaultLanguageHighlighterColors.NUMBER);
   public static final TextAttributesKey SYMBOL = createTextAttributesKey("K_SYMBOL", DefaultLanguageHighlighterColors.CONSTANT);
+  public static final TextAttributesKey SYMBOL_VECTOR = createTextAttributesKey("K_SYMBOL_VECTOR", DefaultLanguageHighlighterColors.CONSTANT);
   public static final TextAttributesKey NUMBER = createTextAttributesKey("K_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
+  public static final TextAttributesKey NUMBER_VECTOR = createTextAttributesKey("K_NUMBER_VECTOR", DefaultLanguageHighlighterColors.NUMBER);
   public static final TextAttributesKey KEYWORD = createTextAttributesKey("K_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+  public static final TextAttributesKey CHAR = createTextAttributesKey("K_CHAR", DefaultLanguageHighlighterColors.STRING);
   public static final TextAttributesKey STRING = createTextAttributesKey("K_STRING", DefaultLanguageHighlighterColors.STRING);
   public static final TextAttributesKey BRACES = createTextAttributesKey("K_BRACES", DefaultLanguageHighlighterColors.BRACES);
   public static final TextAttributesKey BRACKETS = createTextAttributesKey("K_BRACKETS", DefaultLanguageHighlighterColors.BRACKETS);
@@ -39,9 +44,14 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final TextAttributesKey[] ADVERB_KEYS = new TextAttributesKey[]{ADVERB};
   private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{IDENTIFIER};
   private static final TextAttributesKey[] IDENTIFIER_SYS_KEYS = new TextAttributesKey[]{IDENTIFIER_SYS};
+  private static final TextAttributesKey[] COMMAND_KEYS = new TextAttributesKey[]{COMMAND};
+  private static final TextAttributesKey[] OPERATOR_KEYS = new TextAttributesKey[]{OPERATOR};
   private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
+  private static final TextAttributesKey[] NUMBER_VECTOR_KEYS = new TextAttributesKey[]{NUMBER_VECTOR};
   private static final TextAttributesKey[] SYMBOL_KEYS = new TextAttributesKey[]{SYMBOL};
+  private static final TextAttributesKey[] SYMBOL_VECTOR_KEYS = new TextAttributesKey[]{SYMBOL_VECTOR};
   private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+  private static final TextAttributesKey[] CHAR_KEYS = new TextAttributesKey[]{CHAR};
   private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
   private static final TextAttributesKey[] BRACES_KEYS = new TextAttributesKey[]{BRACES};
   private static final TextAttributesKey[] BRACKETS_KEYS = new TextAttributesKey[]{BRACKETS};
@@ -66,19 +76,19 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     m.put(KTypes.Q_SQL_FROM, IDENTIFIER_SYS_KEYS);
 
     m.put(KTypes.NUMBER, NUMBER_KEYS);
-    m.put(KTypes.NUMBER_VECTOR, NUMBER_KEYS);
+    m.put(KTypes.NUMBER_VECTOR, NUMBER_VECTOR_KEYS);
 
-    m.put(KTypes.CHAR, STRING_KEYS);
+    m.put(KTypes.CHAR, CHAR_KEYS);
     m.put(KTypes.STRING, STRING_KEYS);
 
     m.put(KTypes.SYMBOL, SYMBOL_KEYS);
-    m.put(KTypes.SYMBOL_VECTOR, SYMBOL_KEYS);
+    m.put(KTypes.SYMBOL_VECTOR, SYMBOL_VECTOR_KEYS);
 
-    m.put(KTypes.PRIMITIVE_VERB, NUMBER_KEYS);
+    m.put(KTypes.PRIMITIVE_VERB, OPERATOR_KEYS);
     m.put(KTypes.ADVERB, ADVERB_KEYS);
 
-    m.put(KTypes.COMMAND, IDENTIFIER_SYS_KEYS);
-    m.put(KTypes.CURRENT_NAMESPACE, IDENTIFIER_SYS_KEYS);
+    m.put(KTypes.COMMAND, COMMAND_KEYS);
+    m.put(KTypes.CURRENT_NAMESPACE, COMMAND_KEYS);
 
     m.put(KTypes.COLON, KEYWORD_KEYS);
     m.put(KTypes.CONTROL, KEYWORD_KEYS);

@@ -1,12 +1,18 @@
 package com.appian.intellij.k;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.appian.intellij.k.psi.KLambda;
+import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KTypes;
+import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
@@ -14,6 +20,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
@@ -38,6 +45,7 @@ public class KFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       final IElementType elementType = PsiUtilCore.getElementType(child);
 
       if (isOpenBracket(elementType)) {
+
         openBracketStack.push(child);
       } else if (isCloseBracket(elementType) && !openBracketStack.empty()) {
         PsiElement matchingOpenBracket = openBracketStack.pop();
@@ -76,7 +84,17 @@ public class KFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
   @Override
   public String getPlaceholderText(@NotNull ASTNode node) {
-    return "...";
+    return Optional.of(node)
+        .filter(LeafPsiElement.class::isInstance)
+        .map(LeafPsiElement.class::cast)
+        .map(LeafPsiElement::getParent)
+        .filter(KLambda.class::isInstance)
+        .map(KLambda.class::cast)
+        .map(KLambda::getLambdaParams)
+        .map(KLambdaParams::getUserIdList)
+        .map(Collection::stream)
+        .map(s -> "[" + s.map(KUserId::getName).collect(Collectors.joining(";")) + "]")
+        .orElse("") + "...";
   }
 
   @Override

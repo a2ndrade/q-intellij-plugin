@@ -140,5 +140,6 @@
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
     <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
+    <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
   </extensions>
 </idea-plugin>

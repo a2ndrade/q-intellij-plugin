@@ -22,6 +22,8 @@ Element(FILE)
 
 1.0 2.0 3.0
 1 2 3f
+1.0 2. .03
+1.0 2. .03f
 ------------>
 Element(FILE)
   Element(EXPRESSION)
@@ -29,6 +31,12 @@ Element(FILE)
   PsiElement(new line)('\n')
   Element(EXPRESSION)
     PsiElement(number vector)('1 2 3f')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('1.0 2. .03')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('1.0 2. .03f')
 ============|
 
 
@@ -93,3 +101,31 @@ Element(FILE)
   PsiElement(new line)('\n')
   Element(EXPRESSION)
     PsiElement(number vector)('2001.01.12T11 2001.01.12T11:59 2001.01.12T11:59:59 2001.01.12T1111:59:59.999')
+============|
+
+
+2001.01.21 0N 0W 2001.01.12p
+2001.01.01 0n 0w 2001.01.02z
+1 12. 12.3 .32 1.2n
+0D11:59:59 11 11:59 0D11:59:59 11:59:59.999 1.2n
+2001.01.12D11 2001.01.12D11:59 2001.01.12D11:59:59 2001.01.12D11:59:59.9991234
+1.0 2. .03p
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(number vector)('2001.01.21 0N 0W 2001.01.12p')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('2001.01.01 0n 0w 2001.01.02z')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('1 12. 12.3 .32 1.2n')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('0D11:59:59 11 11:59 0D11:59:59 11:59:59.999 1.2n')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('2001.01.12D11 2001.01.12D11:59 2001.01.12D11:59:59 2001.01.12D11:59:59.9991234')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(number vector)('1.0 2. .03p')

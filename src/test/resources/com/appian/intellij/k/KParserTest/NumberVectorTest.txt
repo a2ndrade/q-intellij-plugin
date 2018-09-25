@@ -45,14 +45,14 @@ Element(EXPRESSION)
 ============|
 
 
-0i -0I 0n -0N 0
+0i -0I 0n 0N 0
 ------------>
 Element(EXPRESSION)
-  PsiElement(number vector)('0i -0I 0n -0N 0')
+  PsiElement(number vector)('0i -0I 0n 0N 0')
 ============|
 
 
--0i 0I -0n 0N -0
+-0i 0I 0n 0N -0
 ------------>
 Element(EXPRESSION)
-  PsiElement(number vector)('-0i 0I -0n 0N -0')
+  PsiElement(number vector)('-0i 0I 0n 0N -0')

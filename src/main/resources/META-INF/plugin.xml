@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>1.4</version>
+  <version>1.5</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -19,6 +19,11 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.5</strong><br/>
+      <ul>
+        <li>Improved lexing of date/time and float values</li>
+        <li>Improved lexing of identifiers</li>
+      </ul>
       <strong>1.4</strong><br/>
       <ul>
         <li>More highlighting flexibility</li>

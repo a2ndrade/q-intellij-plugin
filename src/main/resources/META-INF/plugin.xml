@@ -141,5 +141,6 @@
     <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
+    <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
   </extensions>
 </idea-plugin>

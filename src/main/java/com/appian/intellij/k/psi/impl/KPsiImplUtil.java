@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.KIcons;
+import com.appian.intellij.k.KUserIdCache;
 import com.appian.intellij.k.KUtil;
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KElementFactory;
@@ -30,6 +31,7 @@ public final class KPsiImplUtil {
     ASTNode newKeyNode = property.getFirstChild().getNode();
     element.getNode().replaceChild(keyNode, newKeyNode);
     KUtil.putFqn(element, null); // clear so it's recalculated next time
+    KUserIdCache.getInstance().remove(element); // clear file cache to reflect changes immediately
     return element;
   }
 

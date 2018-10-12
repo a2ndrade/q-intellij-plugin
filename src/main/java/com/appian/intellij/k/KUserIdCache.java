@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,13 +13,14 @@ import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileAdapter;
 import com.intellij.openapi.vfs.VirtualFileEvent;
+import com.intellij.openapi.vfs.VirtualFileListener;
+import com.intellij.psi.PsiFile;
 
 /**
  * Caches K functions information per file.
  */
-final class KUserIdCache extends VirtualFileAdapter {
+public final class KUserIdCache implements VirtualFileListener {
 
   static final Key<String[]> USER_IDS = Key.create("userIds");
   static final Key<Trie<Boolean>> USER_IDS_TRIE = Key.create("userIdsTrie");
@@ -98,6 +100,10 @@ final class KUserIdCache extends VirtualFileAdapter {
   @Override
   public void fileDeleted(@NotNull VirtualFileEvent event) {
     remove(event.getFile());
+  }
+
+  public void remove(KUserId target) {
+    remove(Optional.of(target).map(KUserId::getContainingFile).map(PsiFile::getVirtualFile).orElse(null));
   }
 
   void remove(VirtualFile file) {

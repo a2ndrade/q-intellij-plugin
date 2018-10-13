@@ -77,4 +77,9 @@ public final class KPsiImplUtil {
     return false;
   }
 
+  public static boolean isInternal(final KUserId element) {
+    final String name = element.getName();
+    return (name.startsWith("i.") || name.contains(".i."));
+  }
+
 }

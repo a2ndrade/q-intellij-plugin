@@ -116,11 +116,7 @@ final class KStructureViewElement
       @Nullable
       @Override
       public Icon getIcon(boolean unused) {
-        final String name = element.getName();
-        if (name.startsWith("i.") || name.contains(".i.")) {
-          return AllIcons.Nodes.C_private;
-        }
-        return AllIcons.Nodes.C_public;
+        return element.isInternal() ? AllIcons.Nodes.C_private : AllIcons.Nodes.C_public;
       }
 
       @Nullable

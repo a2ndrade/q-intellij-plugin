@@ -1,2 +1,2 @@
-.x.otherExplicit<caret>Ns
+.x._otherExplicit<caret>Ns
 

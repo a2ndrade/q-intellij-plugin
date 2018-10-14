@@ -30,7 +30,7 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
     assertReferenceFound("usage_explicit_ns.k", ".a.b.explicitNs", null);
   }
   public void testOtherExplicitNs() {
-    assertReferenceFound("usage_other_explicit_ns.k", ".x.otherExplicitNs", null);
+    assertReferenceFound("usage_other_explicit_ns.k", ".x._otherExplicitNs", null);
   }
   public void testPopLastNs() {
     assertReferenceFound("usage_pop_last_ns.k", "popLastLevelNs", ".a.popLastLevelNs");

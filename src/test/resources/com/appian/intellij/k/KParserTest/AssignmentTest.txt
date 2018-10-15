@@ -200,3 +200,15 @@ Element(EXPRESSION)
             PsiElement(:)(':')
             Element(EXPRESSION)
               PsiElement(number)('1')
+============|
+
+
+.valid._identifier:1
+------------>
+Element(EXPRESSION)
+  Element(ASSIGNMENT)
+    Element(USER_ID)
+      PsiElement(variable)('.valid._identifier')
+    PsiElement(:)(':')
+    Element(EXPRESSION)
+      PsiElement(number)('1')

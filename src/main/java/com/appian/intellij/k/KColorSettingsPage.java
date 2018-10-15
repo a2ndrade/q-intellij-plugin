@@ -4,13 +4,17 @@ import java.util.Map;
 
 import javax.swing.Icon;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.intellij.lang.Language;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import com.intellij.openapi.options.colors.RainbowColorSettingsPage;
 
-public final class KColorSettingsPage implements ColorSettingsPage {
+public final class KColorSettingsPage implements RainbowColorSettingsPage, ColorSettingsPage {
 
   private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
     new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
@@ -71,5 +75,16 @@ public final class KColorSettingsPage implements ColorSettingsPage {
   @Override
   public String getDisplayName() {
     return "q";
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return KLanguage.INSTANCE;
+  }
+
+  @Override
+  public boolean isRainbowType(TextAttributesKey type) {
+    return KSyntaxHighlighter.IDENTIFIER.equals(type);
   }
 }

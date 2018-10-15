@@ -136,5 +136,5 @@ private atom ::= symbol | number | char
 user_id ::= (user_identifier | q_system_function) {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
   implements="com.appian.intellij.k.psi.KNamedElement"
-  methods=[getName setName getNameIdentifier getPresentation isDeclaration]
+  methods=[getName setName getNameIdentifier getPresentation isDeclaration isInternal]
 }

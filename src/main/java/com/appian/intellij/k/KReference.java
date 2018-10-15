@@ -108,7 +108,6 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
     if (myElement instanceof KUserId) {
       // inline rename
       KPsiImplUtil.setName((KUserId)myElement, newElementName);
-      KUserIdCache.getInstance().remove(myElement.getContainingFile().getVirtualFile());
       return myElement;
     }
     // cross-language rename

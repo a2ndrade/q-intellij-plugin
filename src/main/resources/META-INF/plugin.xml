@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>1.5</version>
+  <version>1.6</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -19,6 +19,12 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.6</strong><br/>
+      <ul>
+        <li>Support for rainbow highlighting (for local variables)</li>
+        <li>Support for viewing inline documentation</li>
+        <li>Fixes issue #25 (Find usages after rename)</li>
+      </ul>
       <strong>1.5</strong><br/>
       <ul>
         <li>Improved lexing of date/time and float values</li>
@@ -140,5 +146,7 @@
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
     <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
+    <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
+    <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
   </extensions>
 </idea-plugin>

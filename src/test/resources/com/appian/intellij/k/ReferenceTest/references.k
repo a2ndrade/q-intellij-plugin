@@ -6,7 +6,7 @@ implicitNs:{x+x}
 
 q).a.b.explicitNs:{x+x}
 
-.x.otherExplicitNs:{x+x}
+.x._otherExplicitNs:{x+x}
 
 \d ^
 

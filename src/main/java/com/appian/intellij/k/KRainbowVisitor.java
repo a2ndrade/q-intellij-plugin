@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
+import com.appian.intellij.k.psi.KQSql;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.codeInsight.daemon.RainbowVisitor;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -30,22 +31,26 @@ public final class KRainbowVisitor extends RainbowVisitor {
     if (context == null) {
       return; // don't include globals
     }
-    final KUserId identifier = (KUserId)element;
-    if (identifier.getName().indexOf('.') != -1) {
+    final KUserId usage = (KUserId)element;
+    if (usage.getName().indexOf('.') != -1) {
       return; // don't include globals
     }
-    PsiElement rainbowElement = identifier.getNameIdentifier();
-    PsiElement resolved;
-    if (identifier.isDeclaration()) {
-      resolved = identifier;
+    PsiElement rainbowElement = usage.getNameIdentifier();
+    PsiElement declaration;
+    if (usage.isDeclaration()) {
+      declaration = usage;
     } else {
-      resolved = findDeclaration(identifier);
-      PsiElement resolvedContext = PsiTreeUtil.findFirstParent(resolved, p -> p instanceof KLambda);
+      declaration = findDeclaration(usage);
+      PsiElement resolvedContext = PsiTreeUtil.findFirstParent(declaration, p -> p instanceof KLambda);
       if (resolvedContext == null) {
         return; // don't include globals
       }
     }
-    HighlightInfo attrs = getRainbowSymbolKey(context, rainbowElement, resolved);
+    final KQSql enclosingQSql = PsiTreeUtil.getContextOfType(usage, KQSql.class);
+    if (enclosingQSql != null) {
+      return; // don't highlight column selections
+    }
+    HighlightInfo attrs = getRainbowSymbolKey(context, rainbowElement, declaration);
     addInfo(attrs);
   }
 

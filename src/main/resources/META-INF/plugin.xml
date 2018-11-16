@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>1.6</version>
+  <version>1.7</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -19,6 +19,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.7</strong><br/>
+      <ul>
+        <li>Minor bug fixes</li>
+      </ul>
       <strong>1.6</strong><br/>
       <ul>
         <li>Support for rainbow highlighting (for local variables)</li>

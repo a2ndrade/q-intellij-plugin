@@ -56,13 +56,13 @@ public final class KDocumentationProvider extends AbstractDocumentationProvider 
   private Optional<String> getFunctionSignature(KUserId userId) {
     return Optional.of(userId)
         .map(KUserId::getParent)
+        .filter(KAssignment.class::isInstance)
         .map(KAssignment.class::cast)
         .map(KAssignment::getExpression)
         .map(KExpression::getLambdaList)
         .filter(l -> !l.isEmpty())
-        .map(l -> l.get(0))
         .map(l -> {
-          final KLambdaParams lambdaParams = l.getLambdaParams();
+          final KLambdaParams lambdaParams = l.get(0).getLambdaParams();
           return lambdaParams == null ? Collections.<KUserId>emptyList() : lambdaParams.getUserIdList();
         })
         .map(Collection::stream).map(s -> {

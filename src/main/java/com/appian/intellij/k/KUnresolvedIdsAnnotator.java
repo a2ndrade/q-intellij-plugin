@@ -71,7 +71,7 @@ public class KUnresolvedIdsAnnotator implements Annotator {
     }
     boolean isInternal = usage.isInternal() && !usage.getContainingFile().isEquivalentTo(declaration.getContainingFile());
     if (isInternal) {
-      holder.createWarningAnnotation(usage,
+      holder.createErrorAnnotation(usage,
           String.format("`%s` is an internal function. It should only be accessed within %s", usage.getName(),
               declaration.getContainingFile().getVirtualFile().getName()));
     }

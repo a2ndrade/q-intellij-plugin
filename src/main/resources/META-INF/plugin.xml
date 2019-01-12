@@ -1,7 +1,8 @@
+
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>1.7</version>
+  <version>1.8</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -152,5 +153,6 @@
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
     <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
+    <spellchecker.support language="q" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
   </extensions>
 </idea-plugin>

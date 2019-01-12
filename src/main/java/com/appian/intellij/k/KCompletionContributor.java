@@ -12,14 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KTypes;
-import com.appian.intellij.k.psi.KUserId;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
@@ -65,74 +63,96 @@ public class KCompletionContributor extends CompletionContributor {
         PlatformPatterns.psiElement(KTypes.USER_IDENTIFIER).withLanguage(KLanguage.INSTANCE),
         new CompletionProvider<CompletionParameters>() {
           public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet resultSet) {
-            final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive();
             final PsiElement element = parameters.getOriginalPosition();
-            if (element == null) {
+            if (element == null)
               return;
-            }
-            final String input = element.getText() == null ? "" : element.getText();
-            final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(element, KLambda.class);
-            // system functions
-            contributeSystemFunctions(resultSet, input);
-            // params
-            final Map<String,KUserId> uniques = new LinkedHashMap<>();
-            Optional.ofNullable(enclosingLambda)
-                .map(KLambda::getLambdaParams)
-                .map(params -> params.getUserIdList()
-                    .stream()
-                    .filter(param -> param.getName().contains(input)))
-                .orElse(Stream.empty())
-                .forEach(param -> uniques.putIfAbsent(param.getName(), param));
-            // locals
-            Optional.ofNullable(PsiTreeUtil.findChildrenOfType(enclosingLambda, KAssignment.class).stream()
-                .map(KAssignment::getUserId)
-                .filter(id -> id.getName().contains(input)))
-                .orElse(Stream.empty())
-                .forEach(local -> uniques.putIfAbsent(local.getName(), local));
-            for (KUserId local : uniques.values()) {
-              caseInsensitiveResultSet.addElement(LookupElementBuilder.create(local));
-            }
-            // globals (same file)
-            final Project project = element.getProject();
-            final VirtualFile sameFile = element.getContainingFile().getVirtualFile();
-            Optional.ofNullable(KUtil.findIdentifiers(project, sameFile).stream()
-                .filter(id -> id.getName().contains(input)))
-                .orElse(Stream.empty())
-                .forEach(global -> caseInsensitiveResultSet.addElement(LookupElementBuilder.create(global)));
+
+            final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive();
+            final Map<String, LookupElementBuilder> uniques = new LinkedHashMap<>();
+
+            contributeSystemFunctions(element, uniques);
+            if (caseInsensitiveResultSet.isStopped())
+              return;
+
+            contributeParams(element, uniques);
+            if (caseInsensitiveResultSet.isStopped())
+              return;
+
+            contributeLocals(element, uniques);
+            if (caseInsensitiveResultSet.isStopped())
+              return;
+
+            contributeSameFileGlobals(element, uniques);
+            if (caseInsensitiveResultSet.isStopped())
+              return;
+
             // globals (other files)
-            if (caseInsensitiveResultSet.isStopped()) {
+            contributeOtherFilesGlobals(element, uniques);
+            if (caseInsensitiveResultSet.isStopped())
               return;
-            }
-            final String sameFilePath = sameFile.getCanonicalPath();
-            final KUserIdCache cache = KUserIdCache.getInstance();
-            final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
-            for (VirtualFile otherFile : otherFiles) {
-              if (sameFilePath.equals(otherFile.getCanonicalPath())) {
-                continue; // already processed above
-              }
-              Optional.ofNullable(cache.findAllIdentifiers(project, otherFile, input, new KUtil.PrefixMatcher(input)).stream())
-                  .orElse(Stream.empty())
-                  .forEach(global -> {
-                    final String fqn = KUtil.getFqn(global);
-                    final LookupElementBuilder lookup = fqn == null ?
-                        LookupElementBuilder.create(global) :
-                        LookupElementBuilder.create(global, fqn);
-                    caseInsensitiveResultSet.addElement(lookup);
-                  });
-            }
+
+            uniques.values().forEach(caseInsensitiveResultSet::addElement);
           }
         }
     );
   }
 
-  private void contributeSystemFunctions(CompletionResultSet resultSet, String input) {
+  @NotNull
+  private static String getInput(PsiElement element) {
+    return element.getText() == null ? "" : element.getText();
+  }
+
+  private static void contributeOtherFilesGlobals(PsiElement element, Map<String, LookupElementBuilder> uniques) {
+    String input = getInput(element);
+    String sameFilePath = element.getContainingFile().getVirtualFile().getCanonicalPath();
+    KUserIdCache cache = KUserIdCache.getInstance();
+    Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
+        GlobalSearchScope.allScope(element.getProject()));
+    for (VirtualFile otherFile : otherFiles) {
+      if (sameFilePath != null && sameFilePath.equals(otherFile.getCanonicalPath())) {
+        continue; // already processed above
+      }
+      cache.findAllIdentifiers(element.getProject(), otherFile, input, new KUtil.PrefixMatcher(input))
+          .forEach(global -> uniques.computeIfAbsent(global.getName(), g->
+              Optional.ofNullable(KUtil.getFqn(global))
+                      .map(fqn->LookupElementBuilder.create(global, fqn))
+                      .orElseGet(()->LookupElementBuilder.create(global))));
+    }
+  }
+
+  private static void contributeSameFileGlobals(PsiElement element, Map<String, LookupElementBuilder> uniques) {
+    String input = getInput(element);
+    KUtil.findIdentifiers(element.getProject(), element.getContainingFile().getVirtualFile()).stream()
+        .filter(id -> id.getName().contains(input))
+        .forEach(global -> uniques.computeIfAbsent(global.getName(), LookupElementBuilder::create));
+  }
+
+  private static void contributeLocals(PsiElement element, Map<String, LookupElementBuilder> uniques) {
+    String input = getInput(element);
+    KLambda enclosingLambda = PsiTreeUtil.getContextOfType(element, KLambda.class);
+    PsiTreeUtil.findChildrenOfType(enclosingLambda, KAssignment.class).stream()
+        .map(KAssignment::getUserId)
+        .filter(id -> id.getName().contains(input))
+        .forEach(local -> uniques.computeIfAbsent(local.getName(), n->LookupElementBuilder.create(local)));
+  }
+
+  private static void contributeParams(PsiElement element, Map<String, LookupElementBuilder> uniques) {
+    String input = getInput(element);
+    Optional.ofNullable(PsiTreeUtil.getContextOfType(element, KLambda.class))
+        .map(KLambda::getLambdaParams)
+        .map(params ->params.getUserIdList().stream().filter(param -> param.getName().contains(input)))
+        .orElse(Stream.empty())
+        .forEach(param -> uniques.computeIfAbsent(param.getName(), n->LookupElementBuilder.create(param)));
+  }
+
+  private static void contributeSystemFunctions(PsiElement element, Map<String, LookupElementBuilder> uniques) {
+    String input = getInput(element);
     if (input.charAt(0) == '.') {
      return; // ignore for completion b/c real declarations are in q.k or in app code as handle fns
     }
     int i = Math.abs(Arrays.binarySearch(SYSTEM_FNS_Q, input) + 1);
     while (i < SYSTEM_FNS_Q.length && SYSTEM_FNS_Q[i].startsWith(input)) {
-      resultSet.addElement(LookupElementBuilder.create(SYSTEM_FNS_Q[i++]));
+      uniques.computeIfAbsent(SYSTEM_FNS_Q[i++], LookupElementBuilder::create);
     }
   }
 

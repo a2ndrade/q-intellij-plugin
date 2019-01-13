@@ -20,6 +20,12 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.8</strong><br/>
+      <ul>
+        <li>Ignores non-significant whitespace after control flow keywords (#28)</li>
+        <li>Displays unique autocomplete suggestions (#30)</li>
+        <li>Enables spellchecking in lang literals & comments (#31)</li>
+      </ul>
       <strong>1.7</strong><br/>
       <ul>
         <li>Minor bug fixes</li>

@@ -1,5 +1,5 @@
 # q-intellij-plugin
-q/k4 language (kx.com) plugin for IntelliJ IDEA. For k3 support, see [k3-intellij-plugin](https://github.com/a2ndrade/k3-intellij-plugin)
+q/k4 language (kx.com) [plugin](https://plugins.jetbrains.com/plugin/7925-q) for IntelliJ IDEA. For k3 support, see [k3-intellij-plugin](https://github.com/a2ndrade/k3-intellij-plugin)
 
 ## Features
 

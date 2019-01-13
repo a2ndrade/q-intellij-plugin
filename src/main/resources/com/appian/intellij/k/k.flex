@@ -164,8 +164,8 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   {NUMBER_VECTOR}                             { return NUMBER_VECTOR; }
   [0-6]":"/{ADVERB}                           { yybegin(ADVERB_STATE); return PRIMITIVE_VERB; }
   [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
-  {CONTROL}/"["                               { return CONTROL; }
-  {CONDITIONAL}/"["                           { return CONDITIONAL; }
+  {CONTROL}/{WHITE_SPACE}*"["                 { return CONTROL; }
+  {CONDITIONAL}/{WHITE_SPACE}*"["             { return CONDITIONAL; }
   {SYMBOL_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
   {SYMBOL_VECTOR}                             { return SYMBOL_VECTOR; }
   {SYMBOL}/{ADVERB}                           { yybegin(ADVERB_STATE); return SYMBOL; }

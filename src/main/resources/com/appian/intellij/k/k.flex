@@ -43,7 +43,7 @@ Q_SYSTEM_FUNCTION=(abs|acos|aj|aj0|all|and|any|asc|asin|asof|atan|attr|avg|avgs|
        |peach|pj|prd|prds|prev|prior|rand|rank|ratios|raze|read0|read1|reciprocal|reverse|rload|rotate|rsave
        |rtrim|save|scan|scov|sdev|set|setenv|show|signum|sin|sqrt|ss|ssr|string|sublist|sum|sums|sv
        |svar|system|tables|tan|til|trim|type|uj|ungroup|union|upper|upsert|value|var|view|views|vs
-       |wavg|where|within|wj|wj1|wsum|ww|xasc|xbar|xcol|xcols|xdesc|xexp|xgroup|xkey|xlog|xprev|xrank)
+       |wavg|where|within|wj|wj1|wsum|ww|xasc|xbar|xcol|xcols|xdesc|xexp|xgroup|xkey|xlog|xprev|xrank|ujf|reval)
 
 Q_SQL_TEMPLATE=(select|exec|update|delete)
 
@@ -95,10 +95,11 @@ NUMBER_VECTOR={INT_VECTOR_ITEM}({WHITE_SPACE}{INT_VECTOR_ITEM})+{INT_TYPE}?|
 C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
-SYMBOL="`"([._a-zA-Z0-9]+|{CHAR_VECTOR})?
+SYMBOL="`"([.:/_a-zA-Z0-9]+|{CHAR_VECTOR})?
 SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
 PRIMITIVE_VERB=[!#$%&*+,-.<=>?@\^_|~]
 ADVERB=("/" | \\ | ' | "/": | \\: | ':)+
+ADVERB_NO_SYMBOL_COLLISION=(\\ | ' | \\: | ':)+
 CONTROL="if"|"do"|"while"
 CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
 
@@ -166,9 +167,9 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
   {CONTROL}/{WHITE_SPACE}*"["                 { return CONTROL; }
   {CONDITIONAL}/{WHITE_SPACE}*"["             { return CONDITIONAL; }
-  {SYMBOL_VECTOR}/{ADVERB}                    { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
+  {SYMBOL_VECTOR}/{ADVERB_NO_SYMBOL_COLLISION} { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
   {SYMBOL_VECTOR}                             { return SYMBOL_VECTOR; }
-  {SYMBOL}/{ADVERB}                           { yybegin(ADVERB_STATE); return SYMBOL; }
+  {SYMBOL}/{ADVERB_NO_SYMBOL_COLLISION}       { yybegin(ADVERB_STATE); return SYMBOL; }
   {SYMBOL}                                    { return SYMBOL; }
   {WHITE_SPACE}                               { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                                 { return COMMENT; }

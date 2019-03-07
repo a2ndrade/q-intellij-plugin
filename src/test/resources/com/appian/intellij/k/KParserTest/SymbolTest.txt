@@ -53,3 +53,42 @@ Element(EXPRESSION)
 ------------>
 Element(EXPRESSION)
   PsiElement(symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
+============|
+
+
+`:path
+`:path/
+`:valid:/:/symbol/
+`:valid:/:/symbol//
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(symbol)('`:path')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(symbol)('`:path/')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(symbol)('`:valid:/:/symbol/')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(symbol)('`:valid:/:/symbol//')
+============|
+
+
+`:/abs_oluate/path
+`:/abs_2_oluate/path/
+------------>
+Element(FILE)
+  Element(EXPRESSION)
+    PsiElement(symbol)('`:/abs_oluate/path')
+  PsiElement(new line)('\n')
+  Element(EXPRESSION)
+    PsiElement(symbol)('`:/abs_2_oluate/path/')
+============|
+
+
+`:path`:path/`:valid:/:/symbol/`:valid:/:/sym_bol//`:/absoluate/path`:/absoluate/path/
+------------>
+Element(EXPRESSION)
+  PsiElement(symbol vector)('`:path`:path/`:valid:/:/symbol/`:valid:/:/sym_bol//`:/absoluate/path`:/absoluate/path/')

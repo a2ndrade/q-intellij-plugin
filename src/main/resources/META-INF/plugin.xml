@@ -1,4 +1,3 @@
-
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
@@ -159,6 +158,6 @@
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
     <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
-    <spellchecker.support language="q" implementationClass="com.intellij.spellchecker.tokenizer.SpellcheckingStrategy"/>
+    <spellchecker.support language="q" implementationClass="com.appian.intellij.k.KSpellcheckingStrategy"/>
   </extensions>
 </idea-plugin>

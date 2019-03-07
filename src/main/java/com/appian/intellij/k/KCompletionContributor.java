@@ -37,9 +37,9 @@ public class KCompletionContributor extends CompletionContributor {
       "like", "lj", "ljf", "load", "log", "lower", "lsq", "ltime", "ltrim", "mavg", "max", "maxs", "mcount",
       "md5", "mdev", "med", "meta", "min", "mins", "mmax", "mmin", "mmu", "mod", "msum", "neg", "next", "not",
       "null", "or", "over", "parse", "peach", "pj", "prd", "prds", "prev", "prior", "rand", "rank", "ratios",
-      "raze", "read0", "read1", "reciprocal", "reverse", "rload", "rotate", "rsave", "rtrim", "save", "scan",
+      "raze", "read0", "read1", "reciprocal", "reval", "reverse", "rload", "rotate", "rsave", "rtrim", "save", "scan",
       "scov", "sdev", "select", "set", "setenv", "show", "signum", "sin", "sqrt", "ss", "ssr", "string",
-      "sublist", "sum", "sums", "sv", "svar", "system", "tables", "tan", "til", "trim", "type", "uj",
+      "sublist", "sum", "sums", "sv", "svar", "system", "tables", "tan", "til", "trim", "type", "uj", "ujf",
       "ungroup", "union", "update", "upper", "upsert", "value", "var", "view", "views", "vs", "wavg", "where",
       "within", "wj", "wj1", "wsum", "ww", "xasc", "xbar", "xcol", "xcols", "xdesc", "xexp", "xgroup", "xkey",
       "xlog", "xprev", "xrank"};

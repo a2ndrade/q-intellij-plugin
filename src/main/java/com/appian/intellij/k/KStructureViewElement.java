@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KUserId;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.java.AccessLevelProvider;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
@@ -116,7 +115,11 @@ final class KStructureViewElement
       @Nullable
       @Override
       public Icon getIcon(boolean unused) {
-        return element.isInternal() ? AllIcons.Nodes.C_private : AllIcons.Nodes.C_public;
+        if (fnDefinition.isPresent()) {
+          return element.isInternal() ? KIcons.PRIVATE_FUNCTION : KIcons.PUBLIC_FUNCTION;
+        } else {
+          return element.isInternal() ? KIcons.PRIVATE_VARIABLE: KIcons.PUBLIC_VARIABLE;
+        }
       }
 
       @Nullable

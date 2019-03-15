@@ -33,7 +33,9 @@ public class ScriptsTest extends KParserTest {
     for(String folderPath : TARGET_FOLDERS) {
       final File folder = new File(folderPath);
       if (!folder.exists()) {
-        throw new RuntimeException("Folder not found: " + folder);
+        // TARGET_FOLDERS point to user's home dir,
+        // not every user has the tests there
+        return;
       }
       Files.walk(Paths.get(folder.toURI())).forEach(path -> {
         final File file = path.toFile();

@@ -10,7 +10,6 @@ import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KUserId;
-import com.appian.intellij.k.psi.impl.KPsiImplUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -21,6 +20,7 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NotNull;
 
 public final class KReference extends PsiReferenceBase<PsiElement> implements PsiReference {
 
@@ -104,10 +104,10 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
   }
 
   @Override
-  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
     if (myElement instanceof KUserId) {
       // inline rename
-      KPsiImplUtil.setName((KUserId)myElement, newElementName);
+      ((KUserId) myElement).setName(newElementName);
       return myElement;
     }
     // cross-language rename

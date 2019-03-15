@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 
+import com.appian.intellij.k.psi.KNamedElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,7 @@ public final class KUserIdCache implements VirtualFileListener {
   static final Key<Trie<Boolean>> USER_IDS_TRIE = Key.create("userIdsTrie");
 
   private static final KUserIdCache INSTANCE = new KUserIdCache();
-  public static final KUserIdCache getInstance() {
+  public static KUserIdCache getInstance() {
     return INSTANCE;
   }
 
@@ -102,8 +103,8 @@ public final class KUserIdCache implements VirtualFileListener {
     remove(event.getFile());
   }
 
-  public void remove(KUserId target) {
-    remove(Optional.of(target).map(KUserId::getContainingFile).map(PsiFile::getVirtualFile).orElse(null));
+  public void remove(KNamedElement target) {
+    remove(Optional.of(target).map(KNamedElement::getContainingFile).map(PsiFile::getVirtualFile).orElse(null));
   }
 
   void remove(VirtualFile file) {

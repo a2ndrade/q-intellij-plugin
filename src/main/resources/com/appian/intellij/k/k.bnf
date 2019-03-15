@@ -11,8 +11,6 @@
   elementTypeClass="com.appian.intellij.k.psi.KElementType"
   tokenTypeClass="com.appian.intellij.k.psi.KTokenType"
 
-  psiImplUtilClass="com.appian.intellij.k.psi.impl.KPsiImplUtil"
-
   tokens=[
 
     // ascii chars
@@ -124,9 +122,7 @@ namespace_declaration ::= current_namespace user_id
 mode_directive ::= mode expression
 
 // simple & compound assignment; local & global
-assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression {
- methods=[isCompound]
-}
+assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression
 
 // all data are syntactically nouns
 private primitive_noun ::= vector | atom | lambda
@@ -136,5 +132,4 @@ private atom ::= symbol | number | char
 user_id ::= (user_identifier | q_system_function) {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"
   implements="com.appian.intellij.k.psi.KNamedElement"
-  methods=[getName setName getNameIdentifier getPresentation isDeclaration isInternal]
 }

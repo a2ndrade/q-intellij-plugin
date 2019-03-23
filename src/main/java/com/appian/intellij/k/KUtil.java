@@ -22,9 +22,9 @@ import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KModeDirective;
+import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KTypes;
-import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
@@ -63,11 +63,14 @@ public final class KUtil {
   interface Matcher {
     boolean matches(String found);
   }
+
   static class PrefixMatcher implements Matcher {
     private final String target;
+
     public PrefixMatcher(String target) {
       this.target = target;
     }
+
     @Override
     public boolean matches(String found) {
       return found.startsWith(target);
@@ -76,9 +79,11 @@ public final class KUtil {
 
   static class ExactMatcher implements Matcher {
     private final String target;
+
     public ExactMatcher(String target) {
       this.target = target;
     }
+
     @Override
     public boolean matches(String found) {
       return target.equals(found);
@@ -87,9 +92,9 @@ public final class KUtil {
 
   private static final Matcher AnyMatcher = (found) -> true;
 
-    @NotNull
+  @NotNull
   static Collection<KUserId> findIdentifiers(
-        Project project, VirtualFile file, Matcher matcher, boolean stopAfterFirstMatch) {
+      Project project, VirtualFile file, Matcher matcher, boolean stopAfterFirstMatch) {
     final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
     if (kFile == null) {
       return Collections.emptyList();
@@ -139,7 +144,7 @@ public final class KUtil {
     }
     final List<KUserId> ids = new ArrayList<>();
     PsiElement currentElement = topLevelElement;
-    while(currentElement instanceof KExpression && currentElement.getFirstChild() instanceof KAssignment) {
+    while (currentElement instanceof KExpression && currentElement.getFirstChild() instanceof KAssignment) {
       final KAssignment assignment = (KAssignment)currentElement.getFirstChild();
       ids.add(assignment.getUserId());
       currentElement = assignment.getExpression();
@@ -147,7 +152,7 @@ public final class KUtil {
     return ids;
   }
 
-  public static Map<String, Set<VirtualFile>> findProjectNamespaces(Project project) {
+  public static Map<String,Set<VirtualFile>> findProjectNamespaces(Project project) {
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     final Map<String,Set<VirtualFile>> namespaceToVirtualFile = new HashMap<>();
@@ -163,12 +168,10 @@ public final class KUtil {
   }
 
   public static Set<String> findFileNamespaces(Project project, VirtualFile file) {
-    return findIdentifiers(project, file).stream()
-        .map(id -> {
-          final String ns = getExplicitNamespace(id.getName());
-          return ns == null ? "" : ns;
-        })
-        .collect(Collectors.toSet());
+    return findIdentifiers(project, file).stream().map(id -> {
+      final String ns = getExplicitNamespace(id.getName());
+      return ns == null ? "" : ns;
+    }).collect(Collectors.toSet());
   }
 
   @NotNull
@@ -241,15 +244,15 @@ public final class KUtil {
     PsiElement topLevelAssignment = null;
     for (Class containerType : potentialContainerTypes) {
       topLevelAssignment = PsiTreeUtil.getTopmostParentOfType(element, containerType);
-      if(topLevelAssignment != null) {
+      if (topLevelAssignment != null) {
         break;
       }
     }
     if (topLevelAssignment == null) {
       return "";
     }
-    final KNamespaceDeclaration enclosingNsDeclaration = PsiTreeUtil.getPrevSiblingOfType(
-        topLevelAssignment, KNamespaceDeclaration.class);
+    final KNamespaceDeclaration enclosingNsDeclaration = PsiTreeUtil.getPrevSiblingOfType(topLevelAssignment,
+        KNamespaceDeclaration.class);
     if (enclosingNsDeclaration == null) {
       return "";
     }
@@ -267,8 +270,7 @@ public final class KUtil {
       topLevelElement = topLevelElement.getNextSibling();
     } while (topLevelElement != null);
     throw new IllegalStateException(
-        "Cannot calculate current namespace for " + element.getName() + " (" + containingFile.getName() +
-            ")");
+        "Cannot calculate current namespace for " + element.getName() + " (" + containingFile.getName() + ")");
   }
 
   private static String getNewNamespace(String currentNamespace, String newNamespace) {
@@ -279,7 +281,7 @@ public final class KUtil {
         return ""; // can't go up any further
       }
       // relative ns becomes absolute if we're in the default ns
-      return  "." + newNamespace;
+      return "." + newNamespace;
     } else if ("^".equals(newNamespace)) { // k3: pop up most-nested newNamespace
       final String newNs = getExplicitNamespace(currentNamespace);
       return (newNs == null || newNs.isEmpty()) ? "" : newNs;

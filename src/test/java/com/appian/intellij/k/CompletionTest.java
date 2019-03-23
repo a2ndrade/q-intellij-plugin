@@ -17,26 +17,29 @@ public class CompletionTest extends LightCodeInsightFixtureTestCase {
   }
 
   public void testGlobals() {
-    testCompletion(new String[] {"globals1.k", "globals2.k"},
-        "someFnInDefaultNsInAnotherFile", "save", "scan", "scov", "sdev", "select", "set", "setenv", "show",
-        "signum", "sin", "sqrt", "square", "ss", "ssr", "string", "sublist", "sum", "sums", "sv", "svar", "system");
+    testCompletion(new String[] {"globals1.k", "globals2.k"}, "someFnInDefaultNsInAnotherFile", "save", "scan", "scov",
+        "sdev", "select", "set", "setenv", "show", "signum", "sin", "sqrt", "square", "ss", "ssr", "string", "sublist",
+        "sum", "sums", "sv", "svar", "system");
   }
 
   public void testSystemFns_k_k() {
     testCompletion("system_fns_k.k", "bin", "binr", "by");
   }
+
   public void testSystemFns_k_q() {
     testCompletion("system_fns_k.q", "bin", "binr", "by");
   }
+
   public void testSystemFns_q_q() {
     testCompletion("system_fns_q.q", "cols", "cor", "cos", "count", "cov");
   }
+
   public void testSystemFns_q_k() {
     testCompletion("system_fns_q.k", "cols", "cor", "cos", "count", "cov");
   }
 
   private void testCompletion(String fileName, String... expectedSuggestions) {
-    testCompletion(new String[]{fileName}, expectedSuggestions);
+    testCompletion(new String[] {fileName}, expectedSuggestions);
   }
 
   private void testCompletion(String[] fileNames, String... expectedSuggestions) {

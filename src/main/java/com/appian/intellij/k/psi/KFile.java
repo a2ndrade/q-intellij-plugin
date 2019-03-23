@@ -1,6 +1,6 @@
 package com.appian.intellij.k.psi;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

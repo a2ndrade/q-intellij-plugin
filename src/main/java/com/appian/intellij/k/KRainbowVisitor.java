@@ -55,7 +55,8 @@ public final class KRainbowVisitor extends RainbowVisitor {
   }
 
   @Nullable
-  private HighlightInfo getRainbowSymbolKey(@NotNull PsiElement context, PsiElement rainbowElement, PsiElement resolved) {
+  private HighlightInfo getRainbowSymbolKey(
+      @NotNull PsiElement context, PsiElement rainbowElement, PsiElement resolved) {
     if (rainbowElement == null || resolved == null) {
       return null;
     }

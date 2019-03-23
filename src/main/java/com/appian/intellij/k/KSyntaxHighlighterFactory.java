@@ -8,7 +8,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 public final class KSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
   @Override
   public SyntaxHighlighter getSyntaxHighlighter(
-    Project project, VirtualFile virtualFile) {
+      Project project, VirtualFile virtualFile) {
     return new KSyntaxHighlighter();
   }
 }

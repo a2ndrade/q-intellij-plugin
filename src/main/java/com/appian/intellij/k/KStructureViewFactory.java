@@ -17,8 +17,8 @@ public class KStructureViewFactory implements PsiStructureViewFactory {
     return new TreeBasedStructureViewBuilder() {
       @NotNull
       @Override
-      public StructureViewModel createStructureViewModel(@Nullable
-          Editor editor) {
+      public StructureViewModel createStructureViewModel(
+          @Nullable Editor editor) {
         return new KStructureViewModel(psiFile);
       }
     };

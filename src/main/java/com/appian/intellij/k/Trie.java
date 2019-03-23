@@ -14,19 +14,19 @@ package com.appian.intellij.k;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Trie implementation supporting CharSequences as prefixes.
- *
  * Prefixes are sequences of characters, and the set of allowed characters is
  * specified as a range of sequential characters. By default, any seven-bit
  * character may appear in a prefix, and so the trie is a 128-ary tree.
  *
+ * @param <T>
  * @author crazybob@google.com (Bob Lee)
  * @author mharris@google.com (Matthew Harris)
- * @param <T>
  */
 final class Trie<T> {
   // The set of allowed characters in prefixes is given by a range of
@@ -50,7 +50,6 @@ final class Trie<T> {
 
   /**
    * Constructs a trie for holding strings of characters.
-   *
    * The set of characters allowed in prefixes is given by the range
    * [rangeOffset, lastCharInRange], inclusive.
    *
@@ -74,7 +73,7 @@ final class Trie<T> {
    * @param prefix
    * @param value
    * @throws IllegalArgumentException if prefix containsKeyWithPrefix a character outside
-   * the range of legal prefix characters.
+   *                                  the range of legal prefix characters.
    */
   public T put(CharSequence prefix, T value) {
     if (value == null) {
@@ -91,8 +90,7 @@ final class Trie<T> {
         }
         current = next;
       } catch (ArrayIndexOutOfBoundsException e) {
-        throw new IllegalArgumentException(
-            "'" + prefix.charAt(i) + "' is not a legal prefix character.");
+        throw new IllegalArgumentException("'" + prefix.charAt(i) + "' is not a legal prefix character.");
       }
     }
     T oldValue = current.value;
@@ -102,6 +100,7 @@ final class Trie<T> {
 
   /**
    * {@inheritDoc}
+   *
    * @param s
    */
   public T get(CharSequence s) {
@@ -140,15 +139,14 @@ final class Trie<T> {
 
   /**
    * Returns a Map containing the same data as this structure.
-   *
    * This implementation constructs and populates an entirely new map rather
    * than providing a map view on the trie, so this is mostly useful for
    * debugging.
    *
    * @return A Map mapping each prefix to its corresponding value.
    */
-  public Map<String, T> toMap() {
-    Map<String, T> map = newLinkedHashMap();
+  public Map<String,T> toMap() {
+    Map<String,T> map = newLinkedHashMap();
     addEntries(root, new StringBuilder(), map);
     return map;
   }
@@ -160,9 +158,8 @@ final class Trie<T> {
    * @param builder A StringBuilder containing the prefix for the given node.
    * @param map
    */
-  private void addEntries(Node<T> node,
-      StringBuilder builder,
-      Map<String, T> map) {
+  private void addEntries(
+      Node<T> node, StringBuilder builder, Map<String,T> map) {
     if (node.value != null) {
       map.put(builder.toString(), node.value);
     }
@@ -170,7 +167,7 @@ final class Trie<T> {
     for (int i = 0; i < node.next.length; i++) {
       Node<T> next = node.next[i];
       if (next != null) {
-        builder.append((char) (i + rangeOffset));
+        builder.append((char)(i + rangeOffset));
         addEntries(next, builder, map);
         builder.deleteCharAt(builder.length() - 1);
       }
@@ -195,7 +192,7 @@ final class Trie<T> {
    * @param <V>
    * @return a newly-created, initially-empty {@code LinkedHashMap}
    */
-  public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
+  public static <K, V> LinkedHashMap<K,V> newLinkedHashMap() {
     return new LinkedHashMap<>();
   }
 
@@ -206,7 +203,7 @@ final class Trie<T> {
     t.put(".ab34", "3");
     // finds ".ab12" & ".ab34"
     final String search = ".ab";
-    boolean b =  t.containsKeyWithPrefix(search);
+    boolean b = t.containsKeyWithPrefix(search);
     System.out.println(search + "->" + b);
   }
 

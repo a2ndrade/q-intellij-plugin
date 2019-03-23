@@ -37,8 +37,8 @@ public final class KDocumentationProvider extends AbstractDocumentationProvider 
       return null;
     }
     final KUserId userId = (KUserId)element;
-    return getComments(userId).map(
-        comments -> String.join("\n<br>", comments, getFunctionSignature(userId).orElse(""))).orElse(null);
+    return getComments(userId).map(comments -> String.join("\n<br>", comments, getFunctionSignature(userId).orElse("")))
+        .orElse(null);
   }
 
   @Nullable
@@ -65,7 +65,8 @@ public final class KDocumentationProvider extends AbstractDocumentationProvider 
           final KLambdaParams lambdaParams = l.get(0).getLambdaParams();
           return lambdaParams == null ? Collections.<KUserId>emptyList() : lambdaParams.getUserIdList();
         })
-        .map(Collection::stream).map(s -> {
+        .map(Collection::stream)
+        .map(s -> {
           final List<String> paramNames = s.map(KUserId::getName).collect(Collectors.toList());
           return String.format("%s[%s] - %s", userId.getName(), String.join(";", paramNames),
               userId.getContainingFile().getName());

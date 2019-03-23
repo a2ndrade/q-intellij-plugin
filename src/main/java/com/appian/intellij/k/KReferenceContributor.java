@@ -16,19 +16,17 @@ public final class KReferenceContributor extends PsiReferenceContributor {
   @Override
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     // references from same language
-    registrar.registerReferenceProvider(
-      PlatformPatterns.psiElement(KUserId.class).withLanguage(KLanguage.INSTANCE),
-      new PsiReferenceProvider() {
-        @NotNull
-        @Override
-        public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
-          if (element instanceof KUserId) {
-            final String key = element.getText();
-            return new PsiReference[]{new KReference((KUserId)element, new TextRange(0, key.length()))};
+    registrar.registerReferenceProvider(PlatformPatterns.psiElement(KUserId.class).withLanguage(KLanguage.INSTANCE),
+        new PsiReferenceProvider() {
+          @NotNull
+          @Override
+          public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
+            if (element instanceof KUserId) {
+              final String key = element.getText();
+              return new PsiReference[] {new KReference((KUserId)element, new TextRange(0, key.length()))};
+            }
+            return new PsiReference[0];
           }
-          return new PsiReference[0];
-        }
-      }
-    );
+        });
   }
 }

@@ -25,7 +25,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 
-
 public class KFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   private static final int MAX_LOOKUP_DEPTH = 10;
 
@@ -69,12 +68,11 @@ public class KFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   /**
    * Checks if the text region between the startElement and endElement is a valid folding region,
    * and if valid, adds to the list of overall descriptors.
-   *
    * This safeguards against cases where missing matching brackets result in incorrect folding region
    * calculations. In some cases, the endElement found may come before the given startElement in the file.
    */
-  private void addIfValidFoldingRegion(PsiElement startElement, PsiElement endElement,
-      List<FoldingDescriptor> descriptors) {
+  private void addIfValidFoldingRegion(
+      PsiElement startElement, PsiElement endElement, List<FoldingDescriptor> descriptors) {
     int startOffset = startElement.getTextOffset() + startElement.getTextLength();
     int endOffset = endElement.getTextOffset();
     if (endOffset - startOffset > 0) {

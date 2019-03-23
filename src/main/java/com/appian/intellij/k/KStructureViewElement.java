@@ -23,8 +23,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 
-final class KStructureViewElement
-    implements StructureViewTreeElement, SortableTreeElement, AccessLevelProvider {
+final class KStructureViewElement implements StructureViewTreeElement, SortableTreeElement, AccessLevelProvider {
 
   private PsiElement element;
 
@@ -59,7 +58,7 @@ final class KStructureViewElement
   @NotNull
   @Override
   public TreeElement[] getChildren() {
-    if (!(element instanceof  KFile)) {
+    if (!(element instanceof KFile)) {
       return EMPTY_ARRAY;
     }
     final Project project = element.getProject();
@@ -118,7 +117,7 @@ final class KStructureViewElement
         if (fnDefinition.isPresent()) {
           return element.isInternal() ? KIcons.PRIVATE_FUNCTION : KIcons.PUBLIC_FUNCTION;
         } else {
-          return element.isInternal() ? KIcons.PRIVATE_VARIABLE: KIcons.PUBLIC_VARIABLE;
+          return element.isInternal() ? KIcons.PRIVATE_VARIABLE : KIcons.PUBLIC_VARIABLE;
         }
       }
 

@@ -30,8 +30,7 @@ public class KParserTest extends ParsingTestCase {
   private static final ParserDefinition SPEC = new KParserDefinition();
   private static final PsiParser PARSER = SPEC.createParser(null);
 
-  static final String TEST_DATA_FOLDERS_PATH =
-      "src/test/resources/" + KParserTest.class.getName().replace('.', '/');
+  static final String TEST_DATA_FOLDERS_PATH = "src/test/resources/" + KParserTest.class.getName().replace('.', '/');
   static final String INPUT_OUTPUT_SEPARATOR = "------------>";
   static final String TEST_CASE_SEPARATOR = "============|";
 
@@ -42,7 +41,7 @@ public class KParserTest extends ParsingTestCase {
     if (fileNames == null) {
       throw new RuntimeException("Folder not found: " + folder);
     }
-    for(String fileName : fileNames) {
+    for (String fileName : fileNames) {
       if (fileName.startsWith("_")) { // e.g. sandboxØ
         continue;
       }
@@ -71,7 +70,7 @@ public class KParserTest extends ParsingTestCase {
   public void testParser() throws Exception {
     final File input = new File(getTestDataPath() + "/" + testFileName);
     final String[] testCases = readFileIntoSections(input, TEST_CASE_SEPARATOR);
-    for(String testCase : testCases) {
+    for (String testCase : testCases) {
       if (testCase.isEmpty()) {
         continue;
       }
@@ -117,8 +116,7 @@ public class KParserTest extends ParsingTestCase {
     return factory.createBuilder(SPEC, lexer, expression);
   }
 
-  static String[] readFileIntoSections(Object source, String sectionsSeparator)
-    throws IOException {
+  static String[] readFileIntoSections(Object source, String sectionsSeparator) throws IOException {
     final List<String> linesList = readLinesIncludingLineTerminators(source);
     final List<String> sectionsList = new ArrayList<String>();
     StringBuffer currentSection = null;
@@ -143,26 +141,22 @@ public class KParserTest extends ParsingTestCase {
     return sectionsList.toArray(new String[0]);
   }
 
-  private static List<String> readLinesIncludingLineTerminators(Object o)
-    throws IOException {
-    try(
-      Reader fr = o instanceof File
-        ? new FileReader((File)o)
-        : new StringReader((String)o);
-      BufferedReader br = new BufferedReader(fr);
-      PushbackReader pr = new PushbackReader(br)) {
+  private static List<String> readLinesIncludingLineTerminators(Object o) throws IOException {
+    try (Reader fr = o instanceof File ? new FileReader((File)o) : new StringReader((String)o);
+        BufferedReader br = new BufferedReader(fr);
+        PushbackReader pr = new PushbackReader(br)) {
       List<String> linesList = new ArrayList<String>();
       int c;
       do {
         StringBuffer lineSb = new StringBuffer();
         while ((c = pr.read()) != -1) {
-          lineSb.append((char) c);
+          lineSb.append((char)c);
           if (c == '\n') {
             break;
           } else if (c == '\r') {
             c = pr.read();
             if (c == '\n') {
-              lineSb.append((char) c);
+              lineSb.append((char)c);
             } else if (c != -1) {
               pr.unread(c);
             }

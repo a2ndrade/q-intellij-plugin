@@ -13,10 +13,10 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
-    for (String context : new String[]{"top", "fn"}) {
-      for (String fromType : new String[]{"local"}) {
-        for (String toType : new String[]{"local", "global"}) {
-          for (String from : new String[]{"def", "usage"}) {
+    for (String context : new String[] {"top", "fn"}) {
+      for (String fromType : new String[] {"local"}) {
+        for (String toType : new String[] {"local", "global"}) {
+          for (String from : new String[] {"def", "usage"}) {
             final String fileNamePrefix = context + "_" + fromType + "_to_" + toType + "_from_" + from;
             final String renameTo = "local".equals(toType) ? "test2" : ".g.test";
             suite.addTest(new RenameTest(fileNamePrefix, renameTo));
@@ -65,9 +65,9 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
     assertEquals(1, references.length);
     final PsiElement resolved = references[0].resolve();
     if (userId.isDeclaration()) {
-      assertNull("Declaration should not resolve to itself",resolved);
+      assertNull("Declaration should not resolve to itself", resolved);
     } else {
-      assertNotNull("Declaration not found",resolved);
+      assertNotNull("Declaration not found", resolved);
     }
   }
 

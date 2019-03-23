@@ -16,19 +16,19 @@ import com.intellij.openapi.options.colors.RainbowColorSettingsPage;
 
 public final class KColorSettingsPage implements RainbowColorSettingsPage, ColorSettingsPage {
 
-  private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-    new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
-    new AttributesDescriptor("Number Vector", KSyntaxHighlighter.NUMBER_VECTOR),
-    new AttributesDescriptor("Char", KSyntaxHighlighter.CHAR),
-    new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
-    new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
-    new AttributesDescriptor("Symbol Vector", KSyntaxHighlighter.SYMBOL_VECTOR),
-    new AttributesDescriptor("Operator", KSyntaxHighlighter.OPERATOR),
-    new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
-    new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
-    new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
-    new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
-    new AttributesDescriptor("Command", KSyntaxHighlighter.COMMAND)
+  private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[] {
+      new AttributesDescriptor("Number", KSyntaxHighlighter.NUMBER),
+      new AttributesDescriptor("Number Vector", KSyntaxHighlighter.NUMBER_VECTOR),
+      new AttributesDescriptor("Char", KSyntaxHighlighter.CHAR),
+      new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
+      new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
+      new AttributesDescriptor("Symbol Vector", KSyntaxHighlighter.SYMBOL_VECTOR),
+      new AttributesDescriptor("Operator", KSyntaxHighlighter.OPERATOR),
+      new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
+      new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),
+      new AttributesDescriptor("Adverb", KSyntaxHighlighter.ADVERB),
+      new AttributesDescriptor("Keyword", KSyntaxHighlighter.KEYWORD),
+      new AttributesDescriptor("Command", KSyntaxHighlighter.COMMAND)
   };
 
   @Override
@@ -43,6 +43,7 @@ public final class KColorSettingsPage implements RainbowColorSettingsPage, Color
 
   @Override
   public String getDemoText() {
+    // @formatter:off
     return "3.5\n" +
       "1 2 2.4 0N 3 43 0i / numbers\n" +
       "\"c\"\n" +
@@ -55,6 +56,7 @@ public final class KColorSettingsPage implements RainbowColorSettingsPage, Color
       "a ,/:\\\\: b\n" +
       "(if[];?[];$[])\n" +
       "\\d .some.dir";
+    // @formatter:on
   }
 
   @Override

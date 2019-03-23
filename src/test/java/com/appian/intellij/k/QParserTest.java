@@ -7,8 +7,7 @@ import junit.framework.TestSuite;
 
 public class QParserTest extends KParserTest {
 
-  static final String TEST_DATA_FOLDERS_PATH =
-      "src/test/resources/" + QParserTest.class.getName().replace('.', '/');
+  static final String TEST_DATA_FOLDERS_PATH = "src/test/resources/" + QParserTest.class.getName().replace('.', '/');
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
@@ -17,7 +16,7 @@ public class QParserTest extends KParserTest {
     if (fileNames == null) {
       throw new RuntimeException("Folder not found: " + folder);
     }
-    for(String fileName : fileNames) {
+    for (String fileName : fileNames) {
       if (fileName.startsWith("_")) { // e.g. sandboxØ
         continue;
       }

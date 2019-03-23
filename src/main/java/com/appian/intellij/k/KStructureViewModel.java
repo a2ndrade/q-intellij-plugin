@@ -9,8 +9,7 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.psi.PsiFile;
 
-final class KStructureViewModel extends StructureViewModelBase
-    implements StructureViewModel.ElementInfoProvider {
+final class KStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
 
   public KStructureViewModel(PsiFile psiFile) {
     super(psiFile, new KStructureViewElement(psiFile));
@@ -18,7 +17,7 @@ final class KStructureViewModel extends StructureViewModelBase
 
   @NotNull
   public Sorter[] getSorters() {
-    return new Sorter[]{Sorter.ALPHA_SORTER};
+    return new Sorter[] {Sorter.ALPHA_SORTER};
   }
 
   @Override

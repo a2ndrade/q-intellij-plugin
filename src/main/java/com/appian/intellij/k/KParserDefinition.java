@@ -23,11 +23,9 @@ public final class KParserDefinition implements ParserDefinition {
 
   public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
   public static final TokenSet COMMENTS = TokenSet.create(KTypes.COMMENT);
-  public static final TokenSet STRING_LITERALS = TokenSet.create(KTypes.SYMBOL, KTypes.STRING,
-    KTypes.SYMBOL_VECTOR);
+  public static final TokenSet STRING_LITERALS = TokenSet.create(KTypes.SYMBOL, KTypes.STRING, KTypes.SYMBOL_VECTOR);
 
-  public static final IFileElementType FILE = new IFileElementType(
-    Language.<KLanguage>findInstance(KLanguage.class));
+  public static final IFileElementType FILE = new IFileElementType(Language.<KLanguage>findInstance(KLanguage.class));
 
   @Override
   public Lexer createLexer(Project project) {

@@ -13,7 +13,7 @@ public final class KElementFactory {
 
   public static KFile createFile(Project project, String text) {
     String name = "dummy.k";
-    return (KFile) PsiFileFactory.getInstance(project).
-      createFileFromText(name, KFileType.INSTANCE, text);
+    return (KFile)PsiFileFactory.getInstance(project).
+        createFileFromText(name, KFileType.INSTANCE, text);
   }
 }

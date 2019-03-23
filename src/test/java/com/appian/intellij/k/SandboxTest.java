@@ -15,5 +15,4 @@ public class SandboxTest extends KParserTest {
     super(testFileName);
   }
 
-
 }

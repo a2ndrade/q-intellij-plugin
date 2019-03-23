@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
 import com.appian.intellij.k.psi.KLambdaParams;
@@ -20,7 +22,6 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public final class KReference extends PsiReferenceBase<PsiElement> implements PsiReference {
 
@@ -76,8 +77,8 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
       return foundInSameFile;
     }
     // 4) check other file's globals
-    final String fqnOrName = isBuiltinQFunction(sameFile, referenceName) ?
-        ".q." + referenceName : // defined under .q namespace inside q.k
+    final String fqnOrName = isBuiltinQFunction(sameFile, referenceName) ? ".q." + referenceName :
+        // defined under .q namespace inside q.k
         KUtil.getFqnOrName(reference);
     final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
@@ -107,7 +108,7 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
   public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
     if (myElement instanceof KUserId) {
       // inline rename
-      ((KUserId) myElement).setName(newElementName);
+      ((KUserId)myElement).setName(newElementName);
       return myElement;
     }
     // cross-language rename

@@ -1,6 +1,6 @@
 package com.appian.intellij.k;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 

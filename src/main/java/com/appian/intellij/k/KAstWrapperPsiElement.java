@@ -23,5 +23,4 @@ public class KAstWrapperPsiElement extends ASTWrapperPsiElement {
     return super.getReference();
   }
 
-
 }

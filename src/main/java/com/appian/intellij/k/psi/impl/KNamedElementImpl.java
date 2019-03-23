@@ -1,17 +1,23 @@
 package com.appian.intellij.k.psi.impl;
 
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.appian.intellij.k.KAstWrapperPsiElement;
 import com.appian.intellij.k.KIcons;
 import com.appian.intellij.k.KUserIdCache;
 import com.appian.intellij.k.KUtil;
-import com.appian.intellij.k.psi.*;
+import com.appian.intellij.k.psi.KAssignment;
+import com.appian.intellij.k.psi.KElementFactory;
+import com.appian.intellij.k.psi.KLambdaParams;
+import com.appian.intellij.k.psi.KNamedElement;
+import com.appian.intellij.k.psi.KNamespaceDeclaration;
+import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements KNamedElement {
   KNamedElementImpl(ASTNode node) {
@@ -73,7 +79,7 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
       return true;
     }
     if (parent instanceof KAssignment) {
-      return ((KAssignment) parent).getArgs() == null;
+      return ((KAssignment)parent).getArgs() == null;
     }
     return false;
   }

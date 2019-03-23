@@ -11,7 +11,7 @@ import com.intellij.openapi.project.Project;
 public class KNamesValidator implements NamesValidator {
 
   private static final Predicate<String> IDENTIFIER = Pattern.compile("[.a-zA-Z][._a-zA-Z0-9]*").asPredicate();
-  private static final String[] KEYWORDS = new String[] {"if","do","while"};
+  private static final String[] KEYWORDS = new String[] {"if", "do", "while"};
 
   @Override
   public boolean isKeyword(@NotNull String name, Project project) {

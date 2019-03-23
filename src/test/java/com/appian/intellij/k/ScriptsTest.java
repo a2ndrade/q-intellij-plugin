@@ -12,12 +12,10 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 public class ScriptsTest extends KParserTest {
-  
+
   private static final String DL = System.getProperty("user.home") + "/repo/data-layer/";
 
-  private static final String[] TARGET_FOLDERS = new String[] {
-    DL + "appian-data-server/src"
-  };
+  private static final String[] TARGET_FOLDERS = new String[] {DL + "appian-data-server/src"};
 
   public static Test suite() {
     final TestSuite suite = new TestSuite();
@@ -30,7 +28,7 @@ public class ScriptsTest extends KParserTest {
   }
 
   private static void configureTestSuite(TestSuite suite) throws IOException {
-    for(String folderPath : TARGET_FOLDERS) {
+    for (String folderPath : TARGET_FOLDERS) {
       final File folder = new File(folderPath);
       if (!folder.exists()) {
         // TARGET_FOLDERS point to user's home dir,
@@ -67,10 +65,7 @@ public class ScriptsTest extends KParserTest {
     final long start = System.currentTimeMillis();
     final ASTNode tree = parse(content);
     final long time = System.currentTimeMillis() - start;
-    final String msg = String.format(
-      "%-30s %8sms  %10.2fKB",
-      testFileName, time, bytes.length/1024.0
-    );
+    final String msg = String.format("%-30s %8sms  %10.2fKB", testFileName, time, bytes.length / 1024.0);
     final String s = DebugUtil.nodeTreeToString(tree, true);
     if (hasParseError(s)) {
       throw new RuntimeException(s);
@@ -78,6 +73,5 @@ public class ScriptsTest extends KParserTest {
       System.out.println(msg);
     }
   }
-
 
 }

@@ -18,9 +18,7 @@ public final class KFindUsagesProvider implements FindUsagesProvider {
   @Nullable
   @Override
   public WordsScanner getWordsScanner() {
-    return new DefaultWordsScanner(new KLexerAdapter(),
-        TokenSet.create(KTypes.USER_ID),
-        TokenSet.EMPTY,
+    return new DefaultWordsScanner(new KLexerAdapter(), TokenSet.create(KTypes.USER_ID), TokenSet.EMPTY,
         TokenSet.EMPTY);
   }
 

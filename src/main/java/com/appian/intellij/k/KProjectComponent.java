@@ -7,7 +7,8 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 
 public final class KProjectComponent implements ProjectComponent {
 
-  public KProjectComponent(){}
+  public KProjectComponent() {
+  }
 
   @Override
   public void projectOpened() {

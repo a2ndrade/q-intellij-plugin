@@ -1,12 +1,12 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
+  repositories {
+    mavenCentral()
+  }
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.2"
-    id "org.jetbrains.grammarkit" version "2018.3.1"
+  id "org.jetbrains.intellij" version "0.4.2"
+  id "org.jetbrains.grammarkit" version "2018.3.1"
 }
 
 apply plugin: 'idea'
@@ -15,46 +15,49 @@ apply plugin: 'org.jetbrains.grammarkit'
 apply plugin: 'java'
 
 intellij {
-    version 'IC-2018.3' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
-    pluginName 'q'
+  version 'IC-2018.3'
+  //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
+  pluginName 'q'
 }
 
 version '1.10' // Plugin version
 
 // import is optional to make task creation easier
-import org.jetbrains.grammarkit.tasks.*
+
+import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateParser
 
 grammarKit {
-    jflexRelease = '1.7.0-1'
+  jflexRelease = '1.7.0-1'
 }
 
 sourceSets {
-    main {
-        java {
-            srcDir 'gen'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
+  main {
+    java {
+      srcDir 'gen'
     }
+    resources {
+      srcDir 'src/main/resources'
+    }
+  }
 }
 
 task generateKLexer(type: GenerateLexer) {
-    source = "src/main/resources/com/appian/intellij/k/k.flex"
-    targetDir = "gen/com/appian/intellij/k"
-    targetClass = "KLexer"
-    purgeOldFiles = true
+  source = "src/main/resources/com/appian/intellij/k/k.flex"
+  targetDir = "gen/com/appian/intellij/k"
+  targetClass = "KLexer"
+  purgeOldFiles = true
 }
 
 task generateKParser(type: GenerateParser) {
-    source = "src/main/resources/com/appian/intellij/k/k.bnf"
-    targetRoot = 'gen'
-    pathToParser = 'com/appian/intellij/k/parser/KParser.java'
-    pathToPsiRoot = 'com/appian/intellij/k/psi'
-    purgeOldFiles = true
+  source = "src/main/resources/com/appian/intellij/k/k.bnf"
+  targetRoot = 'gen'
+  pathToParser = 'com/appian/intellij/k/parser/KParser.java'
+  pathToPsiRoot = 'com/appian/intellij/k/psi'
+  purgeOldFiles = true
 }
 
 compileJava {
-    dependsOn generateKLexer
-    dependsOn generateKParser
+  dependsOn generateKLexer
+  dependsOn generateKParser
 }

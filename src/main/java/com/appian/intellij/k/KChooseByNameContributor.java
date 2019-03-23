@@ -17,8 +17,8 @@ public final class KChooseByNameContributor implements ChooseByNameContributor {
   @Override
   public String[] getNames(Project project, boolean includeNonProjectItems) {
     final KUserIdCache cache = KUserIdCache.getInstance();
-    final Stream<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE,
-        GlobalSearchScope.allScope(project)).stream();
+    final Stream<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE, GlobalSearchScope.allScope(project))
+        .stream();
     return files.flatMap(file -> Stream.of(cache.getIdentifiers(project, file))).toArray(String[]::new);
   }
 
@@ -27,9 +27,10 @@ public final class KChooseByNameContributor implements ChooseByNameContributor {
   public NavigationItem[] getItemsByName(
       String name, String pattern, Project project, boolean includeNonProjectItems) {
     final KUserIdCache cache = KUserIdCache.getInstance();
-    final Stream<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE,
-        GlobalSearchScope.allScope(project)).stream();
-    return files.flatMap(file -> cache.findIdentifiers(project, file, name, true, new KUtil.ExactMatcher(name)).stream())
+    final Stream<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE, GlobalSearchScope.allScope(project))
+        .stream();
+    return files.flatMap(
+        file -> cache.findIdentifiers(project, file, name, true, new KUtil.ExactMatcher(name)).stream())
         .toArray(NavigationItem[]::new);
   }
 

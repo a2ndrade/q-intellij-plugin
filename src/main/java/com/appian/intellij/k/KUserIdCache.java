@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 
-import com.appian.intellij.k.psi.KNamedElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
@@ -27,20 +27,18 @@ public final class KUserIdCache implements VirtualFileListener {
   static final Key<Trie<Boolean>> USER_IDS_TRIE = Key.create("userIdsTrie");
 
   private static final KUserIdCache INSTANCE = new KUserIdCache();
+
   public static KUserIdCache getInstance() {
     return INSTANCE;
   }
 
-  private KUserIdCache() {}
+  private KUserIdCache() {
+  }
 
   String[] getIdentifiers(Project project, VirtualFile file) {
     String[] userIds = file.getUserData(USER_IDS);
     if (userIds == null) {
-      userIds = KUtil.findIdentifiers(project, file)
-          .stream()
-          .map(KUtil::getFqnOrName)
-          .sorted()
-          .toArray(String[]::new);
+      userIds = KUtil.findIdentifiers(project, file).stream().map(KUtil::getFqnOrName).sorted().toArray(String[]::new);
       file.putUserData(USER_IDS, userIds);
     }
     return userIds;
@@ -74,11 +72,7 @@ public final class KUserIdCache implements VirtualFileListener {
 
   @NotNull
   Collection<KUserId> findIdentifiers(
-      Project project,
-      VirtualFile file,
-      String targetIdentifier,
-      boolean stopAfterFirstMatch,
-      KUtil.Matcher matcher) {
+      Project project, VirtualFile file, String targetIdentifier, boolean stopAfterFirstMatch, KUtil.Matcher matcher) {
     if (matcher instanceof KUtil.ExactMatcher) {
       final String[] userIds = getIdentifiers(project, file);
       if (Arrays.binarySearch(userIds, targetIdentifier) < 0) {

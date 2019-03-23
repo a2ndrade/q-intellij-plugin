@@ -25,9 +25,9 @@ public class KUnresolvedIdsAnnotator implements Annotator {
   private static final String[] IMPLICIT_VARS = new String[] {"x", "y", "z"};
 
   private enum LinterPreset {
-    NONE,
-    APPIAN
+    NONE, APPIAN
   }
+
   private static LinterPreset linterPreset;
 
   @Override
@@ -69,7 +69,8 @@ public class KUnresolvedIdsAnnotator implements Annotator {
     if (linter != LinterPreset.APPIAN) {
       return;
     }
-    boolean isInternal = usage.isInternal() && !usage.getContainingFile().isEquivalentTo(declaration.getContainingFile());
+    boolean isInternal =
+        usage.isInternal() && !usage.getContainingFile().isEquivalentTo(declaration.getContainingFile());
     if (isInternal) {
       holder.createErrorAnnotation(usage,
           String.format("`%s` is an internal function. It should only be accessed within %s", usage.getName(),

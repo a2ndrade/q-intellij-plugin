@@ -1,12 +1,25 @@
-.DS_Store
+# Plugin SDK
 out/
 gen/
-*~
+*.hsp
+*.iml
+*.ipr
+*.iws
 idea-flex.skeleton
 JFlex.jar
+jflex*.jar
 KLexer.java
 q-intellij-plugin.zip
 q-intellij-plugin.jar
-q-intellij-plugin.iws
 _KLexer.flex
-*.hsp
+
+# IntelliJ settings
+.idea/
+
+# Gradle directories
+build/
+.gradle/
+
+# Other
+.DS_Store
+*~

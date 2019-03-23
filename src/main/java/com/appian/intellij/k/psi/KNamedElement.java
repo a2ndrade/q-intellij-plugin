@@ -5,5 +5,7 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 public interface KNamedElement extends PsiNameIdentifierOwner {
   boolean isDeclaration();
 
+  boolean isColumnDeclaration();
+
   boolean isInternal();
 }

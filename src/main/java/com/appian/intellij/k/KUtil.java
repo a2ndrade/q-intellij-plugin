@@ -239,7 +239,7 @@ public final class KUtil {
   }
 
   @NotNull
-  static String getCurrentNamespace(KUserId element) {
+  static String getCurrentNamespace(PsiElement element) {
     final Class[] potentialContainerTypes = new Class[] {KExpression.class, KNamespaceDeclaration.class};
     PsiElement topLevelAssignment = null;
     for (Class containerType : potentialContainerTypes) {
@@ -270,7 +270,7 @@ public final class KUtil {
       topLevelElement = topLevelElement.getNextSibling();
     } while (topLevelElement != null);
     throw new IllegalStateException(
-        "Cannot calculate current namespace for " + element.getName() + " (" + containingFile.getName() + ")");
+        "Cannot calculate current namespace for " + element.getText() + " (" + containingFile.getName() + ")");
   }
 
   private static String getNewNamespace(String currentNamespace, String newNamespace) {

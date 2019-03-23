@@ -1,28 +1,32 @@
 `
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`')
 ============|
 
 
 `abc
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`abc')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`abc')
 ============|
 
 
 `"ab"
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`"ab"')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`"ab"')
 ============|
 
 
 `" "
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`" "')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`" "')
 ============|
 
 
@@ -30,14 +34,16 @@ Element(EXPRESSION)
 "
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`"\n"')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`"\n"')
 ============|
 
 
 `a..b_2
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`a..b_2')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`a..b_2')
 ============|
 
 
@@ -45,14 +51,16 @@ Element(EXPRESSION)
  line"
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`" \"multi\"-\n line"')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`" \"multi\"-\n line"')
 ============|
 
 
 `"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
 ============|
 
 
@@ -63,16 +71,20 @@ Element(EXPRESSION)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    PsiElement(symbol)('`:path')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`:path')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(symbol)('`:path/')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`:path/')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(symbol)('`:valid:/:/symbol/')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`:valid:/:/symbol/')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(symbol)('`:valid:/:/symbol//')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`:valid:/:/symbol//')
 ============|
 
 
@@ -81,10 +93,12 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    PsiElement(symbol)('`:/abs_oluate/path')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`:/abs_oluate/path')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    PsiElement(symbol)('`:/abs_2_oluate/path/')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`:/abs_2_oluate/path/')
 ============|
 
 

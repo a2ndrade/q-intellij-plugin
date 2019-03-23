@@ -5,10 +5,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFileFactory;
 
 public final class KElementFactory {
-  public static KUserId createProperty(Project project, String name) {
+  public static KUserId createKUserId(Project project, String name) {
     final KFile file = createFile(project, name);
     // file -> expression -> user_id
     return (KUserId)file.getFirstChild().getFirstChild();
+  }
+
+  public static KSymbolOrRef createKSymbolOrRef(Project project, String name) {
+    if (name.charAt(0) != '`') {
+      throw new RuntimeException(name + " is not a symbol");
+    }
+    final KFile file = createFile(project, name);
+    // file -> expression -> user_id
+    return (KSymbolOrRef)file.getFirstChild().getFirstChild();
   }
 
   public static KFile createFile(Project project, String text) {

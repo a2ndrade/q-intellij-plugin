@@ -125,5 +125,6 @@ Element(EXPRESSION)
 `abc 1
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`abc')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`abc')
   PsiElement(number)('1')

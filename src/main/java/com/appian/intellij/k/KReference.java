@@ -3,9 +3,11 @@ package com.appian.intellij.k;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
@@ -23,7 +25,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 
-public final class KReference extends PsiReferenceBase<PsiElement> implements PsiReference {
+public class KReference extends PsiReferenceBase<PsiElement> implements PsiReference {
 
   public KReference(KUserId element, TextRange textRange) {
     super(element, textRange);
@@ -37,6 +39,12 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
   }
 
   private PsiElement resolve0() {
+    final KUserId reference = (KUserId)myElement;
+    final String referenceName = reference.getName();
+    return resolve00(referenceName);
+  }
+
+  private PsiElement resolve00(String referenceName) {
     final VirtualFile sameFile = myElement.getContainingFile().getOriginalFile().getVirtualFile();
     if (sameFile == null || sameFile.getCanonicalPath() == null) {
       return null;
@@ -47,8 +55,10 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
       return null;
     }
     final Project project = myElement.getProject();
-    final KUserId reference = (KUserId)this.myElement;
-    final String referenceName = reference.getName();
+    final KUserId reference = (KUserId)myElement;
+    if (reference.isColumnDeclaration()) {
+      return myElement;
+    }
     final KUserIdCache cache = KUserIdCache.getInstance();
     final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(this.myElement, KLambda.class);
     final KUserId foundInSameFile = Optional.ofNullable(enclosingLambda)
@@ -77,9 +87,9 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
       return foundInSameFile;
     }
     // 4) check other file's globals
-    final String fqnOrName = isBuiltinQFunction(sameFile, referenceName) ? ".q." + referenceName :
-        // defined under .q namespace inside q.k
-        KUtil.getFqnOrName(reference);
+    final String fqnOrName = isBuiltinQFunction(sameFile, referenceName)
+        ? ".q." + referenceName
+        : KUtil.getFqnOrName(reference);
     final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     for (VirtualFile otherFile : otherFiles) {
@@ -105,13 +115,32 @@ public final class KReference extends PsiReferenceBase<PsiElement> implements Ps
   }
 
   @Override
-  public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
-    if (myElement instanceof KUserId) {
-      // inline rename
-      ((KUserId)myElement).setName(newElementName);
-      return myElement;
-    }
-    // cross-language rename
-    return super.handleElementRename(newElementName);
+  public PsiElement handleElementRename(@NotNull String newName) throws IncorrectOperationException {
+    final KUserId declaration = ((KUserId)resolve());
+    final String newEffectiveName = KReference.getNewNameForUsage(declaration, myElement, newName);
+    ((KUserId)myElement).setName(newEffectiveName);
+    return myElement;
   }
+
+  static String getNewNameForUsage(@Nullable KUserId declaration, @NotNull PsiElement usage, @NotNull String newName) {
+    final boolean isNewNameAbsolute = newName.charAt(0) == '.';
+    final String declarationImplicitNs = KUtil.getCurrentNamespace(declaration);
+    final String usageImplicitNs = KUtil.getCurrentNamespace(usage);
+    final String effectiveNewName;
+    if (isNewNameAbsolute) {
+      effectiveNewName = newName;
+    } else if ("".equals(declarationImplicitNs)) {
+      effectiveNewName = newName;
+    } else if ("".equals(usageImplicitNs)) {
+      effectiveNewName = declarationImplicitNs + "." + newName;
+    } else {
+      if (Objects.equals(declarationImplicitNs, usageImplicitNs)) {
+        effectiveNewName = newName;
+      } else {
+        effectiveNewName = declarationImplicitNs + "." + newName;
+      }
+    }
+    return effectiveNewName;
+  }
+
 }

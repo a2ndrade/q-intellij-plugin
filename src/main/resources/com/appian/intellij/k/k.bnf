@@ -59,6 +59,7 @@
     number="number"
     char="char"
     string="string"
+    symbol="symbol"
     symbol_vector="symbol vector"
     number_vector="number vector"
 
@@ -127,7 +128,8 @@ assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) ex
 // all data are syntactically nouns
 private primitive_noun ::= vector | atom | lambda
 private vector ::= symbol_vector | number_vector | string
-private atom ::= symbol | number | char
+private atom ::= symbol_or_ref | number | char
+symbol_or_ref ::= symbol
 
 user_id ::= (user_identifier | q_system_function) {
   mixin="com.appian.intellij.k.psi.impl.KNamedElementImpl"

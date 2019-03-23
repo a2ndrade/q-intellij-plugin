@@ -1,5 +1,7 @@
 package com.appian.intellij.k.psi.impl;
 
+import java.util.Optional;
+
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +12,7 @@ import com.appian.intellij.k.KUserIdCache;
 import com.appian.intellij.k.KUtil;
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KElementFactory;
+import com.appian.intellij.k.psi.KGroupOrList;
 import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
@@ -31,7 +34,7 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
 
   public PsiElement setName(@NotNull String newName) {
     final ASTNode keyNode = getNode().getFirstChildNode();
-    KUserId property = KElementFactory.createProperty(getProject(), newName);
+    KUserId property = KElementFactory.createKUserId(getProject(), newName);
     ASTNode newKeyNode = property.getFirstChild().getNode();
     getNode().replaceChild(keyNode, newKeyNode);
     KUtil.putFqn(this, null); // clear so it's recalculated next time
@@ -82,6 +85,23 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
       return ((KAssignment)parent).getArgs() == null;
     }
     return false;
+  }
+
+  public boolean isColumnDeclaration() {
+    return Optional.of(getParent())
+        .filter(KAssignment.class::isInstance)
+        .map(PsiElement::getParent)
+        .map(PsiElement::getParent)
+        .filter(KGroupOrList.class::isInstance)
+        .map(KGroupOrList.class::cast)
+        .map(group -> {
+          // it needs at list two items to be a table e.g. ([] a:...)
+          if (group.getExpressionList().isEmpty()) {
+            return false;
+          }
+          return !group.getExpressionList().get(0).getArgsList().isEmpty();
+        })
+        .orElse(false);
   }
 
   public boolean isInternal() {

@@ -4,7 +4,8 @@ Element(EXPRESSION)
   PsiElement(number)('0')
   PsiElement(primitive verb)('#')
   Element(EXPRESSION)
-    PsiElement(symbol)('`')
+    Element(SYMBOL_OR_REF)
+      PsiElement(symbol)('`')
 ============|
 
 

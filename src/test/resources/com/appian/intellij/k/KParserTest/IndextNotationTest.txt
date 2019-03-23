@@ -226,7 +226,8 @@ Element(EXPRESSION)
 `.a.load[]
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`.a.load')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`.a.load')
   Element(ARGS)
     PsiElement([)('[')
     PsiElement(])(']')

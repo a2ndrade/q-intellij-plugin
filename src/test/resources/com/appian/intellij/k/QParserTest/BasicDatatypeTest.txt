@@ -118,7 +118,8 @@ Element(EXPRESSION)
 `some
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol)('`some')
+  Element(SYMBOL_OR_REF)
+    PsiElement(symbol)('`some')
 ============|
 
 
@@ -270,7 +271,8 @@ Element(EXPRESSION)
           PsiElement(char)('" "')
         PsiElement(;)(';')
         Element(EXPRESSION)
-          PsiElement(symbol)('`')
+          Element(SYMBOL_OR_REF)
+            PsiElement(symbol)('`')
         PsiElement(;)(';')
         Element(EXPRESSION)
           PsiElement(number)('0Np')

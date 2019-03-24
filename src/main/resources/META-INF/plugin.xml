@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>idea.k</id>
   <name>q</name>
-  <version>1.10</version>
+  <version>1.11</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -19,7 +19,7 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
-      <strong>1.10</strong><br/>
+      <strong>1.11</strong><br/>
       <ul>
         <li>Symbolic references (find/usages/rename) support</li>
       </ul>
@@ -152,7 +152,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="com.appian.intellij.k.KFileTypeFactory"/>
     <lang.parserDefinition language="q" implementationClass="com.appian.intellij.k.KParserDefinition"/>
-    <lang.syntaxHighlighterFactory key="q" implementationClass="com.appian.intellij.k.KSyntaxHighlighterFactory"/>
+    <lang.syntaxHighlighterFactory language="q" implementationClass="com.appian.intellij.k.KSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.appian.intellij.k.KColorSettingsPage"/>
     <lang.commenter language="q" implementationClass="com.appian.intellij.k.KCommenter"/>
     <lang.braceMatcher language="q" implementationClass="com.appian.intellij.k.KPairedBraceMatcherAdapter"/>

@@ -15,12 +15,12 @@ apply plugin: 'org.jetbrains.grammarkit'
 apply plugin: 'java'
 
 intellij {
+  // see https://www.jetbrains.com/intellij-repository/releases
   version 'IC-2018.3'
-  //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
   pluginName 'q'
 }
 
-version '1.10' // Plugin version
+version '1.11' // Plugin version
 
 // import is optional to make task creation easier
 

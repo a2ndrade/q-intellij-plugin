@@ -19,6 +19,8 @@ Element(FILE)
       Element(EXPRESSION)
         PsiElement(number)('1')
 ============|
+
+
 /
 this is another
 block comment
@@ -40,6 +42,8 @@ Element(FILE)
       Element(EXPRESSION)
         PsiElement(number)('1')
 ============|
+
+
 \d .s SQL w(word) w0(class) w1(transition) v(value)
 a:1
 ------------>
@@ -57,4 +61,3 @@ Element(FILE)
       PsiElement(:)(':')
       Element(EXPRESSION)
         PsiElement(number)('1')
-

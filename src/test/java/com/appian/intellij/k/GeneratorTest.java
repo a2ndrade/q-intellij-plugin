@@ -3,9 +3,12 @@ package com.appian.intellij.k;
 import java.io.File;
 import java.io.PrintStream;
 
+import org.junit.Ignore;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+@Ignore
 public class GeneratorTest extends KParserTest {
 
   public static Test suite() {

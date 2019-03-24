@@ -118,8 +118,8 @@ Element(EXPRESSION)
 `some
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`some')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`some')
 ============|
 
 
@@ -177,6 +177,7 @@ Element(FILE)
   Element(EXPRESSION)
     PsiElement(number)('2000.01.02T12:00:00.000')
 ============|
+
 
 2000.01.02D12
 2000.01.02D12:00
@@ -271,8 +272,8 @@ Element(EXPRESSION)
           PsiElement(char)('" "')
         PsiElement(;)(';')
         Element(EXPRESSION)
-          Element(SYMBOL_OR_REF)
-            PsiElement(symbol)('`')
+          Element(SYMBOL)
+            PsiElement(symbol_token)('`')
         PsiElement(;)(';')
         Element(EXPRESSION)
           PsiElement(number)('0Np')

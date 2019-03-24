@@ -14,4 +14,6 @@ public final class KIcons {
 
   public static final Icon PUBLIC_VARIABLE = new RowIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.C_public);
   public static final Icon PRIVATE_VARIABLE = new RowIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.C_private);
+
+  public static final Icon SYSTEM_FUNCTION = FILE;
 }

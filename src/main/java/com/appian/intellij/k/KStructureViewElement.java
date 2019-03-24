@@ -114,11 +114,7 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
       @Nullable
       @Override
       public Icon getIcon(boolean unused) {
-        if (fnDefinition.isPresent()) {
-          return element.isInternal() ? KIcons.PRIVATE_FUNCTION : KIcons.PUBLIC_FUNCTION;
-        } else {
-          return element.isInternal() ? KIcons.PRIVATE_VARIABLE : KIcons.PUBLIC_VARIABLE;
-        }
+        return element.getPresentation().getIcon(unused);
       }
 
       @Nullable

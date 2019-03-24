@@ -1,6 +1,6 @@
 package com.appian.intellij.k;
 
-import com.appian.intellij.k.psi.KSymbolOrRef;
+import com.appian.intellij.k.psi.KSymbol;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -61,7 +61,7 @@ public class RenameSymbolTest extends LightCodeInsightFixtureTestCase {
     final PsiElement elementAt = file.findElementAt(myFixture.getCaretOffset());
     final PsiElement userIdElement = elementAt.getContext();
     if (fromUsage) {
-      assertInstanceOf(userIdElement, KSymbolOrRef.class);
+      assertInstanceOf(userIdElement, KSymbol.class);
     } else {
       assertInstanceOf(userIdElement, KUserId.class);
     }

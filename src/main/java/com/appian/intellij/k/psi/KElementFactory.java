@@ -11,13 +11,13 @@ public final class KElementFactory {
     return (KUserId)file.getFirstChild().getFirstChild();
   }
 
-  public static KSymbolOrRef createKSymbolOrRef(Project project, String name) {
+  public static KSymbol createKSymbol(Project project, String name) {
     if (name.charAt(0) != '`') {
       throw new RuntimeException(name + " is not a symbol");
     }
     final KFile file = createFile(project, name);
     // file -> expression -> user_id
-    return (KSymbolOrRef)file.getFirstChild().getFirstChild();
+    return (KSymbol)file.getFirstChild().getFirstChild();
   }
 
   public static KFile createFile(Project project, String text) {

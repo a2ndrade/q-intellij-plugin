@@ -33,8 +33,6 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
       DefaultLanguageHighlighterColors.NUMBER);
   public static final TextAttributesKey SYMBOL = createTextAttributesKey("K_SYMBOL",
       DefaultLanguageHighlighterColors.CONSTANT);
-  public static final TextAttributesKey SYMBOL_VECTOR = createTextAttributesKey("K_SYMBOL_VECTOR",
-      DefaultLanguageHighlighterColors.CONSTANT);
   public static final TextAttributesKey NUMBER = createTextAttributesKey("K_NUMBER",
       DefaultLanguageHighlighterColors.NUMBER);
   public static final TextAttributesKey NUMBER_VECTOR = createTextAttributesKey("K_NUMBER_VECTOR",
@@ -65,7 +63,6 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[] {NUMBER};
   private static final TextAttributesKey[] NUMBER_VECTOR_KEYS = new TextAttributesKey[] {NUMBER_VECTOR};
   private static final TextAttributesKey[] SYMBOL_KEYS = new TextAttributesKey[] {SYMBOL};
-  private static final TextAttributesKey[] SYMBOL_VECTOR_KEYS = new TextAttributesKey[] {SYMBOL_VECTOR};
   private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[] {KEYWORD};
   private static final TextAttributesKey[] CHAR_KEYS = new TextAttributesKey[] {CHAR};
   private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[] {STRING};
@@ -97,8 +94,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
     m.put(KTypes.CHAR, CHAR_KEYS);
     m.put(KTypes.STRING, STRING_KEYS);
 
-    m.put(KTypes.SYMBOL, SYMBOL_KEYS);
-    m.put(KTypes.SYMBOL_VECTOR, SYMBOL_VECTOR_KEYS);
+    m.put(KTypes.SYMBOL_TOKEN, SYMBOL_KEYS);
 
     m.put(KTypes.PRIMITIVE_VERB, OPERATOR_KEYS);
     m.put(KTypes.ADVERB, ADVERB_KEYS);

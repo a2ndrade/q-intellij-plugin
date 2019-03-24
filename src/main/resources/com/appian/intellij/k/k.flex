@@ -96,7 +96,6 @@ C=([^\\\"]|\\[^\ \t])
 CHAR=\"{C}\"
 CHAR_VECTOR=\"{C}*\"
 SYMBOL="`"([.:/_a-zA-Z0-9]+|{CHAR_VECTOR})?
-SYMBOL_VECTOR={SYMBOL} ({WHITE_SPACE}*{SYMBOL})+
 PRIMITIVE_VERB=[!#$%&*+,-.<=>?@\^_|~]
 ADVERB=("/" | \\ | ' | "/": | \\: | ':)+
 ADVERB_NO_SYMBOL_COLLISION=(\\ | ' | \\: | ':)+
@@ -167,10 +166,8 @@ CONDITIONAL=":"|"?"|"$"|"@"|"." // ":" is from k3
   [0-6]":"/[^\[]                              { return PRIMITIVE_VERB; }
   {CONTROL}/{WHITE_SPACE}*"["                 { return CONTROL; }
   {CONDITIONAL}/{WHITE_SPACE}*"["             { return CONDITIONAL; }
-  {SYMBOL_VECTOR}/{ADVERB_NO_SYMBOL_COLLISION} { yybegin(ADVERB_STATE); return SYMBOL_VECTOR; }
-  {SYMBOL_VECTOR}                             { return SYMBOL_VECTOR; }
-  {SYMBOL}/{ADVERB_NO_SYMBOL_COLLISION}       { yybegin(ADVERB_STATE); return SYMBOL; }
-  {SYMBOL}                                    { return SYMBOL; }
+  {SYMBOL}/{ADVERB_NO_SYMBOL_COLLISION}       { yybegin(ADVERB_STATE); return SYMBOL_TOKEN; }
+  {SYMBOL}                                    { return SYMBOL_TOKEN; }
   {WHITE_SPACE}                               { return com.intellij.psi.TokenType.WHITE_SPACE; }
   ^{COMMENT1}                                 { return COMMENT; }
   {COMMENT2}/{NEWLINE}                        { return COMMENT; }

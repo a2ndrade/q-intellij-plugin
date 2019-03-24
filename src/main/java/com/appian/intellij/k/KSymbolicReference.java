@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.appian.intellij.k.psi.KElementFactory;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
-import com.appian.intellij.k.psi.KSymbolOrRef;
+import com.appian.intellij.k.psi.KSymbol;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
@@ -21,8 +21,8 @@ import com.intellij.util.IncorrectOperationException;
 
 public final class KSymbolicReference extends PsiReferenceBase<PsiElement> implements PsiReference {
 
-  public KSymbolicReference(KSymbolOrRef element, TextRange textRange) {
-    super(element, textRange);
+  public KSymbolicReference(KSymbol element, TextRange textRange) {
+    super(element, textRange, true);
   }
 
   @Override
@@ -33,7 +33,7 @@ public final class KSymbolicReference extends PsiReferenceBase<PsiElement> imple
   }
 
   private PsiElement resolve0() {
-    final KSymbolOrRef reference = (KSymbolOrRef)myElement;
+    final KSymbol reference = (KSymbol)myElement;
     final String referenceName = reference.getText().substring(1);
     return resolve00(referenceName);
   }
@@ -87,7 +87,7 @@ public final class KSymbolicReference extends PsiReferenceBase<PsiElement> imple
     final KUserId declaration = ((KUserId)resolve());
     final String newEffectiveName = toSymbolicName(KReference.getNewNameForUsage(declaration, myElement, newName));
     final ASTNode keyNode = myElement.getNode().getFirstChildNode();
-    KSymbolOrRef property = KElementFactory.createKSymbolOrRef(myElement.getProject(), newEffectiveName);
+    KSymbol property = KElementFactory.createKSymbol(myElement.getProject(), newEffectiveName);
     ASTNode newKeyNode = property.getFirstChild().getNode();
     myElement.getNode().replaceChild(keyNode, newKeyNode);
     return myElement;

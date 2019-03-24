@@ -2,7 +2,7 @@ package com.appian.intellij.k;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.appian.intellij.k.psi.KSymbolOrRef;
+import com.appian.intellij.k.psi.KSymbol;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
@@ -29,14 +29,17 @@ public final class KReferenceContributor extends PsiReferenceContributor {
             return new PsiReference[0];
           }
         });
-    registrar.registerReferenceProvider(
-        PlatformPatterns.psiElement(KSymbolOrRef.class).withLanguage(KLanguage.INSTANCE), new PsiReferenceProvider() {
+    registrar.registerReferenceProvider(PlatformPatterns.psiElement(KSymbol.class).withLanguage(KLanguage.INSTANCE),
+        new PsiReferenceProvider() {
           @NotNull
           @Override
           public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
-            if (element instanceof KSymbolOrRef) {
+            if (element instanceof KSymbol) {
               final String key = element.getText();
-              return new PsiReference[] {new KSymbolicReference((KSymbolOrRef)element, new TextRange(1, key.length()))};
+              if (key.length() <= 1 || key.charAt(1) == ':' || key.charAt(1) == '/') {
+                return new PsiReference[0];
+              }
+              return new PsiReference[] {new KSymbolicReference((KSymbol)element, new TextRange(1, key.length()))};
             }
             return new PsiReference[0];
           }

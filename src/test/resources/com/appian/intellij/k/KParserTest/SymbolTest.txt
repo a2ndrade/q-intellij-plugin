@@ -1,32 +1,32 @@
 `
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`')
 ============|
 
 
 `abc
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`abc')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`abc')
 ============|
 
 
 `"ab"
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`"ab"')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`"ab"')
 ============|
 
 
 `" "
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`" "')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`" "')
 ============|
 
 
@@ -34,16 +34,16 @@ Element(EXPRESSION)
 "
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`"\n"')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`"\n"')
 ============|
 
 
 `a..b_2
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`a..b_2')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`a..b_2')
 ============|
 
 
@@ -51,16 +51,16 @@ Element(EXPRESSION)
  line"
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`" \"multi\"-\n line"')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`" \"multi\"-\n line"')
 ============|
 
 
 `"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"
 ------------>
 Element(EXPRESSION)
-  Element(SYMBOL_OR_REF)
-    PsiElement(symbol)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
+  Element(SYMBOL)
+    PsiElement(symbol_token)('`"+ - * % | & ^ < > = ! # _ ~ $ ? @ . ,"')
 ============|
 
 
@@ -71,20 +71,20 @@ Element(EXPRESSION)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`:path')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:path')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`:path/')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:path/')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`:valid:/:/symbol/')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:valid:/:/symbol/')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`:valid:/:/symbol//')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:valid:/:/symbol//')
 ============|
 
 
@@ -93,16 +93,28 @@ Element(FILE)
 ------------>
 Element(FILE)
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`:/abs_oluate/path')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:/abs_oluate/path')
   PsiElement(new line)('\n')
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`:/abs_2_oluate/path/')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:/abs_2_oluate/path/')
 ============|
 
 
 `:path`:path/`:valid:/:/symbol/`:valid:/:/sym_bol//`:/absoluate/path`:/absoluate/path/
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('`:path`:path/`:valid:/:/symbol/`:valid:/:/sym_bol//`:/absoluate/path`:/absoluate/path/')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:path')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:path/')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:valid:/:/symbol/')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:valid:/:/sym_bol//')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:/absoluate/path')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`:/absoluate/path/')

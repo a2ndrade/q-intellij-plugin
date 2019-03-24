@@ -22,7 +22,6 @@ public final class KColorSettingsPage implements RainbowColorSettingsPage, Color
       new AttributesDescriptor("Char", KSyntaxHighlighter.CHAR),
       new AttributesDescriptor("String", KSyntaxHighlighter.STRING),
       new AttributesDescriptor("Symbol", KSyntaxHighlighter.SYMBOL),
-      new AttributesDescriptor("Symbol Vector", KSyntaxHighlighter.SYMBOL_VECTOR),
       new AttributesDescriptor("Operator", KSyntaxHighlighter.OPERATOR),
       new AttributesDescriptor("Identifier", KSyntaxHighlighter.IDENTIFIER),
       new AttributesDescriptor("SysFunction", KSyntaxHighlighter.IDENTIFIER_SYS),

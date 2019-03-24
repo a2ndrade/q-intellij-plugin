@@ -4,43 +4,67 @@ Element(EXPRESSION)
   PsiElement(number)('0')
   PsiElement(primitive verb)('#')
   Element(EXPRESSION)
-    Element(SYMBOL_OR_REF)
-      PsiElement(symbol)('`')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
 ============|
 
 
 ``
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('``')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
 ============|
 
 
 ` ` `
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('` ` `')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
 ============|
 
 
 ``abc
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('``abc')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`abc')
 ============|
 
 
 `"ab"`
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('`"ab"`')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`"ab"')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
 ============|
 
 
 `a`b`c
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('`a`b`c')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`a')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`b')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`c')
 ============|
 
 
@@ -48,18 +72,40 @@ Element(EXPRESSION)
  line"`b`
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('`" \"multi\"-\n line"`b`')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`" \"multi\"-\n line"')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`b')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`')
 ============|
 
 
 `a`"bc"`cd`z
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('`a`"bc"`cd`z')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`a')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`"bc"')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`cd')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`z')
 ============|
 
 
 `a `"bc" `cd `z
 ------------>
 Element(EXPRESSION)
-  PsiElement(symbol vector)('`a `"bc" `cd `z')
+  Element(SYMBOL_VECTOR)
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`a')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`"bc"')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`cd')
+    Element(SYMBOL)
+      PsiElement(symbol_token)('`z')

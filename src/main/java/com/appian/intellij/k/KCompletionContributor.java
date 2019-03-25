@@ -1,26 +1,43 @@
 package com.appian.intellij.k;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.swing.Icon;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KLambda;
+import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KTypes;
 import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionLocation;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionService;
+import com.intellij.codeInsight.completion.CompletionSorter;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.PriorityWeigher;
+import com.intellij.codeInsight.completion.impl.PreferStartMatching;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.codeInsight.lookup.LookupElementWeigher;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.Weigher;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -48,14 +65,8 @@ public class KCompletionContributor extends CompletionContributor {
     Arrays.sort(SYSTEM_FNS_Q);
   }
 
-  public static boolean isSystemFn(String fnName) {
-    if (Arrays.binarySearch(SYSTEM_FNS_Q, fnName) >= 0) {
-      return true;
-    }
-    if (fnName.startsWith(".z.")) {
-      return true;
-    }
-    return false;
+  static boolean isSystemFn(String fnName) {
+    return Arrays.binarySearch(SYSTEM_FNS_Q, fnName) >= 0 || fnName.startsWith(".z.");
   }
 
   public KCompletionContributor() {
@@ -63,105 +74,213 @@ public class KCompletionContributor extends CompletionContributor {
         new CompletionProvider<CompletionParameters>() {
           public void addCompletions(
               @NotNull CompletionParameters parameters,
-              ProcessingContext context,
+              @NotNull ProcessingContext context,
               @NotNull CompletionResultSet resultSet) {
             final PsiElement element = parameters.getOriginalPosition();
             if (element == null) {
               return;
             }
 
-            final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive();
-            final Map<String,LookupElementBuilder> uniques = new LinkedHashMap<>();
+            // customize sorting:
+            // 1. give preference to items that start with user input
+            // 2. use explicit priorities as defined by CompletionContributionType, order being:
+            // locals, params, same file globals, system functions and finally globals from other files
+            CompletionSorter sorter = CompletionService.getCompletionService()
+                .emptySorter()
+                .weigh(new PreferStartMatching())
+                .weighAfter("middleMatching", new LookupElementWeigher("priority") {
+                  final Weigher<LookupElement,CompletionLocation> priorityWeigher = new PriorityWeigher();
 
-            contributeSystemFunctions(element, uniques);
-            if (caseInsensitiveResultSet.isStopped()) {
-              return;
+                  @Nullable
+                  @Override
+                  public Comparable weigh(@NotNull LookupElement element) {
+                    return priorityWeigher.weigh(element, new CompletionLocation(parameters));
+                  }
+                });
+
+            final CompletionResultSet caseInsensitiveResultSet = resultSet.caseInsensitive()
+                .withRelevanceSorter(sorter);
+            final Map<String,LookupElement> uniques = new LinkedHashMap<>();
+
+            for (CompletionContributionType ct : CompletionContributionType.values()) {
+              for (ItemPresentation p : ct.getCompletions(element)) {
+                uniques.computeIfAbsent(p.getPresentableText(), t -> ct.createLookupElement(p));
+                if (caseInsensitiveResultSet.isStopped()) {
+                  return;
+                }
+              }
             }
-
-            contributeParams(element, uniques);
-            if (caseInsensitiveResultSet.isStopped()) {
-              return;
-            }
-
-            contributeLocals(element, uniques);
-            if (caseInsensitiveResultSet.isStopped()) {
-              return;
-            }
-
-            contributeSameFileGlobals(element, uniques);
-            if (caseInsensitiveResultSet.isStopped()) {
-              return;
-            }
-
-            // globals (other files)
-            contributeOtherFilesGlobals(element, uniques);
-            if (caseInsensitiveResultSet.isStopped()) {
-              return;
-            }
-
             uniques.values().forEach(caseInsensitiveResultSet::addElement);
           }
         });
   }
 
   @NotNull
-  private static String getInput(PsiElement element) {
+  private static String getText(PsiElement element) {
     return element.getText() == null ? "" : element.getText();
   }
 
-  private static void contributeOtherFilesGlobals(PsiElement element, Map<String,LookupElementBuilder> uniques) {
-    String input = getInput(element);
-    String sameFilePath = element.getContainingFile().getVirtualFile().getCanonicalPath();
-    KUserIdCache cache = KUserIdCache.getInstance();
-    Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
-        GlobalSearchScope.allScope(element.getProject()));
-    for (VirtualFile otherFile : otherFiles) {
-      if (sameFilePath != null && sameFilePath.equals(otherFile.getCanonicalPath())) {
-        continue; // already processed above
+  /**
+   * Different types of completions
+   */
+  private enum CompletionContributionType {
+    /**
+   * Local variable completions
+   */
+  LOCAL {
+        @Override
+        List<ItemPresentation> getCompletions(PsiElement element) {
+          String input = getText(element);
+          return PsiTreeUtil.findChildrenOfType(PsiTreeUtil.getContextOfType(element, KLambda.class), KAssignment.class)
+              .stream()
+              .map(KAssignment::getUserId)
+              .filter(id -> id.getName().contains(input))
+              .map(id -> suppressLocationString(id.getPresentation()))
+              .collect(Collectors.toList());
+        }
+      },
+    /**
+     * Lambda parameter completions
+     */
+    PARAM {
+      @Override
+      List<ItemPresentation> getCompletions(PsiElement element) {
+        String input = getText(element);
+        return Optional.ofNullable(PsiTreeUtil.getContextOfType(element, KLambda.class))
+            .map(KLambda::getLambdaParams)
+            .map(params -> params.getUserIdList().stream().filter(param -> param.getName().contains(input)))
+            .orElse(Stream.empty())
+            .map(id -> suppressLocationString(id.getPresentation()))
+            .collect(Collectors.toList());
       }
-      cache.findAllIdentifiers(element.getProject(), otherFile, input, new KUtil.PrefixMatcher(input))
-          .forEach(global -> uniques.computeIfAbsent(global.getName(), g -> Optional.ofNullable(KUtil.getFqn(global))
-              .map(fqn -> LookupElementBuilder.create(global, fqn))
-              .orElseGet(() -> LookupElementBuilder.create(global))));
+    },
+    /**
+     * Global from the same file completion
+     */
+    SAME_FILE_GLOBAL {
+      @Override
+      List<ItemPresentation> getCompletions(PsiElement input) {
+        String inputText = getText(input);
+        return KUtil.findIdentifiers(input.getProject(), input.getContainingFile().getVirtualFile())
+            .stream()
+            .filter(id -> id.getName().contains(inputText) && Arrays.binarySearch(SYSTEM_FNS_Q, id.getName()) < 0)
+            .map(id -> suppressLocationString(id.getPresentation()))
+            .collect(Collectors.toList());
+      }
+    },
+    /**
+     * System function completions
+     */
+    SYSTEM_FUNCTION {
+      @Override
+      List<ItemPresentation> getCompletions(PsiElement element) {
+        String input = getText(element);
+        if (input.charAt(0) == '.') {
+          return Collections.emptyList(); // ignore for completion b/c real declarations are in q.k or in app code as handle fns
+        }
+
+        List<ItemPresentation> completions = new ArrayList<>();
+        int i = Math.abs(Arrays.binarySearch(SYSTEM_FNS_Q, input) + 1);
+        while (i < SYSTEM_FNS_Q.length && SYSTEM_FNS_Q[i].startsWith(input)) {
+          completions.add(new SystemFunctionPresentation(SYSTEM_FNS_Q[i++]));
+        }
+        return completions;
+      }
+    },
+    /**
+     * Global from some other file completion suggestion
+     */
+    EXTERNAL_GLOBAL {
+      @Override
+      List<ItemPresentation> getCompletions(PsiElement element) {
+        String input = getText(element);
+        String elementFilePath = element.getContainingFile().getVirtualFile().getCanonicalPath();
+        KUserIdCache cache = KUserIdCache.getInstance();
+        return FileTypeIndex.getFiles(KFileType.INSTANCE, GlobalSearchScope.allScope(element.getProject()))
+            .stream()
+            .filter(file -> elementFilePath == null || !elementFilePath.equals(file.getCanonicalPath()))
+            .flatMap(file -> cache.findAllIdentifiers(element.getProject(), file, input, new KUtil.PrefixMatcher(input))
+                .stream())
+            .map(KNamedElement::getPresentation)
+            .collect(Collectors.toList());
+      }
+    };
+
+    LookupElement createLookupElement(ItemPresentation presentation) {
+      //noinspection ConstantConditions
+      LookupElement element = LookupElementBuilder.create(presentation.getPresentableText())
+          .withIcon(presentation.getIcon(false))
+          .withTypeText(presentation.getLocationString(), true);
+      return PrioritizedLookupElement.withPriority(element, getPriority());
+    }
+
+    /**
+     * @return the priority for PriorityWeigher.
+     * For simplicity
+     * relying on the order of items in the enum
+     * to determine which types of completions
+     * will be prioritized.
+     */
+    double getPriority() {
+      return ordinal();
+    }
+
+    /**
+     * @param input an element representing user input
+     * @return a list of presentations for completion suggestions of this type
+     */
+    abstract List<ItemPresentation> getCompletions(PsiElement input);}
+
+  /**
+   * @param presentation a presentation
+   * @return identical presentation without location string
+   */
+  private static ItemPresentation suppressLocationString(ItemPresentation presentation) {
+    return new ItemPresentation() {
+      @Nullable
+      @Override
+      public String getPresentableText() {
+        return presentation.getPresentableText();
+      }
+
+      @Nullable
+      @Override
+      public String getLocationString() {
+        return "";
+      }
+
+      @Nullable
+      @Override
+      public Icon getIcon(boolean unused) {
+        return presentation.getIcon(unused);
+      }
+    };
+  }
+
+  private static class SystemFunctionPresentation implements ItemPresentation {
+    private final String name;
+
+    private SystemFunctionPresentation(String name) {
+      this.name = Objects.requireNonNull(name);
+    }
+
+    @NotNull
+    @Override
+    public String getPresentableText() {
+      return name;
+    }
+
+    @NotNull
+    @Override
+    public String getLocationString() {
+      return "";
+    }
+
+    @NotNull
+    @Override
+    public Icon getIcon(boolean b) {
+      return KIcons.SYSTEM_FUNCTION;
     }
   }
-
-  private static void contributeSameFileGlobals(PsiElement element, Map<String,LookupElementBuilder> uniques) {
-    String input = getInput(element);
-    KUtil.findIdentifiers(element.getProject(), element.getContainingFile().getVirtualFile())
-        .stream()
-        .filter(id -> id.getName().contains(input))
-        .forEach(global -> uniques.computeIfAbsent(global.getName(), LookupElementBuilder::create));
-  }
-
-  private static void contributeLocals(PsiElement element, Map<String,LookupElementBuilder> uniques) {
-    String input = getInput(element);
-    KLambda enclosingLambda = PsiTreeUtil.getContextOfType(element, KLambda.class);
-    PsiTreeUtil.findChildrenOfType(enclosingLambda, KAssignment.class)
-        .stream()
-        .map(KAssignment::getUserId)
-        .filter(id -> id.getName().contains(input))
-        .forEach(local -> uniques.computeIfAbsent(local.getName(), n -> LookupElementBuilder.create(local)));
-  }
-
-  private static void contributeParams(PsiElement element, Map<String,LookupElementBuilder> uniques) {
-    String input = getInput(element);
-    Optional.ofNullable(PsiTreeUtil.getContextOfType(element, KLambda.class))
-        .map(KLambda::getLambdaParams)
-        .map(params -> params.getUserIdList().stream().filter(param -> param.getName().contains(input)))
-        .orElse(Stream.empty())
-        .forEach(param -> uniques.computeIfAbsent(param.getName(), n -> LookupElementBuilder.create(param)));
-  }
-
-  private static void contributeSystemFunctions(PsiElement element, Map<String,LookupElementBuilder> uniques) {
-    String input = getInput(element);
-    if (input.charAt(0) == '.') {
-      return; // ignore for completion b/c real declarations are in q.k or in app code as handle fns
-    }
-    int i = Math.abs(Arrays.binarySearch(SYSTEM_FNS_Q, input) + 1);
-    while (i < SYSTEM_FNS_Q.length && SYSTEM_FNS_Q[i].startsWith(input)) {
-      uniques.computeIfAbsent(SYSTEM_FNS_Q[i++], LookupElementBuilder::create);
-    }
-  }
-
 }
+

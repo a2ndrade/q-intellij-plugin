@@ -108,4 +108,9 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
     final String name = getName();
     return name.startsWith("i.") || name.contains(".i.");
   }
+
+  @Override
+  public int getAccessLevel() {
+    return isInternal() ? KNamedElement.PRIVATE_ACCESS_LEVEL : KNamedElement.PUBLIC_ACCESS_LEVEL;
+  }
 }

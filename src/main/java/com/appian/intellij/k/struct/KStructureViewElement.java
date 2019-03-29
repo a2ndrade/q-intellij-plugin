@@ -1,4 +1,4 @@
-package com.appian.intellij.k;
+package com.appian.intellij.k.struct;
 
 import java.util.Optional;
 
@@ -7,8 +7,11 @@ import javax.swing.Icon;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.appian.intellij.k.KSyntaxHighlighter;
+import com.appian.intellij.k.KUtil;
 import com.appian.intellij.k.psi.KFile;
 import com.appian.intellij.k.psi.KLambda;
+import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.java.AccessLevelProvider;
@@ -88,7 +91,7 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
 
   @Override
   public int getAccessLevel() {
-    return 0;
+    return (element instanceof KNamedElement) ? ((KNamedElement)element).getAccessLevel() : KNamedElement.UNKNOWN_ACCESS_LEVEL;
   }
 
   @Override

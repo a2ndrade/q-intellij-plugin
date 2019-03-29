@@ -1,4 +1,4 @@
-package com.appian.intellij.k;
+package com.appian.intellij.k.struct;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

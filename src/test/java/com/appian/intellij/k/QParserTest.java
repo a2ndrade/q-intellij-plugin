@@ -17,7 +17,7 @@ public class QParserTest extends KParserTest {
       throw new RuntimeException("Folder not found: " + folder);
     }
     for (String fileName : fileNames) {
-      if (fileName.startsWith("_")) { // e.g. sandboxØ
+      if (fileName.startsWith("_")) { // e.g. sandbox
         continue;
       }
       suite.addTest(new QParserTest(fileName));

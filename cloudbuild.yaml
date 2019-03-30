@@ -1,3 +1,3 @@
 steps:
-- name: 'gcr.io/cloud-builders/gradle'
-  args: ['build']
+- name: 'kkopper/oraclejdk-gradle'
+  args: ['bash', './gradlew', 'build']

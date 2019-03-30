@@ -175,7 +175,7 @@ public final class KUtil {
   }
 
   @NotNull
-  static String getDescriptiveName(@NotNull KUserId element) {
+  public static String getDescriptiveName(@NotNull KUserId element) {
     final String fqnOrName = KUtil.getFqnOrName(element);
     return getFunctionDefinition(element).map((KLambda lambda) -> {
       final KLambdaParams lambdaParams = lambda.getLambdaParams();
@@ -230,7 +230,7 @@ public final class KUtil {
   }
 
   @Nullable
-  static String getExplicitNamespace(String identifier) {
+  public static String getExplicitNamespace(String identifier) {
     return isAbsoluteId(identifier) ? identifier.substring(0, identifier.lastIndexOf('.')) : null;
   }
 

@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
   <id>idea.k</id>
   <name>q</name>
   <version>1.12</version>
@@ -162,7 +162,7 @@
     <gotoSymbolContributor implementation="com.appian.intellij.k.KChooseByNameContributor"/>
     <lang.namesValidator language="q" implementationClass="com.appian.intellij.k.KNamesValidator"/>
     <lang.findUsagesProvider language="q" implementationClass="com.appian.intellij.k.KFindUsagesProvider"/>
-    <lang.psiStructureViewFactory language="q" implementationClass="com.appian.intellij.k.KStructureViewFactory"/>
+    <lang.psiStructureViewFactory language="q" implementationClass="com.appian.intellij.k.struct.KStructureViewFactory"/>
     <completion.contributor language="q" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
     <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>

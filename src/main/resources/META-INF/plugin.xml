@@ -170,5 +170,7 @@
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
     <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
     <spellchecker.support language="q" implementationClass="com.appian.intellij.k.KSpellcheckingStrategy"/>
+    <applicationService serviceInterface="com.appian.intellij.k.settings.KSettingsService" serviceImplementation="com.appian.intellij.k.settings.KSettingsService"/>
+    <applicationConfigurable groupId="language" displayName="Q" id="preferences.Q" instance="com.appian.intellij.k.settings.KSettingsConfigurable"/>
   </extensions>
 </idea-plugin>

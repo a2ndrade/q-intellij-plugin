@@ -75,7 +75,7 @@ public final class KColorSettingsPage implements RainbowColorSettingsPage, Color
 
   @Override
   public String getDisplayName() {
-    return "q";
+    return "Q";
   }
 
   @Nullable

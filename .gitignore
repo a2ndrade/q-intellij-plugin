@@ -19,6 +19,7 @@ _KLexer.flex
 # Gradle directories
 build/
 .gradle/
+gradle.properties
 
 # Other
 .DS_Store

@@ -61,3 +61,8 @@ compileJava {
   dependsOn generateKLexer
   dependsOn generateKParser
 }
+
+publishPlugin {
+  username intellijPublishUsername
+  password intellijPublishPassword
+}

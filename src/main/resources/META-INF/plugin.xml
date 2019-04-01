@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>idea.k</id>
   <name>q</name>
-  <version>1.12</version>
+  <version>1.13</version>
   <category>Custom Languages</category>
   <vendor email="antonio.andrade@appian.com">Antonio Andrade</vendor>
   <description><![CDATA[
@@ -19,6 +19,12 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.13</strong><br/>
+      <ul>
+        <li>Function parameter hints</li>
+        <li>Visibility and types toggles/filters in structure view</li>
+        <li>Configurable patterns to mark identifiers as private (Settings)</li>
+      </ul>
       <strong>1.12</strong><br/>
       <ul>
         <li>Symbolic references (find/usages/rename) support</li>

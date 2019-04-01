@@ -18,7 +18,7 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="If a name starts with one of the strings below, treat it as private:"/>
+          <text value="Treat as private any identifier prefixed with:"/>
         </properties>
       </component>
       <component id="440c3" class="javax.swing.JTextField" binding="internalPrefixes">
@@ -34,7 +34,7 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="If a name contains one of the strings below, treat it as private:"/>
+          <text value="Treat as private any identifier that includes:"/>
         </properties>
       </component>
       <component id="c58dd" class="javax.swing.JLabel">
@@ -42,7 +42,7 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Use ; to separate substrings."/>
+          <text value="Use ; to separate multiple values"/>
         </properties>
       </component>
       <component id="9aac" class="javax.swing.JTextField" binding="internalSubstrings">

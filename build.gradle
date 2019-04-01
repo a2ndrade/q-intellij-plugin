@@ -20,7 +20,7 @@ intellij {
   pluginName 'q'
 }
 
-version '1.12' // Plugin version
+version '1.13' // Plugin version
 
 // import is optional to make task creation easier
 

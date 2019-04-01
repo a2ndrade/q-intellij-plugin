@@ -162,7 +162,8 @@
     <gotoSymbolContributor implementation="com.appian.intellij.k.KChooseByNameContributor"/>
     <lang.namesValidator language="q" implementationClass="com.appian.intellij.k.KNamesValidator"/>
     <lang.findUsagesProvider language="q" implementationClass="com.appian.intellij.k.KFindUsagesProvider"/>
-    <lang.psiStructureViewFactory language="q" implementationClass="com.appian.intellij.k.struct.KStructureViewFactory"/>
+    <lang.psiStructureViewFactory language="q"
+                                  implementationClass="com.appian.intellij.k.struct.KStructureViewFactory"/>
     <completion.contributor language="q" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
     <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
@@ -170,5 +171,7 @@
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
     <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
     <spellchecker.support language="q" implementationClass="com.appian.intellij.k.KSpellcheckingStrategy"/>
+    <typedHandler implementation="com.appian.intellij.k.KTypedHandler" id="q"/>
+    <codeInsight.parameterInfo language="q" implementationClass="com.appian.intellij.k.KParameterInfoHandler"/>
   </extensions>
 </idea-plugin>

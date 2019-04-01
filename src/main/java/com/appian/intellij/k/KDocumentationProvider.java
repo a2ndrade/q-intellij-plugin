@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KAssignment;
@@ -47,13 +48,11 @@ public final class KDocumentationProvider extends AbstractDocumentationProvider 
       return false;
     }
     final KUserId userId = (KUserId)element;
-    if (userId.isDeclaration()) {
-      return true;
-    }
-    return false;
+    return userId.isDeclaration();
   }
 
-  private Optional<String> getFunctionSignature(KUserId userId) {
+  @NotNull
+  static Optional<String> getFunctionSignature(KUserId userId) {
     return Optional.of(userId)
         .map(KUserId::getParent)
         .filter(KAssignment.class::isInstance)
@@ -68,13 +67,22 @@ public final class KDocumentationProvider extends AbstractDocumentationProvider 
         .map(Collection::stream)
         .map(s -> {
           final List<String> paramNames = s.map(KUserId::getName).collect(Collectors.toList());
-          return String.format("%s[%s] - %s", userId.getName(), String.join(";", paramNames),
+          return String.format("%s[%s] - %s", KUtil.getFqnOrName(userId), String.join(";", paramNames),
               userId.getContainingFile().getName());
         });
   }
 
   @Nullable
   private Optional<String> getComments(KUserId userId) {
+    final Collection<String> comments = getFunctionDocs(userId);
+    if (comments.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(String.join("\n<br>", comments));
+  }
+
+  @NotNull
+  static Collection<String> getFunctionDocs(KUserId userId) {
     final KExpression fnDeclaration = PsiTreeUtil.getContextOfType(userId, KExpression.class);
     final Deque<String> comments = new ArrayDeque<>();
     PsiElement curr = fnDeclaration.getPrevSibling();
@@ -83,10 +91,7 @@ public final class KDocumentationProvider extends AbstractDocumentationProvider 
       comments.push(comment.getText());
       curr = curr.getPrevSibling();
     }
-    if (comments.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(String.join("\n<br>", comments));
+    return comments;
   }
 
 }

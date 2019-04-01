@@ -91,7 +91,9 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
 
   @Override
   public int getAccessLevel() {
-    return (element instanceof KNamedElement) ? ((KNamedElement)element).getAccessLevel() : KNamedElement.UNKNOWN_ACCESS_LEVEL;
+    return (element instanceof KNamedElement)
+        ? ((KNamedElement)element).getAccessLevel()
+        : KNamedElement.UNKNOWN_ACCESS_LEVEL;
   }
 
   @Override

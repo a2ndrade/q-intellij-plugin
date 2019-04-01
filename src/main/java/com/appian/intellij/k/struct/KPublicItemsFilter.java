@@ -1,5 +1,7 @@
 package com.appian.intellij.k.struct;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.appian.intellij.k.psi.KNamedElement;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
@@ -7,8 +9,6 @@ import com.intellij.ide.util.treeView.smartTree.ActionPresentationData;
 import com.intellij.ide.util.treeView.smartTree.Filter;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.util.PlatformIcons;
-
-import org.jetbrains.annotations.NotNull;
 
 public class KPublicItemsFilter implements Filter {
 

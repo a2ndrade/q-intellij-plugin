@@ -62,7 +62,7 @@ compileJava {
   dependsOn generateKParser
 }
 
-publishPlugin {
-  username intellijPublishUsername
-  password intellijPublishPassword
-}
+//publishPlugin {
+//  username intellijPublishUsername
+//  password intellijPublishPassword
+//}

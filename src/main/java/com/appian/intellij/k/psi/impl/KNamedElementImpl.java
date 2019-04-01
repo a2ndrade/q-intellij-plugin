@@ -17,6 +17,7 @@ import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KUserId;
+import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
@@ -105,8 +106,7 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
   }
 
   public boolean isInternal() {
-    final String name = getName();
-    return name.startsWith("i.") || name.contains(".i.");
+    return KSettingsService.getInstance().getSettings().isInternalName(getName());
   }
 
   @Override

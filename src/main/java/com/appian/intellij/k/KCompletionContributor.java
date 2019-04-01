@@ -123,8 +123,7 @@ public class KCompletionContributor extends CompletionContributor {
   /**
    * Different types of completions
    */
-  private enum CompletionContributionType {
-    /**
+  private enum CompletionContributionType {/**
    * Local variable completions
    */
   LOCAL {

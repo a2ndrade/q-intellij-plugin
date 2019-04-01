@@ -1,4 +1,4 @@
-# q-intellij-plugin
+# q-intellij-plugin &middot; [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt) [![cloud build status](https://storage.googleapis.com/q-intellij-plugin/build/master-badge.svg)](https://github.com/a2ndrade/q-intellij-plugin)
 q/k4 language (kx.com) [plugin](https://plugins.jetbrains.com/plugin/7925-q) for IntelliJ IDEA. For k3 support, see [k3-intellij-plugin](https://github.com/a2ndrade/k3-intellij-plugin)
 
 ## Features

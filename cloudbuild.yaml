@@ -1,3 +1,3 @@
 steps:
-- name: 'eviles/alpine-oracle-jdk8'
-  args: ['bash', './gradlew', 'build']
+  - name: 'eviles/alpine-oracle-jdk8'
+    args: ['bash', './gradlew', 'build']

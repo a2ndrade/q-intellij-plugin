@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.4.2"
+  id "org.jetbrains.intellij" version "0.4.7"
   id "org.jetbrains.grammarkit" version "2018.3.1"
 }
 
@@ -16,7 +16,7 @@ apply plugin: 'java'
 
 intellij {
   // see https://www.jetbrains.com/intellij-repository/releases
-  version 'IC-2018.3'
+  version 'IC-2018.1.8'
   pluginName 'q'
 }
 
@@ -61,6 +61,8 @@ compileJava {
   dependsOn generateKLexer
   dependsOn generateKParser
 }
+
+patchPluginXml.untilBuild=null
 
 //publishPlugin {
 //  username intellijPublishUsername

@@ -1,3 +1,6 @@
+import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateParser
+
 buildscript {
   repositories {
     mavenCentral()
@@ -20,12 +23,10 @@ intellij {
   pluginName 'q'
 }
 
-version '1.13' // Plugin version
-
-// import is optional to make task creation easier
-
-import org.jetbrains.grammarkit.tasks.GenerateLexer
-import org.jetbrains.grammarkit.tasks.GenerateParser
+version '1.14' // Plugin version
+patchPluginXml {
+  untilBuild '191.*'
+}
 
 grammarKit {
   jflexRelease = '1.7.0-1'
@@ -62,9 +63,9 @@ compileJava {
   dependsOn generateKParser
 }
 
-patchPluginXml.untilBuild=null
-
-//publishPlugin {
-//  username intellijPublishUsername
-//  password intellijPublishPassword
-//}
+if (project.hasProperty('intellijPublishUsername')) {
+  publishPlugin {
+    username intellijPublishUsername
+    password intellijPublishPassword
+  }
+}

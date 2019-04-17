@@ -2,8 +2,6 @@ package com.appian.intellij.k;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
@@ -53,7 +50,7 @@ public final class KSyntaxHighlighter extends SyntaxHighlighterBase {
       DefaultLanguageHighlighterColors.LINE_COMMENT);
 
   static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("K_BAD_CHARACTER",
-      new TextAttributes(Color.RED, null, null, null, Font.BOLD));
+      DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
 
   private static final TextAttributesKey[] ADVERB_KEYS = new TextAttributesKey[] {ADVERB};
   private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[] {IDENTIFIER};

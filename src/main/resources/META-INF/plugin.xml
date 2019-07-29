@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.16</strong><br/>
+      <ul>
+        <li>Intellij 2019.2 support</li>
+      </ul>
       <strong>1.15</strong><br/>
       <ul>
         <li>New plugin icons</li>

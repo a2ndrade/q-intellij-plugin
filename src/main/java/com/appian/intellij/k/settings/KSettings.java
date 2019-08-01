@@ -1,5 +1,6 @@
 package com.appian.intellij.k.settings;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,9 +8,10 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 
-public class KSettings {
+public class KSettings implements Cloneable {
   private List<String> internalPrefixes = Collections.singletonList("i.");
   private List<String> internalSubstrings = Collections.singletonList(".i.");
+  private List<KServerSpec> servers = new ArrayList<>();
 
   @SuppressWarnings("WeakerAccess") // needs to be public property to be persistable
   public String getInternalPrefixes() {
@@ -31,6 +33,14 @@ public class KSettings {
     this.internalPrefixes = semiSplit(internalPrefixes);
   }
 
+  public List<KServerSpec> getServers() {
+    return servers;
+  }
+
+  public void setServers(List<KServerSpec> servers) {
+    this.servers = servers;
+  }
+
   public boolean isInternalName(String name) {
     return internalPrefixes.stream().anyMatch(name::startsWith) || internalSubstrings.stream().anyMatch(name::contains);
   }
@@ -46,9 +56,14 @@ public class KSettings {
       return Collections.emptyList();
     }
 
-    return Stream.of(string.split(";"))
-        .map(String::trim)
-        .filter(s -> !s.isEmpty())
-        .collect(Collectors.toList());
+    return Stream.of(string.split(";")).map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+  }
+
+  public KSettings clone() {
+    try {
+      return (KSettings)super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

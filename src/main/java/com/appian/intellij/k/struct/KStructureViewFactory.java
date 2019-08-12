@@ -3,7 +3,6 @@ package com.appian.intellij.k.struct;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
@@ -21,7 +20,7 @@ public class KStructureViewFactory implements PsiStructureViewFactory {
       public StructureViewModel createStructureViewModel(
           @Nullable Editor editor) {
         KStructureViewModel model = new KStructureViewModel(psiFile);
-        KSettingsService.getInstance().addListener((o, n) -> model.fireModelUpdate());
+        model.registerListeners();
         return model;
       }
     };

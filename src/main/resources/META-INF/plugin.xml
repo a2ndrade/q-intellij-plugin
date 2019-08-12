@@ -194,4 +194,20 @@
     <applicationConfigurable groupId="language" displayName="Q" id="preferences.Q"
                              instance="com.appian.intellij.k.settings.KSettingsConfigurable"/>
   </extensions>
+  <actions>
+    <group id="com.appian.intellij.k.actions.KRunSelectionActionGroup"
+           class="com.appian.intellij.k.actions.KRunSelectionActionGroup"
+           text="Run Selection On" popup="true">
+      <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu1"/>
+    </group>
+    <action id="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction"
+            class="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction" text="KRunSelectionPopupAction"
+            description="Run selection popup">
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt E"/>
+    </action>
+    <action id="com.appian.intellij.k.actions.KRunSelectionPopupAction"
+            class="com.appian.intellij.k.actions.KRunSelectionPopupAction" text="KRunSelectionPopupAction">
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt E"/>
+    </action>
+  </actions>
 </idea-plugin>

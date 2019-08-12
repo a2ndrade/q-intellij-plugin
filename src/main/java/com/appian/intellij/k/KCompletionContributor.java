@@ -123,21 +123,22 @@ public class KCompletionContributor extends CompletionContributor {
   /**
    * Different types of completions
    */
-  private enum CompletionContributionType {/**
-   * Local variable completions
-   */
-  LOCAL {
-        @Override
-        List<ItemPresentation> getCompletions(PsiElement element) {
-          String input = getText(element);
-          return PsiTreeUtil.findChildrenOfType(PsiTreeUtil.getContextOfType(element, KLambda.class), KAssignment.class)
-              .stream()
-              .map(KAssignment::getUserId)
-              .filter(id -> id.getName().contains(input))
-              .map(id -> suppressLocationString(id.getPresentation()))
-              .collect(Collectors.toList());
-        }
-      },
+  private enum CompletionContributionType {
+    /**
+     * Local variable completions
+     */
+    LOCAL {
+      @Override
+      List<ItemPresentation> getCompletions(PsiElement element) {
+        String input = getText(element);
+        return PsiTreeUtil.findChildrenOfType(PsiTreeUtil.getContextOfType(element, KLambda.class), KAssignment.class)
+            .stream()
+            .map(KAssignment::getUserId)
+            .filter(id -> id.getName().contains(input))
+            .map(id -> suppressLocationString(id.getPresentation()))
+            .collect(Collectors.toList());
+      }
+    },
     /**
      * Lambda parameter completions
      */
@@ -228,7 +229,8 @@ public class KCompletionContributor extends CompletionContributor {
      * @param input an element representing user input
      * @return a list of presentations for completion suggestions of this type
      */
-    abstract List<ItemPresentation> getCompletions(PsiElement input);}
+    abstract List<ItemPresentation> getCompletions(PsiElement input);
+  }
 
   /**
    * @param presentation a presentation

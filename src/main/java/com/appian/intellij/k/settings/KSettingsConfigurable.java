@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 
 public class KSettingsConfigurable implements SearchableConfigurable, Configurable.NoScroll {
@@ -41,7 +40,7 @@ public class KSettingsConfigurable implements SearchableConfigurable, Configurab
   }
 
   @Override
-  public void apply() throws ConfigurationException {
+  public void apply() {
     KSettings newSettings = new KSettings();
     panel.apply(newSettings);
     KSettingsService.getInstance().setSettings(newSettings);

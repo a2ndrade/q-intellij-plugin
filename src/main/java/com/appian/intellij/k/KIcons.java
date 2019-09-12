@@ -2,6 +2,8 @@ package com.appian.intellij.k;
 
 import javax.swing.Icon;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.LayeredIcon;
@@ -16,14 +18,19 @@ public final class KIcons {
   public static final Icon PUBLIC_VARIABLE = new RowIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.C_public);
   public static final Icon PRIVATE_VARIABLE = new RowIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.C_private);
 
-  public static final Icon QSERVER;
+  public static final Icon QSERVER =  layer(AllIcons.Webreferences.Server, FILE);
+  public static final Icon RUN_SELECTION = AllIcons.General.Run;
+  public static final Icon DEFINE_SELECTION = AllIcons.Actions.Upload;
 
-  static {
+  @SuppressWarnings("SameParameterValue")
+  @NotNull
+  private static LayeredIcon layer(Icon icon1, Icon icon2) {
     LayeredIcon icon = new LayeredIcon(2);
-    icon.setIcon(AllIcons.Webreferences.Server, 0, 0, 0);
-    icon.setIcon(FILE, 1, 6, 6);
-    QSERVER = icon;
+    icon.setIcon(icon1, 0, 0, 0);
+    icon.setIcon(icon2, 1, 6, 6);
+    return icon;
   }
 
+  @SuppressWarnings("WeakerAccess")
   public static final Icon SYSTEM_FUNCTION = FILE;
 }

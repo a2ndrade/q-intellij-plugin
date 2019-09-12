@@ -189,25 +189,54 @@
     <spellchecker.support language="q" implementationClass="com.appian.intellij.k.KSpellcheckingStrategy"/>
     <typedHandler implementation="com.appian.intellij.k.KTypedHandler" id="q"/>
     <codeInsight.parameterInfo language="q" implementationClass="com.appian.intellij.k.KParameterInfoHandler"/>
-    <applicationService serviceInterface="com.appian.intellij.k.settings.KSettingsService"
-                        serviceImplementation="com.appian.intellij.k.settings.KSettingsService"/>
+    <applicationService
+        serviceImplementation="com.appian.intellij.k.settings.KSettingsService"/>
     <applicationConfigurable groupId="language" displayName="Q" id="preferences.Q"
                              instance="com.appian.intellij.k.settings.KSettingsConfigurable"/>
   </extensions>
   <actions>
+
+    <!-- editor popup menu customization -->
     <group id="com.appian.intellij.k.actions.KRunSelectionActionGroup"
            class="com.appian.intellij.k.actions.KRunSelectionActionGroup"
            text="Run Selection On" popup="true">
       <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu1"/>
     </group>
+    <group id="com.appian.intellij.k.actions.KDefineElementActionGroup"
+           class="com.appian.intellij.k.actions.KDefineElementActionGroup"
+           text="Define On" popup="true">
+      <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu1"/>
+    </group>
+    <!-- end editor popup menu customization -->
+
+    <!-- structure view popup menu customization -->
+    <group id="com.appian.intellij.k.actions.KDefineNavigatableElementActionGroup"
+           class="com.appian.intellij.k.actions.KDefineElementActionGroup"
+           text="Define On" popup="true">
+<!--      <separator/>-->
+      <add-to-group group-id="StructureViewPopupMenu" anchor="after" relative-to-action="AddToFavorites"/>
+    </group>
+    <!-- end structure view popup menu customization -->
+
+    <!-- keyboard shortcuts -->
     <action id="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction"
-            class="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction" text="KRunSelectionPopupAction"
+            class="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction" text="Evaluate Selection On Active Q Server"
             description="Run selection popup">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt E"/>
     </action>
     <action id="com.appian.intellij.k.actions.KRunSelectionPopupAction"
-            class="com.appian.intellij.k.actions.KRunSelectionPopupAction" text="KRunSelectionPopupAction">
+            class="com.appian.intellij.k.actions.KRunSelectionPopupAction" text="Choose Q Server To Evaluate Selection">
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt E"/>
     </action>
+    <action id="com.appian.intellij.k.actions.KDefineElementOnActiveServerAction"
+            class="com.appian.intellij.k.actions.KDefineElementOnActiveServerAction" text="Redefine Function On Active Q Server"
+            description="Run selection popup">
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt R"/>
+    </action>
+    <action id="com.appian.intellij.k.actions.KDefineElementPopupAction"
+            class="com.appian.intellij.k.actions.KDefineElementPopupAction" text="Choose Q Server To Redefine Function">
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt R"/>
+    </action>
+    <!-- end keyboard shortcuts -->
   </actions>
 </idea-plugin>

@@ -1,8 +1,11 @@
 package com.appian.intellij.k.actions;
 
+import static com.appian.intellij.k.actions.KActionUtil.getEditor;
+
+import java.util.Optional;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
@@ -17,20 +20,15 @@ public class KRunSelectionPopupAction extends AnAction {
 
   @Override
   public void actionPerformed(AnActionEvent e) {
-    Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
-    if (editor == null) {
-      return;
-    }
-
-    String selectedText = editor.getSelectionModel().getSelectedText();
-    if (selectedText == null) {
+    Optional<Editor> editor = getEditor(e);
+    if (!editor.isPresent() || editor.get().getSelectionModel().getSelectedText() == null) {
       return;
     }
 
     ListPopup popup = JBPopupFactory.getInstance()
-        .createActionGroupPopup("Run Selection On", new KRunSelectionActionGroup(), e.getDataContext(),
+        .createActionGroupPopup("Evaluate Selection On", new KRunSelectionActionGroup(), e.getDataContext(),
             JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, true);
 
-    popup.showInBestPositionFor(editor);
+    popup.showInBestPositionFor(editor.get());
   }
 }

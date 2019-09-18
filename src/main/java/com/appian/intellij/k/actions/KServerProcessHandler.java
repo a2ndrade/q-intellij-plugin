@@ -3,50 +3,53 @@ package com.appian.intellij.k.actions;
 import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
 import static com.intellij.execution.ui.ConsoleViewContentType.NORMAL_OUTPUT;
 import static com.intellij.execution.ui.ConsoleViewContentType.USER_INPUT;
+import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.settings.KServerSpec;
+import com.appian.intellij.k.settings.KSettingsService;
+import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
 
 import kx.c;
 
 public class KServerProcessHandler extends ProcessHandler {
-  private final KServerSpec serverSpec;
-  private c connection;
 
-  KServerProcessHandler(KServerSpec serverSpec) {
-    this.serverSpec = serverSpec;
+  private final String serverId;
+
+  KServerProcessHandler(String serverId) {
+    this.serverId = requireNonNull(serverId);
   }
 
-  KServerSpec getServerSpec() {
-    return serverSpec;
+  String getServerId() {
+    return serverId;
   }
 
   @Override
   protected void destroyProcessImpl() {
-    closeConnection();
     notifyProcessTerminated(0);
   }
 
   @Override
   protected void detachProcessImpl() {
-    closeConnection();
     notifyProcessDetached();
   }
 
-  private void closeConnection() {
-    if (connection != null) {
+  private void closeConnection(c conn) {
+    if (conn != null) {
       try {
-        connection.close();
+        conn.close();
       } catch (IOException e) {
         // ignore
       }
-      connection = null;
     }
   }
 
@@ -66,20 +69,25 @@ public class KServerProcessHandler extends ProcessHandler {
   }
 
   private c getConnection() throws IOException, c.KException {
-    if (connection == null) {
-      connection = new c(serverSpec.getHost(), serverSpec.getPort(),
-          serverSpec.getUser() + ":" + serverSpec.getPassword(), serverSpec.useTLS());
-    }
-    return connection;
+    KServerSpec spec = KSettingsService.getInstance()
+        .getSettings()
+        .getServers()
+        .stream()
+        .filter(s -> s.getId().equals(serverId))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException(
+            "Connection details for server " + serverId + " not found, please close console and try again"));
+    return new c(spec.getHost(), spec.getPort(), spec.getUser() + ":" + spec.getPassword(), spec.useTLS());
   }
 
   void execute(ConsoleView console, String q) {
+    c conn = null;
     try {
-      c conn = getConnection();
+      conn = getConnection();
       try {
         console.print("q) " + q + "\n", USER_INPUT);
-        String s = new String((char[])conn.k("{.Q.s value x}", q.toCharArray()));
-        console.print(s, NORMAL_OUTPUT);
+        Object r = conn.k("{.Q.s value x}", q.toCharArray());
+        console.print(toString(r) + "\n", NORMAL_OUTPUT);
       } catch (c.KException e) {
         console.print("'" + e.getMessage() + "\n", ERROR_OUTPUT);
       }
@@ -87,9 +95,61 @@ public class KServerProcessHandler extends ProcessHandler {
       console.print("'" + e.getMessage() + "\n", ERROR_OUTPUT);
     } catch (Exception e) {
       console.print(e.getMessage() + "\n", ERROR_OUTPUT);
-      // close connection to force reconnection on any error other than
-      // the error from q instance
-      closeConnection();
+    } finally {
+      closeConnection(conn);
+      if (console instanceof ConsoleViewImpl) {
+        ((ConsoleViewImpl)console).requestScrollingToEnd();
+      }
     }
+  }
+
+  /*
+   * Convert result to String. Under normal circumstances result will
+   * be char[] as the request that gets sent to the server is constructed
+   * to always return String.
+   * If someone installs a custom .z.pg handler that does not return
+   * the value of expression sent, but chooses to return something else (a fairly
+   * obscure use case imo) - try to handle it gracefully.
+   */
+  private static String toString(Object o) {
+    if (o instanceof char[]) {
+      return new String((char[])o);
+    }
+
+    if (o instanceof Object[]) {
+      return "[" +
+          Arrays.stream(((Object[])o)).map(KServerProcessHandler::toString).collect(Collectors.joining(",")) +
+          "]";
+    }
+
+    if (o instanceof int[]) {
+      return Arrays.toString((int[])o);
+    }
+
+    if (o instanceof byte[]) {
+      return Arrays.toString((byte[])o);
+    }
+
+    if (o instanceof long[]) {
+      return Arrays.toString((long[])o);
+    }
+
+    if (o instanceof float[]) {
+      return Arrays.toString((float[])o);
+    }
+
+    if (o instanceof short[]) {
+      return Arrays.toString((short[])o);
+    }
+
+    if (o instanceof double[]) {
+      return Arrays.toString((double[])o);
+    }
+
+    if (o instanceof boolean[]) {
+      return Arrays.toString((boolean[])o);
+    }
+
+    return Objects.toString(o);
   }
 }

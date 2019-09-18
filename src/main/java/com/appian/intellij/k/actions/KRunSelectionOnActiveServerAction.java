@@ -1,12 +1,12 @@
 package com.appian.intellij.k.actions;
 
+import static com.appian.intellij.k.actions.KActionUtil.getEditorSelection;
+import static com.appian.intellij.k.actions.KActionUtil.getSelectedServer;
+
 import java.util.Optional;
 
-import com.appian.intellij.k.settings.KServerSpec;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.editor.Editor;
 
 /**
  * An action that runs selected Q code using currently
@@ -18,22 +18,15 @@ public class KRunSelectionOnActiveServerAction extends AnAction {
 
   @Override
   public void actionPerformed(AnActionEvent e) {
-    Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
-    if (editor == null) {
-      return;
-    }
-    String selectedText = editor.getSelectionModel().getSelectedText();
-    if (selectedText == null) {
+    if (!getEditorSelection(e).isPresent()) {
       return;
     }
 
-    Optional<KServerSpec> activeServer = KRunnerUtil.getSelectedServer(e.getProject());
-
-    if (activeServer.isPresent()) {
-      new KRunSelectionAction(getEventProject(e), null, activeServer.get()).actionPerformed(e);
-      return;
+    Optional<String> activeServerId = getSelectedServer(e.getProject());
+    if (activeServerId.isPresent()) {
+      new KRunSelectionAction(getEventProject(e), null, activeServerId.get()).actionPerformed(e);
+    } else {
+      new KRunSelectionPopupAction().actionPerformed(e);
     }
-
-    new KRunSelectionPopupAction().actionPerformed(e);
   }
 }

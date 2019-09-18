@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -69,6 +70,10 @@ public class KSettingsService implements PersistentStateComponent<KSettings> {
 
     this.settings = newSettings;
     fireSettingsChange(old);
+  }
+
+  public void updateSettings(Function<KSettings,KSettings> oldSettingsConsumer) {
+    setSettings(oldSettingsConsumer.apply(getSettings()));
   }
 
   @NotNull

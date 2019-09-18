@@ -13,6 +13,15 @@ public class KSettings implements Cloneable {
   private List<String> internalSubstrings = Collections.singletonList(".i.");
   private List<KServerSpec> servers = new ArrayList<>();
 
+  @NotNull
+  public KSettings cloneWithNewServer(KServerSpec newServer) {
+    ArrayList<KServerSpec> newServers = new ArrayList<>(getServers());
+    newServers.add(newServer);
+    KSettings newSettings = clone();
+    newSettings.setServers(newServers);
+    return newSettings;
+  }
+
   @SuppressWarnings("WeakerAccess") // needs to be public property to be persistable
   public String getInternalPrefixes() {
     return semiJoin(this.internalPrefixes);

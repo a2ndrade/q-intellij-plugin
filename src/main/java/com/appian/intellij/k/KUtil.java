@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -303,5 +304,32 @@ public final class KUtil {
   public static String getFqnOrName(KNamedElement element) {
     final String fqn = getFqn(element);
     return fqn != null ? fqn : element.getName();
+  }
+
+  private static Optional<PsiElement> findTopLevelMatching(PsiElement element, Predicate<PsiElement> predicate) {
+    for (PsiElement e = element; e != null; e = e.getParent()) {
+      if (e.getParent() instanceof KFile) {
+        return predicate.test(e) ? Optional.of(e) : Optional.empty();
+      }
+    }
+    return Optional.empty();
+  }
+
+  public static Optional<PsiElement> getTopLevelFunctionDefinition(PsiElement elem) {
+    return findTopLevelMatching(elem, el -> cast(el, KExpression.class).map(PsiElement::getFirstChild)
+        .flatMap(e -> cast(e, KAssignment.class))
+        .map(PsiElement::getLastChild)
+        .flatMap(e -> cast(e, KExpression.class))
+        .map(PsiElement::getFirstChild)
+        .flatMap(e -> cast(e, KLambda.class))
+        .isPresent());
+  }
+
+  public static <T> Optional<T> cast(Object o, Class<T> clazz) {
+    if (clazz.isInstance(o)) {
+      return Optional.of(clazz.cast(o));
+    } else {
+      return Optional.empty();
+    }
   }
 }

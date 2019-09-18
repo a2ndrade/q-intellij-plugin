@@ -16,7 +16,7 @@ public class KServerSpec {
   public KServerSpec() {
   }
 
-  public KServerSpec(String name, String host, int port, boolean useTLS, String user, String password) {
+  KServerSpec(String name, String host, int port, boolean useTLS, String user, String password) {
     this.name = Objects.requireNonNull(name);
     this.host = Objects.requireNonNull(host);
     this.port = port;
@@ -55,9 +55,12 @@ public class KServerSpec {
     return password;
   }
 
+  public String getId() {
+    return (name == null ? "" : name) + " [" + (user == null || user.isEmpty() ? "" : user + "@") + host + ":" + port + "]";
+  }
+
   public String toString() {
-    return (name == null ? "" : name) + " [" + (user == null || user.isEmpty() ? "" : user + "@") + host + ":" + port +
-        "]";
+    return getId();
   }
 
   @SuppressWarnings("unused") // needed for serialization
@@ -75,12 +78,12 @@ public class KServerSpec {
     this.useTLS = useTLS;
   }
 
-  @SuppressWarnings("unused") // needed for serialization
+  @SuppressWarnings({"unused", "WeakerAccess"}) // needed for serialization
   public void setUser(String user) {
     this.user = user;
   }
 
-  @SuppressWarnings("unused") // needed for serialization
+  @SuppressWarnings({"unused", "WeakerAccess"}) // needed for serialization
   public void setPassword(String password) {
     this.password = password;
   }

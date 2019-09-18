@@ -63,9 +63,8 @@ compileJava {
   dependsOn generateKParser
 }
 
-if (project.hasProperty('intellijPublishUsername')) {
+if (project.hasProperty('intellijPublishToken')) {
   publishPlugin {
-    username intellijPublishUsername
-    password intellijPublishPassword
+    token intellijPublishToken
   }
 }

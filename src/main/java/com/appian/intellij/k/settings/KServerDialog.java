@@ -38,7 +38,7 @@ public class KServerDialog extends DialogWrapper {
   private JButton testConnectionButton;
   private JLabel messageLabel;
 
-  private final static Color darkGreem     = new JBColor(new Color(0, 155, 0), Color.green);
+  private final static Color DARK_GREEN = new JBColor(new Color(0, 155, 0), Color.green);
 
   public KServerDialog(Function<String,ValidationInfo> nameValidator) {
     super(null);
@@ -60,7 +60,7 @@ public class KServerDialog extends DialogWrapper {
       panel.setCursor(Cursor.getPredefinedCursor(WAIT_CURSOR));
       c connection = getConnectionSpec().createConnection();
       try {
-        messageLabel.setForeground(darkGreem);
+        messageLabel.setForeground(DARK_GREEN);
         messageLabel.setText("Success");
       }
       finally {

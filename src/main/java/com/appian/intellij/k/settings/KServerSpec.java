@@ -1,8 +1,13 @@
 package com.appian.intellij.k.settings;
 
+import java.io.IOException;
 import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.util.xmlb.annotations.Transient;
+
+import kx.c;
 
 public class KServerSpec {
   private String name;
@@ -99,5 +104,10 @@ public class KServerSpec {
     KServerSpec that = (KServerSpec)o;
     return Objects.equals(name, that.name) && port == that.port && useTLS == that.useTLS && host.equals(that.host) &&
         Objects.equals(user, that.user) && Objects.equals(password, that.password);
+  }
+
+  @NotNull
+  public c createConnection() throws c.KException, IOException {
+    return new c(getHost(), getPort(), getUser() + ":" + getPassword(), useTLS());
   }
 }

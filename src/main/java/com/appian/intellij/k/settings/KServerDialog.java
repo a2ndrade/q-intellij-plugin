@@ -1,11 +1,18 @@
 package com.appian.intellij.k.settings;
 
+import static java.awt.Cursor.WAIT_CURSOR;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.function.Function;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -15,6 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.JBColor;
+
+import kx.c;
 
 public class KServerDialog extends DialogWrapper {
   private final Function<String,ValidationInfo> nameValidator;
@@ -25,12 +35,43 @@ public class KServerDialog extends DialogWrapper {
   private JCheckBox useTLSCheckBox;
   private JFormattedTextField portText;
   private JTextField nameText;
+  private JButton testConnectionButton;
+  private JLabel messageLabel;
+
+  private final static Color darkGreem     = new JBColor(new Color(0, 155, 0), Color.green);
 
   public KServerDialog(Function<String,ValidationInfo> nameValidator) {
     super(null);
     this.nameValidator = nameValidator;
     init();
     setTitle("Q Server");
+    testConnectionButton.addActionListener(e -> testConnection());
+  }
+
+  private void testConnection() {
+    ValidationInfo validationInfo = doValidate();
+    if (validationInfo != null) {
+      clickDefaultButton();
+      return;
+    }
+
+    Cursor cursor = panel.getCursor();
+    try {
+      panel.setCursor(Cursor.getPredefinedCursor(WAIT_CURSOR));
+      c connection = getConnectionSpec().createConnection();
+      try {
+        messageLabel.setForeground(darkGreem);
+        messageLabel.setText("Success");
+      }
+      finally {
+        connection.close();
+      }
+    } catch (c.KException | IOException e) {
+      messageLabel.setForeground(JBColor.RED);
+      messageLabel.setText(e.getMessage());
+    } finally {
+      panel.setCursor(cursor);
+    }
   }
 
   @Nullable

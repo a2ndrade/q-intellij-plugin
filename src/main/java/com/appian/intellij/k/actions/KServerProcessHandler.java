@@ -77,7 +77,7 @@ public class KServerProcessHandler extends ProcessHandler {
         .findFirst()
         .orElseThrow(() -> new RuntimeException(
             "Connection details for server " + serverId + " not found, please close console and try again"));
-    return new c(spec.getHost(), spec.getPort(), spec.getUser() + ":" + spec.getPassword(), spec.useTLS());
+    return spec.createConnection();
   }
 
   void execute(ConsoleView console, String q) {

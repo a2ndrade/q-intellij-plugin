@@ -55,7 +55,7 @@ public class KRunSelectionAction extends AnAction {
     if (processHandler == null) { // can't really happen, but...
       console.print("Internal error, please close the console and try again", ERROR_OUTPUT);
     } else {
-      processHandler.execute(console, q);
+      processHandler.execute(project, console, q);
     }
   }
 }

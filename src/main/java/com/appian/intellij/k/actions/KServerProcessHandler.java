@@ -1,5 +1,6 @@
 package com.appian.intellij.k.actions;
 
+import static com.appian.intellij.k.actions.KActionUtil.showInformationNotification;
 import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
 import static com.intellij.execution.ui.ConsoleViewContentType.NORMAL_OUTPUT;
 import static com.intellij.execution.ui.ConsoleViewContentType.USER_INPUT;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
@@ -18,12 +20,16 @@ import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.project.Project;
 
 import kx.c;
 
 public class KServerProcessHandler extends ProcessHandler {
-
   private final String serverId;
+  private final AtomicBoolean running = new AtomicBoolean();
 
   KServerProcessHandler(String serverId) {
     this.serverId = requireNonNull(serverId);
@@ -44,12 +50,10 @@ public class KServerProcessHandler extends ProcessHandler {
   }
 
   private void closeConnection(c conn) {
-    if (conn != null) {
-      try {
-        conn.close();
-      } catch (IOException e) {
-        // ignore
-      }
+    try {
+      conn.close();
+    } catch (IOException e) {
+      // ignore
     }
   }
 
@@ -80,23 +84,39 @@ public class KServerProcessHandler extends ProcessHandler {
     return spec.createConnection();
   }
 
-  void execute(ConsoleView console, String q) {
-    c conn = null;
+  void execute(Project project, ConsoleView console, String q) {
+    if (!running.compareAndSet(false, true)) {
+      showInformationNotification(project, "Server is already running a query");
+      return;
+    }
+
+    ApplicationManager.getApplication()
+        .executeOnPooledThread(() -> ProgressManager.getInstance().runInReadActionWithWriteActionPriority(() -> {
+          try {
+            doExecute(console, q);
+          } finally {
+            running.set(false);
+          }
+        }, ProgressIndicatorProvider.getGlobalProgressIndicator()));
+  }
+
+  private void doExecute(ConsoleView console, String q) {
     try {
-      conn = getConnection();
+      c conn = getConnection();
       try {
         console.print("q) " + q + "\n", USER_INPUT);
         Object r = conn.k("{.Q.s value x}", q.toCharArray());
         console.print(toString(r) + "\n", NORMAL_OUTPUT);
       } catch (c.KException e) {
         console.print("'" + e.getMessage() + "\n", ERROR_OUTPUT);
+      } finally {
+        closeConnection(conn);
       }
     } catch (c.KException e) {
       console.print("'" + e.getMessage() + "\n", ERROR_OUTPUT);
     } catch (Exception e) {
       console.print(e.getMessage() + "\n", ERROR_OUTPUT);
     } finally {
-      closeConnection(conn);
       if (console instanceof ConsoleViewImpl) {
         ((ConsoleViewImpl)console).requestScrollingToEnd();
       }
@@ -117,8 +137,7 @@ public class KServerProcessHandler extends ProcessHandler {
     }
 
     if (o instanceof Object[]) {
-      return "[" +
-          Arrays.stream(((Object[])o)).map(KServerProcessHandler::toString).collect(Collectors.joining(",")) +
+      return "[" + Arrays.stream(((Object[])o)).map(KServerProcessHandler::toString).collect(Collectors.joining(",")) +
           "]";
     }
 

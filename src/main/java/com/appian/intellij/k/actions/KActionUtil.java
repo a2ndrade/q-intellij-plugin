@@ -25,6 +25,8 @@ import com.intellij.execution.ui.RunContentManager;
 import com.intellij.execution.ui.actions.CloseAction;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -34,6 +36,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -155,5 +158,13 @@ class KActionUtil {
     return Optional.ofNullable(getElementAtCaret(event).flatMap(KUtil::getTopLevelFunctionDefinition)
         .orElseGet(
             () -> getNavigableSelectionElement(event).flatMap(KUtil::getTopLevelFunctionDefinition).orElse(null)));
+  }
+
+  static void showInformationNotification(Project project, String message) {
+    String displayId = "Q Plugin Notifications";
+    NotificationGroup group = Optional.ofNullable(NotificationGroup.findRegisteredGroup(displayId))
+        .orElseGet(() -> NotificationGroup.toolWindowGroup(displayId, ToolWindowId.RUN));
+
+    group.createNotification(message, NotificationType.INFORMATION).notify(project);
   }
 }

@@ -71,7 +71,7 @@ public class KDefineElementAction extends AnAction {
       PsiElement copy = element.copy();
       ((LeafPsiElement)copy.getFirstChild().getFirstChild().getFirstChild()).replaceWithText(getFqnOrName(userId));
 
-      processHandler.execute(console, copy.getText());
+      processHandler.execute(project, console, copy.getText());
     }
   }
 }

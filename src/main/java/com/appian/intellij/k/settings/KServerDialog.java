@@ -20,6 +20,9 @@ import javax.swing.text.NumberFormatter;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.JBColor;
@@ -54,10 +57,18 @@ public class KServerDialog extends DialogWrapper {
       clickDefaultButton();
       return;
     }
+    ApplicationManager.getApplication()
+        .executeOnPooledThread(() -> ProgressManager.getInstance().runInReadActionWithWriteActionPriority(
+            this::doTestConnection, ProgressIndicatorProvider.getGlobalProgressIndicator()));
 
+  }
+
+  private void doTestConnection() {
     Cursor cursor = panel.getCursor();
     try {
       panel.setCursor(Cursor.getPredefinedCursor(WAIT_CURSOR));
+      messageLabel.setForeground(Color.PINK);
+      messageLabel.setText("Connecting...");
       c connection = getConnectionSpec().createConnection();
       try {
         messageLabel.setForeground(DARK_GREEN);

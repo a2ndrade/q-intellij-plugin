@@ -1,11 +1,18 @@
 package com.appian.intellij.k.settings;
 
+import static java.awt.Cursor.WAIT_CURSOR;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.function.Function;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -13,8 +20,14 @@ import javax.swing.text.NumberFormatter;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.JBColor;
+
+import kx.c;
 
 public class KServerDialog extends DialogWrapper {
   private final Function<String,ValidationInfo> nameValidator;
@@ -25,12 +38,51 @@ public class KServerDialog extends DialogWrapper {
   private JCheckBox useTLSCheckBox;
   private JFormattedTextField portText;
   private JTextField nameText;
+  private JButton testConnectionButton;
+  private JLabel messageLabel;
+
+  private final static Color DARK_GREEN = new JBColor(new Color(0, 155, 0), Color.green);
 
   public KServerDialog(Function<String,ValidationInfo> nameValidator) {
     super(null);
     this.nameValidator = nameValidator;
     init();
     setTitle("Q Server");
+    testConnectionButton.addActionListener(e -> testConnection());
+  }
+
+  private void testConnection() {
+    ValidationInfo validationInfo = doValidate();
+    if (validationInfo != null) {
+      clickDefaultButton();
+      return;
+    }
+    ApplicationManager.getApplication()
+        .executeOnPooledThread(() -> ProgressManager.getInstance().runInReadActionWithWriteActionPriority(
+            this::doTestConnection, ProgressIndicatorProvider.getGlobalProgressIndicator()));
+
+  }
+
+  private void doTestConnection() {
+    Cursor cursor = panel.getCursor();
+    try {
+      panel.setCursor(Cursor.getPredefinedCursor(WAIT_CURSOR));
+      messageLabel.setForeground(Color.PINK);
+      messageLabel.setText("Connecting...");
+      c connection = getConnectionSpec().createConnection();
+      try {
+        messageLabel.setForeground(DARK_GREEN);
+        messageLabel.setText("Success");
+      }
+      finally {
+        connection.close();
+      }
+    } catch (c.KException | IOException e) {
+      messageLabel.setForeground(JBColor.RED);
+      messageLabel.setText(e.getMessage());
+    } finally {
+      panel.setCursor(cursor);
+    }
   }
 
   @Nullable

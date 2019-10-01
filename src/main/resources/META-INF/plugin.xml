@@ -203,12 +203,12 @@
     <!-- editor popup menu customization -->
     <group id="com.appian.intellij.k.actions.KRunSelectionActionGroup"
            class="com.appian.intellij.k.actions.KRunSelectionActionGroup"
-           text="Run Selection On" popup="true">
+           text="Evaluate Selection On" popup="true">
       <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu1"/>
     </group>
     <group id="com.appian.intellij.k.actions.KDefineElementActionGroup"
            class="com.appian.intellij.k.actions.KDefineElementActionGroup"
-           text="Define On" popup="true">
+           text="Redefine On" popup="true">
       <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu1"/>
     </group>
     <!-- end editor popup menu customization -->
@@ -216,7 +216,7 @@
     <!-- structure view popup menu customization -->
     <group id="com.appian.intellij.k.actions.KDefineNavigatableElementActionGroup"
            class="com.appian.intellij.k.actions.KDefineElementActionGroup"
-           text="Define On" popup="true">
+           text="Redefine On" popup="true">
 <!--      <separator/>-->
       <add-to-group group-id="StructureViewPopupMenu" anchor="after" relative-to-action="AddToFavorites"/>
     </group>

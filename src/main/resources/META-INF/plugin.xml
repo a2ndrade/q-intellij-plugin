@@ -169,6 +169,7 @@
     ]]>
   </change-notes>
   <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.java</depends>
   <project-components>
     <component>
       <implementation-class>com.appian.intellij.k.KProjectComponent</implementation-class>

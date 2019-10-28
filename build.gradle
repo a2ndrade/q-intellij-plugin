@@ -23,7 +23,7 @@ intellij {
   pluginName 'q'
 }
 
-version '1.18' // Plugin version
+version '1.19' // Plugin version
 patchPluginXml {
   untilBuild '192.*'
 }

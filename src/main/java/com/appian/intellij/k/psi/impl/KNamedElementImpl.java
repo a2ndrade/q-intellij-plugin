@@ -22,6 +22,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.SearchScope;
 
 public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements KNamedElement {
   KNamedElementImpl(ASTNode node) {
@@ -112,5 +114,13 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
   @Override
   public int getAccessLevel() {
     return isInternal() ? KNamedElement.PRIVATE_ACCESS_LEVEL : KNamedElement.PUBLIC_ACCESS_LEVEL;
+  }
+
+  // Indicates the scope of files in which to find usages of this PsiElement
+  // For find usages, this should include all files in the top level project
+  @NotNull
+  @Override
+  public SearchScope getUseScope() {
+    return GlobalSearchScope.projectScope(getProject());
   }
 }

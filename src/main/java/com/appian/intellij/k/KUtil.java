@@ -1,6 +1,7 @@
 package com.appian.intellij.k;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,8 +49,7 @@ public final class KUtil {
         GlobalSearchScope.allScope(project));
     final Stream<KUserId> stream = virtualFiles.stream()
         .flatMap(file -> findIdentifiers(project, file, AnyMatcher, false).stream());
-    List<KUserId> fnNames = stream.collect(Collectors.toList());
-    return fnNames;
+    return stream.collect(Collectors.toList());
   }
 
   public static Collection<KUserId> findIdentifiers(Project project, VirtualFile file) {
@@ -59,6 +60,14 @@ public final class KUtil {
   public static KUserId findFirstExactMatch(Project project, VirtualFile file, String targetIdentifier) {
     final Iterator<KUserId> it = findIdentifiers(project, file, new ExactMatcher(targetIdentifier), true).iterator();
     return it.hasNext() ? it.next() : null;
+  }
+
+  @SafeVarargs
+  public static <T> Optional<T> first(Supplier<Optional<T>>... suppliers) {
+    return Arrays.stream(suppliers)
+        .map(Supplier::get)
+        .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
+        .findFirst();
   }
 
   interface Matcher {
@@ -196,7 +205,7 @@ public final class KUtil {
     return Optional.empty();
   }
 
-  static boolean isInQFile(PsiElement element) {
+  private static boolean isInQFile(PsiElement element) {
     return isInFileWithExt(element, "q");
   }
 
@@ -215,8 +224,8 @@ public final class KUtil {
     }
     // in k3, the Q built-in functions are valid variable names. In Q, they are not
     if (KUtil.isInQFile(element)) {
-      final IElementType elementType = ((KUserId)element).getNameIdentifier().getNode().getElementType();
-      return KTypes.Q_SYSTEM_FUNCTION != elementType;
+      PsiElement nameIdentifier = ((KUserId)element).getNameIdentifier();
+      return nameIdentifier != null && KTypes.Q_SYSTEM_FUNCTION != nameIdentifier.getNode().getElementType();
     }
     return true;
   }

@@ -2,10 +2,10 @@ package com.appian.intellij.k.actions;
 
 import static com.appian.intellij.k.KIcons.RUN_SELECTION;
 import static com.appian.intellij.k.actions.KActionUtil.getEditorSelection;
+import static com.appian.intellij.k.actions.KActionUtil.isInQFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,15 +15,16 @@ import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.Separator;
 import com.intellij.openapi.components.ServiceManager;
 
 /**
- * An action group consisting of an action to run selected
- * code on the new server or any of the servers, defined
+ * An action group consisting of an action to evaluate
+ * code on a new server or any of the servers defined
  * in settings.
  */
-public class KRunSelectionActionGroup extends ActionGroup {
+public class KEvalActionGroup extends ActionGroup {
   @NotNull
   @Override
   public AnAction[] getChildren(@Nullable AnActionEvent e) {
@@ -31,11 +32,11 @@ public class KRunSelectionActionGroup extends ActionGroup {
       return new AnAction[0];
     }
 
-    List<KRunSelectionAction> serverActions = ServiceManager.getService(KSettingsService.class)
+    List<KEvalAction> serverActions = ServiceManager.getService(KSettingsService.class)
         .getSettings()
         .getServers()
         .stream()
-        .map(s -> new KRunSelectionAction(e.getProject(), s.toString(), s.getId()))
+        .map(s -> new KEvalAction(e.getProject(), s.toString(), s.getId()))
         .collect(Collectors.toList());
 
     List<AnAction> actions = new ArrayList<>();
@@ -45,16 +46,16 @@ public class KRunSelectionActionGroup extends ActionGroup {
       actions.add(Separator.getInstance());
     }
 
-    actions.add(new KRunSelectionAction(e.getProject(), "New Server...", null));
+    actions.add(new KEvalAction(e.getProject(), "New Server...", null));
     return actions.toArray(new AnAction[0]);
   }
 
   @Override
-  public void update(AnActionEvent event) {
-    event.getPresentation().setIcon(RUN_SELECTION);
-
-    Optional<String> selection = getEditorSelection(event);
-    event.getPresentation().setEnabled(selection.isPresent());
-    event.getPresentation().setVisible(selection.isPresent());
+  public void update(AnActionEvent e) {
+    Presentation p = e.getPresentation();
+    p.setVisible(isInQFile(e.getDataContext()));
+    p.setIcon(RUN_SELECTION);
+    p.setText(getEditorSelection(e.getDataContext()).isPresent() ? "Evaluate Selection On" : "Evaluate Line On");
   }
+
 }

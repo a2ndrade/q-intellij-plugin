@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.20</strong><br/>
+      <ul>
+        <li>New option to evaluate current line</li>
+      </ul>
       <strong>1.19</strong><br/>
       <ul>
         <li>Find Usages now works across modules</li>

@@ -54,7 +54,7 @@ public class KDefineElementActionGroup extends ActionGroup {
 
   @Override
   public void update(AnActionEvent event) {
-    Optional<PsiElement> f = getSelectedFunctionDefinition(event);
+    Optional<PsiElement> f = getSelectedFunctionDefinition(event.getDataContext());
 
     event.getPresentation().setVisible(f.isPresent());
     event.getPresentation().setEnabled(f.isPresent());

@@ -210,8 +210,8 @@
   <actions>
 
     <!-- editor popup menu customization -->
-    <group id="com.appian.intellij.k.actions.KRunSelectionActionGroup"
-           class="com.appian.intellij.k.actions.KRunSelectionActionGroup"
+    <group id="com.appian.intellij.k.actions.KEvalActionGroup"
+           class="com.appian.intellij.k.actions.KEvalActionGroup"
            text="Evaluate Selection On" popup="true">
       <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu1"/>
     </group>
@@ -232,13 +232,13 @@
     <!-- end structure view popup menu customization -->
 
     <!-- keyboard shortcuts -->
-    <action id="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction"
-            class="com.appian.intellij.k.actions.KRunSelectionOnActiveServerAction" text="Evaluate Selection On Active Q Server"
+    <action id="com.appian.intellij.k.actions.KEvalOnActiveServerAction"
+            class="com.appian.intellij.k.actions.KEvalOnActiveServerAction" text="Evaluate Selection On Active Q Server"
             description="Run selection popup">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt E"/>
     </action>
-    <action id="com.appian.intellij.k.actions.KRunSelectionPopupAction"
-            class="com.appian.intellij.k.actions.KRunSelectionPopupAction" text="Choose Q Server To Evaluate Selection">
+    <action id="com.appian.intellij.k.actions.KEvalPopupAction"
+            class="com.appian.intellij.k.actions.KEvalPopupAction" text="Choose Q Server To Evaluate Selection">
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt E"/>
     </action>
     <action id="com.appian.intellij.k.actions.KDefineElementOnActiveServerAction"

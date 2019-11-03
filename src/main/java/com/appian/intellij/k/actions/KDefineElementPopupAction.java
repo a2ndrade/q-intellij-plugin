@@ -20,17 +20,17 @@ import com.intellij.psi.PsiElement;
  * and defines selected function on the chosen server
  */
 public class KDefineElementPopupAction extends AnAction {
-  public KDefineElementPopupAction() {
+  KDefineElementPopupAction() {
   }
 
   @Override
   public void actionPerformed(AnActionEvent e) {
-    Optional<Editor> editor = getEditor(e);
+    Optional<Editor> editor = getEditor(e.getDataContext());
     if (!editor.isPresent()) {
       return;
     }
 
-    Optional<PsiElement> f = getElementAtCaret(e).flatMap(KUtil::getTopLevelFunctionDefinition);
+    Optional<PsiElement> f = getElementAtCaret(e.getDataContext()).flatMap(KUtil::getTopLevelFunctionDefinition);
     if (!f.isPresent()) {
       return;
     }

@@ -1,5 +1,6 @@
 package com.appian.intellij.k.actions;
 
+import static com.appian.intellij.k.actions.KActionUtil.runInBackground;
 import static com.appian.intellij.k.actions.KActionUtil.showInformationNotification;
 import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
 import static com.intellij.execution.ui.ConsoleViewContentType.NORMAL_OUTPUT;
@@ -20,9 +21,6 @@ import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 
 import kx.c;
@@ -90,14 +88,13 @@ public class KServerProcessHandler extends ProcessHandler {
       return;
     }
 
-    ApplicationManager.getApplication()
-        .executeOnPooledThread(() -> ProgressManager.getInstance().runInReadActionWithWriteActionPriority(() -> {
-          try {
-            doExecute(console, q);
-          } finally {
-            running.set(false);
-          }
-        }, ProgressIndicatorProvider.getGlobalProgressIndicator()));
+    runInBackground(() -> {
+      try {
+        doExecute(console, q);
+      } finally {
+        running.set(false);
+      }
+    });
   }
 
   private void doExecute(ConsoleView console, String q) {

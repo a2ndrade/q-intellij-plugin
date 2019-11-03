@@ -43,7 +43,7 @@ public class KDefineElementAction extends AnAction {
 
   @Override
   public void actionPerformed(AnActionEvent event) {
-    Optional<PsiElement> f = getSelectedFunctionDefinition(event);
+    Optional<PsiElement> f = getSelectedFunctionDefinition(event.getDataContext());
     if (!f.isPresent()) {
       return;
     }

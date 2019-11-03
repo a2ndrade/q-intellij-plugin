@@ -1,9 +1,12 @@
 package com.appian.intellij.k.actions;
 
 import static com.appian.intellij.k.KUtil.cast;
+import static com.appian.intellij.k.KUtil.first;
 import static com.intellij.openapi.actionSystem.CommonDataKeys.PSI_FILE;
+import static com.intellij.openapi.progress.ProgressIndicatorProvider.getGlobalProgressIndicator;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -16,6 +19,7 @@ import com.appian.intellij.k.settings.KServerDialog;
 import com.appian.intellij.k.settings.KServerSpec;
 import com.appian.intellij.k.settings.KSettings;
 import com.appian.intellij.k.settings.KSettingsService;
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.execution.ExecutionManager;
 import com.intellij.execution.Executor;
 import com.intellij.execution.executors.DefaultRunExecutor;
@@ -31,10 +35,18 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.pom.Navigatable;
@@ -61,8 +73,8 @@ class KActionUtil {
         .getContentManager()
         .getAllDescriptors()
         .stream()
-        .filter(
-            e -> e.getProcessHandler() instanceof KServerProcessHandler && ((KServerProcessHandler) e.getProcessHandler()).getServerId().equals(serverId))
+        .filter(e -> e.getProcessHandler() instanceof KServerProcessHandler &&
+            ((KServerProcessHandler)e.getProcessHandler()).getServerId().equals(serverId))
         .findFirst();
   }
 
@@ -115,13 +127,13 @@ class KActionUtil {
     return dialog.showAndGet() ? Optional.of(dialog.getConnectionSpec()) : Optional.empty();
   }
 
-  static Optional<PsiElement> getElementAtCaret(AnActionEvent e) {
-    Optional<Editor> editor = getEditor(e);
+  static Optional<PsiElement> getElementAtCaret(DataContext dataContext) {
+    Optional<Editor> editor = getEditor(dataContext);
     if (!editor.isPresent()) {
       return Optional.empty();
     }
 
-    PsiFile file = PSI_FILE.getData(e.getDataContext());
+    PsiFile file = PSI_FILE.getData(dataContext);
     if (file == null) {
       return Optional.empty();
     }
@@ -129,18 +141,31 @@ class KActionUtil {
     return Optional.ofNullable(file.findElementAt(editor.get().getCaretModel().getOffset()));
   }
 
-  static Optional<String> getEditorSelection(AnActionEvent e) {
-    return getEditor(e).map(editor -> editor.getSelectionModel().getSelectedText());
+  static Optional<String> getEditorSelection(DataContext dataContext) {
+    return getEditor(dataContext).map(editor -> editor.getSelectionModel().getSelectedText());
   }
 
   @SuppressWarnings("WeakerAccess")
-  static Optional<Navigatable> getNavigableSelection(AnActionEvent e) {
-    return Optional.ofNullable(CommonDataKeys.NAVIGATABLE.getData(e.getDataContext()));
+  static Optional<String> getEditorLine(DataContext dataContext) {
+    return getEditor(dataContext).map(editor -> {
+      Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
+      Document doc = editor.getDocument();
+      return doc.getText(new TextRange(primaryCaret.getVisualLineStart(), primaryCaret.getVisualLineEnd()));
+    });
+  }
+
+  static Optional<String> getEditorEvalText(DataContext dataContext) {
+    return first(()-> getEditorSelection(dataContext), ()->getEditorLine(dataContext));
   }
 
   @SuppressWarnings("WeakerAccess")
-  static Optional<PsiElement> getNavigableSelectionElement(AnActionEvent e) {
-    return getNavigableSelection(e).flatMap(n -> cast(n, AbstractTreeNode.class))
+  static Optional<Navigatable> getNavigableSelection(DataContext dataContext) {
+    return Optional.ofNullable(CommonDataKeys.NAVIGATABLE.getData(dataContext));
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  static Optional<PsiElement> getNavigableSelectionElement(DataContext dataContext) {
+    return getNavigableSelection(dataContext).flatMap(n -> cast(n, AbstractTreeNode.class))
         .map(AbstractTreeNode::getValue)
         .flatMap(n -> cast(n, StructureViewTreeElement.class))
         .map(StructureViewTreeElement::getValue)
@@ -148,16 +173,21 @@ class KActionUtil {
   }
 
   @NotNull
-  static Optional<Editor> getEditor(AnActionEvent e) {
-    return Optional.ofNullable(CommonDataKeys.EDITOR.getData(e.getDataContext()));
+  static Optional<Editor> getEditor(DataContext dataContext) {
+    return Optional.ofNullable(CommonDataKeys.EDITOR.getData(dataContext));
   }
 
   @NotNull
-  static Optional<PsiElement> getSelectedFunctionDefinition(AnActionEvent event) {
+  static Optional<VirtualFile> getVirtualFile(DataContext dataContext) {
+    return Optional.ofNullable(CommonDataKeys.VIRTUAL_FILE.getData(dataContext));
+  }
+
+  @NotNull
+  static Optional<PsiElement> getSelectedFunctionDefinition(DataContext dataContext) {
     //noinspection SimplifyOptionalCallChains
-    return Optional.ofNullable(getElementAtCaret(event).flatMap(KUtil::getTopLevelFunctionDefinition)
+    return Optional.ofNullable(getElementAtCaret(dataContext).flatMap(KUtil::getTopLevelFunctionDefinition)
         .orElseGet(
-            () -> getNavigableSelectionElement(event).flatMap(KUtil::getTopLevelFunctionDefinition).orElse(null)));
+            () -> getNavigableSelectionElement(dataContext).flatMap(KUtil::getTopLevelFunctionDefinition).orElse(null)));
   }
 
   static void showInformationNotification(Project project, String message) {
@@ -166,5 +196,31 @@ class KActionUtil {
         .orElseGet(() -> NotificationGroup.toolWindowGroup(displayId, ToolWindowId.RUN));
 
     group.createNotification(message, NotificationType.INFORMATION).notify(project);
+  }
+
+  static void showErrorHint(AnActionEvent event, String text) {
+    Optional<Editor> editor = getEditor(event.getDataContext());
+    if (!editor.isPresent()) {
+      return;
+    }
+    if (event.getInputEvent() instanceof KeyEvent) {
+      HintManager.getInstance().showErrorHint(editor.get(), text);
+    }
+    else {
+      // when popup menu is used to trigger an action,
+      // editor hint does not work for some reason, use
+      // popup instead
+      JBPopupFactory.getInstance().createMessage(text).showInBestPositionFor(editor.get());
+    }
+  }
+
+  static void runInBackground(Runnable runnable) {
+    ApplicationManager.getApplication()
+        .executeOnPooledThread(() -> ProgressManager.getInstance()
+            .runInReadActionWithWriteActionPriority(runnable, getGlobalProgressIndicator()));
+  }
+
+  static boolean isInQFile(DataContext dataContext) {
+    return getVirtualFile(dataContext).map(f -> "q".equals(f.getExtension())).orElse(false);
   }
 }

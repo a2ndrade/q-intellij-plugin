@@ -122,7 +122,10 @@ namespace_declaration ::= current_namespace user_id
 mode_directive ::= mode expression
 
 // simple & compound assignment; local & global
-assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression
+assignment ::= user_id [args] (colon [colon] | verb colon | colon verb colon) expression {
+  mixin="com.appian.intellij.k.psi.impl.KAssignmentMixinImpl"
+  implements="com.appian.intellij.k.psi.KAssignmentMixin"
+}
 
 // all data are syntactically nouns
 private primitive_noun ::= vector | atom | lambda

@@ -30,7 +30,7 @@ public final class KChooseByNameContributor implements ChooseByNameContributor {
     final Stream<VirtualFile> files = FileTypeIndex.getFiles(KFileType.INSTANCE, GlobalSearchScope.allScope(project))
         .stream();
     return files.flatMap(
-        file -> cache.findIdentifiers(project, file, name, true, new KUtil.ExactMatcher(name)).stream())
+        file -> cache.findGlobalDeclarations(project, file, true, new KUtil.ExactGlobalAssignmentMatcher(name)).stream())
         .toArray(NavigationItem[]::new);
   }
 

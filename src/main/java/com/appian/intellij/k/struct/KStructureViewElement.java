@@ -66,7 +66,7 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
     }
     final Project project = element.getProject();
     final VirtualFile virtualFile = ((KFile)element).getVirtualFile();
-    return KUtil.findIdentifiers(project, virtualFile)
+    return KUtil.findGlobalDeclarations(project, virtualFile)
         .stream()
         .map(KStructureViewElement::new)
         .toArray(TreeElement[]::new);
@@ -126,7 +126,7 @@ final class KStructureViewElement implements StructureViewTreeElement, SortableT
       @Override
       public TextAttributesKey getTextAttributesKey() {
         final String name = element.getName();
-        final String ns = KUtil.getExplicitNamespace(name);
+        final String ns = KUtil.getNearestContextName(name);
         final String localName = ns != null ? name.substring(ns.length() + 1) : name;
         if (fnDefinition.isPresent() && localName.charAt(0) == '_') { // convention for side-effect functions
           return KSyntaxHighlighter.IDENTIFIER_SYS;

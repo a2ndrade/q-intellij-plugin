@@ -100,7 +100,7 @@ public class KParameterInfoHandler implements DumbAware,
       return null;
     }
     final KUserId declaration = Optional.ofNullable(PsiTreeUtil.getPrevSiblingOfType(args, KUserId.class))
-        .map(id -> new KReference(id, null).resolve())
+        .map(id -> new KReference(id, null).resolveFirstUnordered())
         .filter(KUserId.class::isInstance)
         .map(KUserId.class::cast)
         .orElse(null);

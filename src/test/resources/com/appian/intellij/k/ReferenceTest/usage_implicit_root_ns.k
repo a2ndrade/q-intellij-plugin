@@ -1,2 +1,2 @@
-.implicitRoot<caret>Ns
+implicitRoot<caret>Ns
 

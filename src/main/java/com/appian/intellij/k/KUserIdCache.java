@@ -9,13 +9,13 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 
 /**
@@ -38,7 +38,7 @@ public final class KUserIdCache implements VirtualFileListener {
   String[] getIdentifiers(Project project, VirtualFile file) {
     String[] userIds = file.getUserData(USER_IDS);
     if (userIds == null) {
-      userIds = KUtil.findIdentifiers(project, file).stream().map(KUtil::getFqnOrName).sorted().toArray(String[]::new);
+      userIds = KUtil.findGlobalDeclarations(project, file).stream().map(KUtil::getFqnOrName).sorted().toArray(String[]::new);
       file.putUserData(USER_IDS, userIds);
     }
     return userIds;
@@ -48,7 +48,7 @@ public final class KUserIdCache implements VirtualFileListener {
     Trie<Boolean> userIds = file.getUserData(USER_IDS_TRIE);
     if (userIds == null) {
       userIds = new Trie<>();
-      final Collection<KUserId> identifiers = KUtil.findIdentifiers(project, file);
+      final Collection<KUserId> identifiers = KUtil.findGlobalDeclarations(project, file);
       for (KUserId userId : identifiers) {
         userIds.put(KUtil.getFqnOrName(userId), Boolean.TRUE);
       }
@@ -59,36 +59,40 @@ public final class KUserIdCache implements VirtualFileListener {
 
   @Nullable
   KUserId findFirstExactMatch(Project project, VirtualFile file, String targetIdentifier) {
-    final Iterator<KUserId> it = findIdentifiers(project, file, targetIdentifier, true,
-        new KUtil.ExactMatcher(targetIdentifier)).iterator();
+    final Iterator<KUserId> it = findGlobalDeclarations(project, file, true,
+        new KUtil.ExactGlobalAssignmentMatcher(targetIdentifier)).iterator();
     return it.hasNext() ? it.next() : null;
   }
 
   @NotNull
-  Collection<KUserId> findAllIdentifiers(
-      Project project, VirtualFile file, String targetIdentifier, KUtil.Matcher matcher) {
-    return findIdentifiers(project, file, targetIdentifier, false, matcher);
+  Collection<KUserId> findGlobalDeclarations(
+      Project project, VirtualFile file, KUtil.Matcher matcher) {
+    return findGlobalDeclarations(project, file, false, matcher);
   }
 
   @NotNull
-  Collection<KUserId> findIdentifiers(
-      Project project, VirtualFile file, String targetIdentifier, boolean stopAfterFirstMatch, KUtil.Matcher matcher) {
-    if (matcher instanceof KUtil.ExactMatcher) {
-      final String[] userIds = getIdentifiers(project, file);
-      if (Arrays.binarySearch(userIds, targetIdentifier) < 0) {
-        return Collections.emptyList();
-      }
-    } else if (matcher instanceof KUtil.PrefixMatcher) {
-      final Trie<Boolean> userIds = getIdentifiersTrie(project, file);
-      if (!userIds.containsKeyWithPrefix(targetIdentifier)) {
-        return Collections.emptyList();
+  Collection<KUserId> findGlobalDeclarations(
+      Project project, VirtualFile file, boolean stopAfterFirstMatch, KUtil.Matcher matcher) {
+    final String targetIdentifier = matcher.getTarget();
+    // quickly skip files without a potential match
+    if (!matcher.skipCacheCheck()) {
+      if (matcher instanceof KUtil.ExactGlobalAssignmentMatcher) {
+        final String[] userIds = getIdentifiers(project, file);
+        if (Arrays.binarySearch(userIds, targetIdentifier) < 0) {
+          return Collections.emptyList();
+        }
+      } else if (matcher instanceof KUtil.PrefixGlobalAssignmentMatcher) {
+        final Trie<Boolean> userIds = getIdentifiersTrie(project, file);
+        if (!userIds.containsKeyWithPrefix(targetIdentifier)) {
+          return Collections.emptyList();
+        }
       }
     }
-    return KUtil.findIdentifiers(project, file, matcher, stopAfterFirstMatch);
+    return KUtil.findGlobalDeclarations(project, file, matcher, stopAfterFirstMatch);
   }
 
   @Override
-  public void contentsChanged(@NotNull VirtualFileEvent event) {
+  public void beforeContentsChange(@NotNull VirtualFileEvent event) {
     remove(event.getFile());
   }
 
@@ -97,8 +101,8 @@ public final class KUserIdCache implements VirtualFileListener {
     remove(event.getFile());
   }
 
-  public void remove(KNamedElement target) {
-    remove(Optional.of(target).map(KNamedElement::getContainingFile).map(PsiFile::getVirtualFile).orElse(null));
+  public void remove(PsiElement target) {
+    remove(Optional.of(target).map(PsiElement::getContainingFile).map(PsiFile::getVirtualFile).orElse(null));
   }
 
   void remove(VirtualFile file) {

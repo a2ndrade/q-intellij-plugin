@@ -1,6 +1,7 @@
 package com.appian.intellij.k;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -13,43 +14,33 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
 
-public final class KSymbolicReference extends PsiReferenceBase<PsiElement> implements PsiReference {
+public final class KSymbolicReference extends KReferenceBase {
 
-  public KSymbolicReference(KSymbol element, TextRange textRange) {
-    super(element, textRange, true);
+  KSymbolicReference(KSymbol element, TextRange textRange) {
+    super(element, textRange, false);
   }
 
+  @NotNull
   @Override
-  public PsiElement resolve() {
-    final PsiElement reference = resolve0();
-    // avoid including a variable declaration as a reference to itself
-    return reference == myElement ? null : reference;
+  Collection<KUserId> resolve0(boolean stopAfterFirstMatch) {
+    final String referenceName = myElement.getText().substring(1);
+    return resolve00(referenceName, stopAfterFirstMatch);
   }
 
-  private PsiElement resolve0() {
-    final KSymbol reference = (KSymbol)myElement;
-    final String referenceName = reference.getText().substring(1);
-    return resolve00(referenceName);
-  }
-
-  private PsiElement resolve00(String referenceName) {
+  @NotNull
+  private Collection<KUserId> resolve00(String referenceName, boolean stopAfterFirstMatch) {
     final VirtualFile sameFile = myElement.getContainingFile().getOriginalFile().getVirtualFile();
     if (sameFile == null || sameFile.getCanonicalPath() == null) {
-      return null;
+      return Collections.emptyList();
     }
-    final String sameFilePath = sameFile.getCanonicalPath();
     final PsiElement context = myElement.getContext();
     if (context instanceof KNamespaceDeclaration) {
-      return null;
+      return Collections.emptyList();
     }
     final Project project = myElement.getProject();
-    final KUserIdCache cache = KUserIdCache.getInstance();
+
     final String fqn;
     if (KUtil.isAbsoluteId(referenceName)) {
       fqn = referenceName;
@@ -57,39 +48,19 @@ public final class KSymbolicReference extends PsiReferenceBase<PsiElement> imple
       final String currentNs = KUtil.getCurrentNamespace(myElement);
       fqn = KUtil.generateFqn(currentNs, referenceName);
     }
-    // 1) check same-file globals
-    KUserId foundInSameFile = cache.findFirstExactMatch(project, sameFile, fqn);
-    if (foundInSameFile != null) {
-      return foundInSameFile;
-    }
-    // 2) check other file's globals
-    final Collection<VirtualFile> otherFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
-        GlobalSearchScope.allScope(project));
-    for (VirtualFile otherFile : otherFiles) {
-      if (sameFilePath.equals(otherFile.getCanonicalPath())) {
-        continue; // already processed above
-      }
-      KUserId foundInOtherFile = cache.findFirstExactMatch(project, otherFile, fqn);
-      if (foundInOtherFile != null) {
-        return foundInOtherFile;
-      }
-    }
-    return null;
+    final KUtil.ExactGlobalAssignmentMatcher matcher = new KUtil.ExactGlobalAssignmentMatcher(fqn);
+    return findDeclarations(project, sameFile, stopAfterFirstMatch, matcher);
   }
 
   @Override
-  public Object[] getVariants() {
-    return new Object[0];
-  }
-
-  @Override
-  public PsiElement handleElementRename(@NotNull String newName) throws IncorrectOperationException {
-    final KUserId declaration = ((KUserId)resolve());
-    final String newEffectiveName = toSymbolicName(KReference.getNewNameForUsage(declaration, myElement, newName));
+  public PsiElement handleElementRename(@NotNull final String newName) throws IncorrectOperationException {
+    final KUserId declaration = (KUserId)resolve();
+    final String newEffectiveName = getNewNameForUsage(declaration, myElement, newName);
     final ASTNode keyNode = myElement.getNode().getFirstChildNode();
-    KSymbol property = KElementFactory.createKSymbol(myElement.getProject(), newEffectiveName);
+    KSymbol property = KElementFactory.createKSymbol(myElement.getProject(), toSymbolicName(newEffectiveName));
     ASTNode newKeyNode = property.getFirstChild().getNode();
     myElement.getNode().replaceChild(keyNode, newKeyNode);
+    KUserIdCache.getInstance().remove(myElement);
     return myElement;
   }
 

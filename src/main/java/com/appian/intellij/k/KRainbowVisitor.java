@@ -32,7 +32,7 @@ public final class KRainbowVisitor extends RainbowVisitor {
       return; // don't include globals
     }
     final KUserId usage = (KUserId)element;
-    if (usage.getName().indexOf('.') != -1) {
+    if (KUtil.isNamespacedId(usage.getText())) {
       return; // don't include globals
     }
     PsiElement rainbowElement = usage.getNameIdentifier();
@@ -61,10 +61,7 @@ public final class KRainbowVisitor extends RainbowVisitor {
       return null;
     }
     String name = ((KUserId)resolved).getName();
-    if (name != null) {
-      return getInfo(context, rainbowElement, name, KSyntaxHighlighter.IDENTIFIER);
-    }
-    return null;
+    return getInfo(context, rainbowElement, name, KSyntaxHighlighter.IDENTIFIER);
   }
 
   @Nullable

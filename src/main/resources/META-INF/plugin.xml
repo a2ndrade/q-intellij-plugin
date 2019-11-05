@@ -214,6 +214,10 @@
         serviceImplementation="com.appian.intellij.k.settings.KSettingsService"/>
     <applicationConfigurable groupId="language" displayName="Q" id="preferences.Q"
                              instance="com.appian.intellij.k.settings.KSettingsConfigurable"/>
+    <renamePsiElementProcessor implementation="com.appian.intellij.k.KRenamePsiElementProcessor"/>
+    <refactoring.elementListenerProvider implementation="com.appian.intellij.k.KRefactoringListenerProvider"/>
+    <usageTypeProvider implementation="com.appian.intellij.k.KUsageTypeProvider"/>
+    <renameHandler implementation="com.appian.intellij.k.KVariableInplaceRenameHandler"/>
   </extensions>
   <actions>
 

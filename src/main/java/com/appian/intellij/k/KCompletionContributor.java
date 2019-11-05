@@ -161,9 +161,9 @@ public class KCompletionContributor extends CompletionContributor {
       @Override
       List<ItemPresentation> getCompletions(PsiElement input) {
         String inputText = getText(input);
-        return KUtil.findIdentifiers(input.getProject(), input.getContainingFile().getVirtualFile())
+        return KUtil.findGlobalDeclarations(input.getProject(), input.getContainingFile().getVirtualFile())
             .stream()
-            .filter(id -> id.getName().contains(inputText) && Arrays.binarySearch(SYSTEM_FNS_Q, id.getName()) < 0)
+            .filter(id -> id.getDetails().getFqn().contains(inputText) && Arrays.binarySearch(SYSTEM_FNS_Q, id.getName()) < 0)
             .map(id -> suppressLocationString(id.getPresentation()))
             .collect(Collectors.toList());
       }
@@ -199,7 +199,7 @@ public class KCompletionContributor extends CompletionContributor {
         return FileTypeIndex.getFiles(KFileType.INSTANCE, GlobalSearchScope.allScope(element.getProject()))
             .stream()
             .filter(file -> elementFilePath == null || !elementFilePath.equals(file.getCanonicalPath()))
-            .flatMap(file -> cache.findAllIdentifiers(element.getProject(), file, input, new KUtil.PrefixMatcher(input))
+            .flatMap(file -> cache.findGlobalDeclarations(element.getProject(), file, new KUtil.PrefixGlobalAssignmentMatcher(input))
                 .stream())
             .map(KNamedElement::getPresentation)
             .collect(Collectors.toList());

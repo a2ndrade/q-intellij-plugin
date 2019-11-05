@@ -5,3 +5,7 @@ test2:1;
 sampleFn:{[]
   `.a.test2[2];
   }
+
+.a.test2[3]
+
+if[1;.a.test2:123]

@@ -62,6 +62,6 @@ public final class KFindUsagesProvider implements FindUsagesProvider {
       return "";
     }
     final KUserId userId = (KUserId)element;
-    return useFullName ? KUtil.getFqnOrName(userId) : userId.getName();
+    return useFullName ? userId.getDetails().getFqn() : userId.getName();
   }
 }

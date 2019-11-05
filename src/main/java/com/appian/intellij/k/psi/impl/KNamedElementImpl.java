@@ -1,6 +1,8 @@
 package com.appian.intellij.k.psi.impl;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 import javax.swing.Icon;
 
@@ -8,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.appian.intellij.k.KAstWrapperPsiElement;
 import com.appian.intellij.k.KIcons;
+import com.appian.intellij.k.KReference;
 import com.appian.intellij.k.KUserIdCache;
 import com.appian.intellij.k.KUtil;
 import com.appian.intellij.k.psi.KAssignment;
@@ -32,21 +35,23 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
 
   @NotNull
   public String getName() {
-    return getNode().getFirstChildNode().getText();
+    return getText();
   }
 
   public PsiElement setName(@NotNull String newName) {
-    final ASTNode keyNode = getNode().getFirstChildNode();
-    KUserId property = KElementFactory.createKUserId(getProject(), newName);
-    ASTNode newKeyNode = property.getFirstChild().getNode();
-    getNode().replaceChild(keyNode, newKeyNode);
-    KUtil.putFqn(this, null); // clear so it's recalculated next time
-    KUserIdCache.getInstance().remove(this); // clear file cache to reflect changes immediately
+    Optional.ofNullable(KElementFactory.createKUserId(getProject(), newName))
+        .map(KUserId::getFirstChild)
+        .map(PsiElement::getNode)
+        .ifPresent(newKeyNode -> {
+          final ASTNode keyNode = getNode().getFirstChildNode();
+          getNode().replaceChild(keyNode, newKeyNode);
+          KUserIdCache.getInstance().remove(this); // clear file cache to reflect changes immediately
+        });
     return this;
   }
 
   public PsiElement getNameIdentifier() {
-    return getNode().getFirstChildNode().getPsi();
+    return this;
   }
 
   public ItemPresentation getPresentation() {
@@ -54,7 +59,7 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
       @NotNull
       @Override
       public String getPresentableText() {
-        return KUtil.getFqnOrName(KNamedElementImpl.this);
+        return getDetails().getFqn();
       }
 
       @NotNull
@@ -90,6 +95,54 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
     return false;
   }
 
+  @NotNull
+  public Info getDetails() {
+    final String text = getName();
+    PsiElement parent = getParent();
+    if (parent instanceof KLambdaParams || parent instanceof KNamespaceDeclaration) {
+      return new Info(text, false, false);
+    }
+    if (parent instanceof KAssignment) {
+      final KAssignment assign = (KAssignment)parent;
+      if (assign.isGlobal()) {
+        boolean isComposite = assign.isComposite();
+        if (KUtil.isAbsoluteId(text)) {
+          return new Info(text, true, !isComposite);
+        }
+        return new Info(() -> {
+          final String currentNs = KUtil.getCurrentNamespace(this);
+          return KUtil.generateFqn(currentNs, text);
+        }, true, !isComposite);
+      }
+      // local declaration
+      return new Info(text, false, false);
+    }
+    if (KUtil.isAbsoluteId(text)) {
+      return new Info(text, true, false);
+    }
+    final BooleanSupplier isGlobal = () -> {
+      // ensure that `a` inside the function is resolved to `.ns.a` AND `x` is resolved to `x`
+      //   \d .ns
+      //   a:1
+      //   fn:{a+x}
+      for (String implicitVar : KNamedElement.IMPLICIT_VARS) {
+        if (implicitVar.equals(text)) {
+          return false;
+        }
+      }
+      // make sure it's not a reference to a local (which is never namespaced)
+      return KReference.findLocalDeclaration(this) == null;
+    };
+    return new Info(() -> {
+      if (!isGlobal.getAsBoolean()){
+        return text;
+      }
+      // if not, then use current namespace to infer full-qualified name
+      final String currentNs = KUtil.getCurrentNamespace(this);
+      return KUtil.generateFqn(currentNs, text);
+    }, isGlobal, false);
+  }
+
   public boolean isColumnDeclaration() {
     return Optional.of(getParent())
         .filter(KAssignment.class::isInstance)
@@ -105,6 +158,21 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
           return !group.getExpressionList().get(0).getArgsList().isEmpty();
         })
         .orElse(false);
+  }
+
+  @Override
+  public boolean isEquivalentTo(PsiElement object) {
+    if (object instanceof KNamedElement) {
+      final Info thisInfo = getDetails();
+      if (thisInfo.isGlobal()) {
+        final KUserId other = (KUserId)object;
+        final Info otherInfo = other.getDetails();
+        if (otherInfo.isGlobal()) {
+          return Objects.equals(thisInfo.getFqn(), otherInfo.getFqn());
+        }
+      }
+    }
+    return false;
   }
 
   public boolean isInternal() {

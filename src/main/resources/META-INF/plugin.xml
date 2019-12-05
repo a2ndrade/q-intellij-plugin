@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.21</strong><br/>
+      <ul>
+        <li>2019.3 Intellij support</li>
+      </ul>
       <strong>1.20</strong><br/>
       <ul>
         <li>New option to evaluate current line</li>

@@ -4,17 +4,23 @@ noNs:{x+x}
 
 implicitNs:{x+x}
 
+fn1:{[]
+  inside.fn.relative:1
+}
+
+fn2:{[]
+  .inside.fn.absolute:2
+}
+
 q).a.b.explicitNs:{x+x}
 
 .x._otherExplicitNs:{x+x}
 
-\d ^
+\d .c
 
-popLastLevelNs:{x+x}
-
-\d c
-
-implicitSubNs:{x+x}
+fn3:{[]
+  globalAmend::3
+}
 
 \d .x
 

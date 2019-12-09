@@ -2,13 +2,15 @@ package com.appian.intellij.k.psi;
 
 import com.appian.intellij.k.KFileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 
 public final class KElementFactory {
   public static KUserId createKUserId(Project project, String name) {
     final KFile file = createFile(project, name);
     // file -> expression -> user_id
-    return (KUserId)file.getFirstChild().getFirstChild();
+    final PsiElement element = file.getFirstChild().getFirstChild();
+    return element instanceof KUserId ? (KUserId)element : null;
   }
 
   public static KSymbol createKSymbol(Project project, String name) {

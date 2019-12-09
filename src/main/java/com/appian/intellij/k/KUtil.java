@@ -30,35 +30,31 @@ import com.appian.intellij.k.psi.KNamespaceDeclaration;
 import com.appian.intellij.k.psi.KTypes;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public final class KUtil {
-
-  private static final Key<String> FQN = Key.create("fqn");
 
   public static Collection<KUserId> findProjectIdentifiers(Project project) {
     final Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(KFileType.INSTANCE,
         GlobalSearchScope.allScope(project));
     final Stream<KUserId> stream = virtualFiles.stream()
-        .flatMap(file -> findIdentifiers(project, file, AnyMatcher, false).stream());
+        .flatMap(file -> findGlobalDeclarations(project, file, new AnyMatcher(), false).stream());
     return stream.collect(Collectors.toList());
   }
 
-  public static Collection<KUserId> findIdentifiers(Project project, VirtualFile file) {
-    return findIdentifiers(project, file, AnyMatcher, false);
+  public static Collection<KUserId> findGlobalDeclarations(Project project, VirtualFile file) {
+    return findGlobalDeclarations(project, file, new AnyMatcher(), false);
   }
 
   @Nullable
   public static KUserId findFirstExactMatch(Project project, VirtualFile file, String targetIdentifier) {
-    final Iterator<KUserId> it = findIdentifiers(project, file, new ExactMatcher(targetIdentifier), true).iterator();
+    final Iterator<KUserId> it = findGlobalDeclarations(project, file, new ExactGlobalAssignmentMatcher(targetIdentifier), true).iterator();
     return it.hasNext() ? it.next() : null;
   }
 
@@ -71,79 +67,120 @@ public final class KUtil {
   }
 
   interface Matcher {
-    boolean matches(String found);
+    boolean matches(KUserId found);
+    default String getTarget() {
+      return null;
+    }
+    default boolean skipCacheCheck() { return false; };
+    Matcher withSkipCacheCheck();
   }
 
-  static class PrefixMatcher implements Matcher {
+  static class PrefixGlobalAssignmentMatcher implements Matcher {
     private final String target;
-
-    public PrefixMatcher(String target) {
-      this.target = target;
+    private final boolean skipCacheCheck;
+    public PrefixGlobalAssignmentMatcher(String target) {
+      this(target, false);
     }
-
+    public PrefixGlobalAssignmentMatcher(String target, boolean skipCacheCheck) {
+      this.target = target;
+      this.skipCacheCheck = skipCacheCheck;
+    }
     @Override
-    public boolean matches(String found) {
-      return found.startsWith(target);
+    public boolean matches(KUserId found) {
+      if (found.getParent() instanceof KAssignment) {
+        KNamedElement.Info foundInfo = found.getDetails();
+        return foundInfo.isGlobalAssignment() && foundInfo.getFqn().startsWith(target);
+      }
+      return false;
+    }
+    @Override
+    public String getTarget() {
+      return target;
+    }
+    @Override
+    public boolean skipCacheCheck() {
+      return skipCacheCheck;
+    }
+    @Override
+    public PrefixGlobalAssignmentMatcher withSkipCacheCheck() {
+      return new PrefixGlobalAssignmentMatcher(target, true);
     }
   }
 
-  static class ExactMatcher implements Matcher {
+  static class ExactGlobalAssignmentMatcher implements Matcher {
     private final String target;
-
-    public ExactMatcher(String target) {
-      this.target = target;
+    private final boolean skipCacheCheck;
+    public ExactGlobalAssignmentMatcher(String target) {
+      this(target, false);
     }
-
+    public ExactGlobalAssignmentMatcher(String target, boolean skipCacheCheck) {
+      this.target = target;
+      this.skipCacheCheck = skipCacheCheck;
+    }
     @Override
-    public boolean matches(String found) {
-      return target.equals(found);
+    public boolean matches(KUserId found) {
+      if (found.getParent() instanceof KAssignment) {
+        KNamedElement.Info foundInfo = found.getDetails();
+        return foundInfo.isGlobalAssignment() && target.equals(foundInfo.getFqn());
+      }
+      return false;
+    }
+    @Override
+    public String getTarget() {
+      return target;
+    }
+    @Override
+    public boolean skipCacheCheck() {
+      return skipCacheCheck;
+    }
+    @Override
+    public ExactGlobalAssignmentMatcher withSkipCacheCheck() {
+      return new ExactGlobalAssignmentMatcher(target, true);
     }
   }
-
-  private static final Matcher AnyMatcher = (found) -> true;
+  static class AnyMatcher implements Matcher {
+    private final boolean skipCacheCheck;
+    AnyMatcher() {
+      this(false);
+    }
+    AnyMatcher(boolean skipCacheCheck) {
+      this.skipCacheCheck = skipCacheCheck;
+    }
+    @Override
+    public boolean matches(KUserId found) {
+      if (found.getParent() instanceof KAssignment) {
+        KNamedElement.Info foundInfo = found.getDetails();
+        return foundInfo.isGlobalAssignment();
+      }
+      return false;
+    }
+    @Override
+    public boolean skipCacheCheck() {
+      return skipCacheCheck;
+    }
+    @Override
+    public Matcher withSkipCacheCheck() {
+      return new AnyMatcher(true);
+    }
+  }
 
   @NotNull
-  static Collection<KUserId> findIdentifiers(
+  static Collection<KUserId> findGlobalDeclarations(
       Project project, VirtualFile file, Matcher matcher, boolean stopAfterFirstMatch) {
     final KFile kFile = (KFile)PsiManager.getInstance(project).findFile(file);
     if (kFile == null) {
-      return Collections.emptyList();
+      return Collections.emptySet();
     }
-    String currentNamespace = ""; // default namespace
-    PsiElement topLevelElement = kFile.getFirstChild();
-    final Collection<KUserId> results = new ArrayList<>(0);
-    if (topLevelElement == null) {
-      return results;
-    }
-    do {
-      if (topLevelElement instanceof KNamespaceDeclaration) {
-        final String newNamespace = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();
-        currentNamespace = getNewNamespace(currentNamespace, newNamespace);
-      } else {
-        // there are multiple ids if they are chained i.e. x:y:z:1
-        for (KUserId userId : getTopLevelAssignmentIds(topLevelElement)) {
-          final String userIdName = userId.getName();
-          final String userIdNamespace = getExplicitNamespace(userIdName);
-          boolean match = false;
-          if (userIdNamespace == null && !currentNamespace.isEmpty()) {
-            final String fqn = generateFqn(currentNamespace, userIdName);
-            if (matcher.matches(fqn)) {
-              putFqn(userId, fqn);
-              match = true;
-            }
-          } else if (matcher.matches(userIdName)) {
-            match = true;
-          }
-          if (match) {
-            results.add(userId);
-            if (stopAfterFirstMatch) {
-              return results;
-            }
-          }
+    final Set<KUserId> results = new LinkedHashSet<>(stopAfterFirstMatch ? 1 : 16);
+    Collection<KUserId> ids = PsiTreeUtil.findChildrenOfType(kFile, KUserId.class);
+    for (KUserId found : ids) {
+      if (matcher.matches(found)) {
+        results.add(found);
+        if (stopAfterFirstMatch) {
+          return results;
         }
       }
-      topLevelElement = topLevelElement.getNextSibling();
-    } while (topLevelElement != null);
+    }
     return results;
   }
 
@@ -178,8 +215,8 @@ public final class KUtil {
   }
 
   public static Set<String> findFileNamespaces(Project project, VirtualFile file) {
-    return findIdentifiers(project, file).stream().map(id -> {
-      final String ns = getExplicitNamespace(id.getName());
+    return findGlobalDeclarations(project, file).stream().map(id -> {
+      final String ns = getRootContextName(id.getName());
       return ns == null ? "" : ns;
     }).collect(Collectors.toSet());
   }
@@ -230,26 +267,38 @@ public final class KUtil {
     return true;
   }
 
-  static String generateFqn(String namespace, String identifier) {
-    if (namespace.isEmpty()) {
+  public static String generateFqn(String namespace, String identifier) {
+    if (namespace == null || namespace.isEmpty()) {
       return identifier; // default namespace
-    } else if (".".equals(namespace)) {
-      return "." + identifier; // root namespace
     }
     return namespace + "." + identifier;
   }
 
   @Nullable
-  public static String getExplicitNamespace(String identifier) {
+  public static String getNearestContextName(String identifier) {
     return isAbsoluteId(identifier) ? identifier.substring(0, identifier.lastIndexOf('.')) : null;
   }
 
-  static boolean isAbsoluteId(String identifier) {
+  @Nullable
+  public static String getRootContextName(String identifier) {
+    if (!isAbsoluteId(identifier) || identifier.length() < 2) {
+      return null;
+    }
+    // ignore first dot
+    int idx = identifier.substring(1).indexOf('.');
+    return idx > 0 ? identifier.substring(0, 1 + idx) : null;
+  }
+
+  public static boolean isAbsoluteId(String identifier) {
     return identifier.charAt(0) == '.';
   }
 
+  public static boolean isNamespacedId(String identifier) {
+    return isAbsoluteId(identifier) || identifier.indexOf('.') != -1;
+  }
+
   @NotNull
-  static String getCurrentNamespace(PsiElement element) {
+  public static String getCurrentNamespace(PsiElement element) {
     final Class[] potentialContainerTypes = new Class[] {KExpression.class, KNamespaceDeclaration.class};
     PsiElement topLevelAssignment = null;
     for (Class containerType : potentialContainerTypes) {
@@ -272,7 +321,8 @@ public final class KUtil {
     do {
       if (topLevelElement instanceof KNamespaceDeclaration) {
         final String ns = ((KNamespaceDeclaration)topLevelElement).getUserId().getText();
-        currentNamespace = getNewNamespace(currentNamespace, ns);
+        // \d . switches to the root context but non-namespaced declarations go to the default context, not under `.`
+        currentNamespace = ".".equals(ns) ? "" : ns;
       }
       if (topLevelElement == enclosingNsDeclaration) {
         return currentNamespace;
@@ -283,36 +333,13 @@ public final class KUtil {
         "Cannot calculate current namespace for " + element.getText() + " (" + containingFile.getName() + ")");
   }
 
-  private static String getNewNamespace(String currentNamespace, String newNamespace) {
-    if (isAbsoluteId(newNamespace)) {
-      return newNamespace;
-    } else if (currentNamespace.isEmpty()) {
-      if ("^".equals(newNamespace)) {
-        return ""; // can't go up any further
-      }
-      // relative ns becomes absolute if we're in the default ns
-      return "." + newNamespace;
-    } else if ("^".equals(newNamespace)) { // k3: pop up most-nested newNamespace
-      final String newNs = getExplicitNamespace(currentNamespace);
-      return (newNs == null || newNs.isEmpty()) ? "" : newNs;
-    } else {
-      return currentNamespace + '.' + newNamespace;
-    }
-  }
-
-  public static void putFqn(KNamedElement element, String fqn) {
-    element.putUserData(FQN, fqn);
-  }
-
-  @Nullable
-  public static String getFqn(KNamedElement element) {
-    return element.getUserData(FQN);
-  }
-
+  /**
+   * @deprecated use {@link KUserId#getDetails()} instead
+   */
   @NotNull
+  @Deprecated
   public static String getFqnOrName(KNamedElement element) {
-    final String fqn = getFqn(element);
-    return fqn != null ? fqn : element.getName();
+    return element.getDetails().getFqn();
   }
 
   private static Optional<PsiElement> findTopLevelMatching(PsiElement element, Predicate<PsiElement> predicate) {

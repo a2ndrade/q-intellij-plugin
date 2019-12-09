@@ -19,7 +19,7 @@ public class CompletionTest extends LightCodeInsightFixtureTestCase {
   public void testGlobals() {
     testCompletion(new String[] {"globals1.k", "globals2.k"}, "square", "save", "scan", "scov", "sdev", "select", "set",
         "setenv", "show", "signum", "sin", "sqrt", "ss", "ssr", "string", "sublist", "sum", "sums", "sv", "svar",
-        "system", "someFnInDefaultNsInAnotherFile");
+        "system", "some.locallyDefined.namespacedGlobal", "someFnInDefaultNsInAnotherFile", "someLocallyDefinedGlobal");
   }
 
   public void testSystemFns_k_k() {

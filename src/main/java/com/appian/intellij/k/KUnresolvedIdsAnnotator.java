@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.psi.KLambda;
+import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KQSql;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -22,7 +23,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 public class KUnresolvedIdsAnnotator implements Annotator {
 
   static final String Q_INTELLIJ_PLUGIN_CONFIG = ".q-intellij-plugin";
-  private static final String[] IMPLICIT_VARS = new String[] {"x", "y", "z"};
 
   private enum LinterPreset {
     NONE, APPIAN
@@ -49,7 +49,7 @@ public class KUnresolvedIdsAnnotator implements Annotator {
       return;
     }
     // check if it's one of the implicit x,y,z parameters
-    for (String implicitVar : IMPLICIT_VARS) {
+    for (String implicitVar : KNamedElement.IMPLICIT_VARS) {
       if (implicitVar.equals(variableName)) {
         final KLambda enclosingLambda = PsiTreeUtil.getContextOfType(usage, KLambda.class);
         if (enclosingLambda != null && enclosingLambda.getLambdaParams() == null) {
@@ -106,7 +106,11 @@ public class KUnresolvedIdsAnnotator implements Annotator {
     if (references.length == 0) {
       return null;
     }
-    return references[0].resolve();
+    final PsiReference reference = references[0];
+    if (reference instanceof KReference) {
+      return ((KReference)reference).resolveFirstUnordered();
+    }
+    return reference.resolve();
   }
 
 }

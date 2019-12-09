@@ -13,36 +13,16 @@ import junit.framework.TestSuite;
 
 public class ScriptsTest extends KParserTest {
 
-  private static final String DL = System.getProperty("user.home") + "/repo/data-layer/";
-
-  private static final String[] TARGET_FOLDERS = new String[] {DL + "appian-data-server/src"};
-
   public static Test suite() {
     final TestSuite suite = new TestSuite();
     try {
-      configureTestSuite(suite);
+      for (File input : TestInputFiles.asFiles()) {
+        suite.addTest(new ScriptsTest(input));
+      }
     } catch (IOException e) {
       // ignore
     }
     return suite;
-  }
-
-  private static void configureTestSuite(TestSuite suite) throws IOException {
-    for (String folderPath : TARGET_FOLDERS) {
-      final File folder = new File(folderPath);
-      if (!folder.exists()) {
-        // TARGET_FOLDERS point to user's home dir,
-        // not every user has the tests there
-        return;
-      }
-      Files.walk(Paths.get(folder.toURI())).forEach(path -> {
-        final File file = path.toFile();
-        final String fileName = file.getName();
-        if (file.isFile() && (fileName.endsWith(".k") || fileName.endsWith(".q"))) {
-          suite.addTest(new ScriptsTest(file));
-        }
-      });
-    }
   }
 
   private final File file;

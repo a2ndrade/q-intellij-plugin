@@ -1,4 +1,4 @@
-\d .explicit.ns
+\d .other
 
 no<caret>Ns
 

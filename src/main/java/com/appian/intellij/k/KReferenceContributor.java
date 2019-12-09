@@ -22,11 +22,11 @@ public final class KReferenceContributor extends PsiReferenceContributor {
           @NotNull
           @Override
           public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
-            if (element instanceof KUserId) {
-              final String key = element.getText();
-              return new PsiReference[] {new KReference((KUserId)element, new TextRange(0, key.length()))};
+            if (!(element instanceof KUserId)) {
+              return new PsiReference[0];
             }
-            return new PsiReference[0];
+            final KUserId id = (KUserId)element;
+            return new PsiReference[] {new KReference(id, new TextRange(0, id.getText().length()))};
           }
         });
     registrar.registerReferenceProvider(PlatformPatterns.psiElement(KSymbol.class).withLanguage(KLanguage.INSTANCE),

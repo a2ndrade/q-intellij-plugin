@@ -18,6 +18,14 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.22</strong><br/>
+      <ul>
+        <li>Find Usages Improvements & Rename Refactoring:</li>
+        <li> - Locally-defined globals support</li>
+        <li> - Multiple declarations support</li>
+        <li> - Up-to-date references after undo/redo actions (#29)</li>
+        <li>Structure View is now always in sync (#43)</li>
+      </ul>
       <strong>1.21</strong><br/>
       <ul>
         <li>2019.3 Intellij support</li>

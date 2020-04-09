@@ -315,8 +315,11 @@ public final class KUtil {
     if (enclosingNsDeclaration == null) {
       return "";
     }
-    String currentNamespace = ""; // default namespace
     final PsiFile containingFile = element.getContainingFile();
+    if (containingFile == null) {
+      return "";
+    }
+    String currentNamespace = ""; // default namespace
     PsiElement topLevelElement = containingFile.getFirstChild();
     do {
       if (topLevelElement instanceof KNamespaceDeclaration) {

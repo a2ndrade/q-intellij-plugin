@@ -8,8 +8,8 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.4.7"
-  id "org.jetbrains.grammarkit" version "2018.3.1"
+  id "org.jetbrains.intellij" version "0.4.18"
+  id "org.jetbrains.grammarkit" version "2019.2"
 }
 
 apply plugin: 'idea'
@@ -19,13 +19,14 @@ apply plugin: 'java'
 
 intellij {
   // see https://www.jetbrains.com/intellij-repository/releases
-  version 'IC-2018.1.8'
+  version 'IC-2019.2'
   pluginName 'q'
+  plugins = ['java']
 }
 
-version '1.22' // Plugin version
+version '1.23' // Plugin version
 patchPluginXml {
-  untilBuild '193.*'
+  untilBuild '201.*'
 }
 
 grammarKit {

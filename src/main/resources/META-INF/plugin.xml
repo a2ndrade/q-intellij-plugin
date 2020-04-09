@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.23</strong><br/>
+      <ul>
+        <li>2020.1 Intellij support</li>
+      </ul>
       <strong>1.22</strong><br/>
       <ul>
         <li>Find Usages Improvements & Rename Refactoring:</li>
@@ -188,6 +192,7 @@
       </ul>
     ]]>
   </change-notes>
+  <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.java</depends>
   <project-components>
@@ -211,7 +216,7 @@
                                   implementationClass="com.appian.intellij.k.struct.KStructureViewFactory"/>
     <completion.contributor language="q" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
-    <enterHandlerDelegate implementation="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
+    <enterBetweenBracesDelegate language="q" implementationClass="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
     <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>

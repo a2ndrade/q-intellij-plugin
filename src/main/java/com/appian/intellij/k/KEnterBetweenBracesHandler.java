@@ -1,8 +1,8 @@
 package com.appian.intellij.k;
 
-import com.intellij.codeInsight.editorActions.enter.EnterBetweenBracesHandler;
+import com.intellij.codeInsight.editorActions.enter.EnterBetweenBracesDelegate;
 
-public class KEnterBetweenBracesHandler extends EnterBetweenBracesHandler {
+public class KEnterBetweenBracesHandler extends EnterBetweenBracesDelegate {
 
   @Override
   protected boolean isBracePair(char c1, char c2) {

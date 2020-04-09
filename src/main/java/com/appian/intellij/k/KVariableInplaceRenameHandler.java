@@ -6,6 +6,7 @@ import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
+import com.intellij.injected.editor.EditorWindow;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.command.impl.StartMarkAction;
 import com.intellij.openapi.editor.Editor;
@@ -13,7 +14,6 @@ import com.intellij.openapi.util.Pass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.refactoring.rename.inplace.InplaceRefactoring;
 import com.intellij.refactoring.rename.inplace.MemberInplaceRenameHandler;
@@ -80,7 +80,8 @@ public final class KVariableInplaceRenameHandler extends VariableInplaceRenameHa
         else {
           final InplaceRefactoring inplaceRefactoring = editor.getUserData(InplaceRefactoring.INPLACE_RENAMER);
           if (inplaceRefactoring != null && inplaceRefactoring.getClass() == MemberInplaceRenamer.class) {
-            final TemplateState templateState = TemplateManagerImpl.getTemplateState(InjectedLanguageUtil.getTopLevelEditor(editor));
+            final Editor effectiveEditor = editor instanceof EditorWindow ? ((EditorWindow)editor).getDelegate() : editor;
+            final TemplateState templateState = TemplateManagerImpl.getTemplateState(effectiveEditor);
             if (templateState != null) {
               templateState.gotoEnd(true);
             }

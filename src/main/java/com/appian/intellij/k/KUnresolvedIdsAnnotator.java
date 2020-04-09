@@ -15,14 +15,14 @@ import com.appian.intellij.k.psi.KQSql;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public class KUnresolvedIdsAnnotator implements Annotator {
 
-  static final String Q_INTELLIJ_PLUGIN_CONFIG = ".q-intellij-plugin";
+  private static final String Q_INTELLIJ_PLUGIN_CONFIG = ".q-intellij-plugin";
 
   private enum LinterPreset {
     NONE, APPIAN
@@ -84,7 +84,7 @@ public class KUnresolvedIdsAnnotator implements Annotator {
     }
     return linterPreset = Optional.of(usage)
         .map(PsiElement::getProject)
-        .map(Project::getBaseDir)
+        .map(ProjectUtil::guessProjectDir)
         .map(p -> p.findChild(Q_INTELLIJ_PLUGIN_CONFIG))
         .map(configFile -> {
           final Properties props = new Properties();

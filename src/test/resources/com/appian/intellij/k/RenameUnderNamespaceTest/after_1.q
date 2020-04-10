@@ -14,7 +14,7 @@ fnA:{[global]
   global;
   `<new-name>}
 
-fnB:{[a;b;c]
+fnB:{[]
   <new-name>;
   `<new-name>}
 

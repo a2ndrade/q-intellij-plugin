@@ -9,7 +9,9 @@ import com.appian.intellij.k.psi.KQSql;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.codeInsight.daemon.RainbowVisitor;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
+import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor;
+import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -60,7 +62,14 @@ public final class KRainbowVisitor extends RainbowVisitor {
     if (rainbowElement == null || resolved == null) {
       return null;
     }
-    String name = ((KUserId)resolved).getName();
+    if (rainbowElement == resolved && KUnusedVariableHighlightVisitor.isUnusedKLocalDeclaration(resolved)) {
+      // gray out unused variables
+      return HighlightInfo.newHighlightInfo(HighlightInfoType.UNUSED_SYMBOL)
+          .range(resolved)
+          .textAttributes(CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES)
+          .create();
+    }
+    final String name = ((KUserId)resolved).getName();
     return getInfo(context, rainbowElement, name, KSyntaxHighlighter.IDENTIFIER);
   }
 

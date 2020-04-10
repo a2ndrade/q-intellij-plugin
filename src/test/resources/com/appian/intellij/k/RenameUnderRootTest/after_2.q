@@ -12,7 +12,7 @@ fnA:{[<new-name>]
   <new-name>;
   `global}
 
-fnB:{[a;b;c]
+fnB:{[]
   global;
   `global}
 

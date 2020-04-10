@@ -219,6 +219,7 @@
     <enterBetweenBracesDelegate language="q" implementationClass="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>
+    <highlightVisitor implementation="com.appian.intellij.k.KUnusedVariableHighlightVisitor"/>
     <lang.documentationProvider language="q" implementationClass="com.appian.intellij.k.KDocumentationProvider"/>
     <spellchecker.support language="q" implementationClass="com.appian.intellij.k.KSpellcheckingStrategy"/>
     <typedHandler implementation="com.appian.intellij.k.KTypedHandler" id="q"/>

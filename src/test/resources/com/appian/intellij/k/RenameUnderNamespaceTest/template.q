@@ -14,7 +14,7 @@ fnA:{[glo<caret#6>bal]
   glo<caret#7>bal;
   `glo<caret#8>bal}
 
-fnB:{[a;b;c]
+fnB:{[]
   glo<caret#9>bal;
   `glo<caret#10>bal}
 

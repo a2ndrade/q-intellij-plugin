@@ -19,7 +19,7 @@ public final class KIcons {
   public static final Icon PRIVATE_VARIABLE = new RowIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.C_private);
 
   public static final Icon QSERVER =  layer(AllIcons.Webreferences.Server, FILE);
-  public static final Icon RUN_SELECTION = AllIcons.General.Run;
+  public static final Icon RUN_SELECTION = AllIcons.RunConfigurations.TestState.Run;
   public static final Icon DEFINE_SELECTION = AllIcons.Actions.Upload;
 
   @SuppressWarnings("SameParameterValue")

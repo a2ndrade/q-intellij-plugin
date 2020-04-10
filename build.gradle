@@ -23,9 +23,9 @@ intellij {
   pluginName 'q'
 }
 
-version '1.20' // Plugin version
+version '1.21' // Plugin version
 patchPluginXml {
-  untilBuild '192.*'
+  untilBuild '201.*'
 }
 
 grammarKit {

@@ -22,6 +22,8 @@ intellij {
   version 'IC-2019.2'
   pluginName 'q'
   plugins = ['java']
+  // see https://github.com/JetBrains/gradle-intellij-plugin/issues/391
+  buildSearchableOptions.enabled = false
 }
 
 version '1.23' // Plugin version

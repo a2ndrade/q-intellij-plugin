@@ -216,6 +216,7 @@
                                   implementationClass="com.appian.intellij.k.struct.KStructureViewFactory"/>
     <completion.contributor language="q" implementationClass="com.appian.intellij.k.KCompletionContributor"/>
     <annotator language="q" implementationClass="com.appian.intellij.k.KUnresolvedIdsAnnotator"/>
+    <annotator language="q" implementationClass="com.appian.intellij.k.KLambdaAnnotator"/>
     <enterBetweenBracesDelegate language="q" implementationClass="com.appian.intellij.k.KEnterBetweenBracesHandler"/>
     <lang.foldingBuilder language="q" implementationClass="com.appian.intellij.k.KFoldingBuilder"/>
     <highlightVisitor implementation="com.appian.intellij.k.KRainbowVisitor"/>

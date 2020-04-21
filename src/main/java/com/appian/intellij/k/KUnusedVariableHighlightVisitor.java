@@ -37,13 +37,14 @@ final class KUnusedVariableHighlightVisitor implements HighlightVisitor {
 
   @Override
   public void visit(@NotNull PsiElement element) {
-    if (isUnusedKLocalDeclaration(element)) {
-      // gray out unused variables
-      holder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.UNUSED_SYMBOL)
-          .range(element)
-          .textAttributes(CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES)
-          .create());
+    if (!isUnusedKLocalDeclaration(element)) {
+      return;
     }
+    // gray out unused variables
+    holder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.UNUSED_SYMBOL)
+        .range(element)
+        .textAttributes(CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES)
+        .create());
   }
 
   @NotNull
@@ -59,6 +60,9 @@ final class KUnusedVariableHighlightVisitor implements HighlightVisitor {
     final KUserId usage = (KUserId)element;
     if (!usage.isDeclaration()) {
       return false; // ignore. we want to highlight declarations, not usages
+    }
+    if (usage.isColumnDeclaration()) {
+      return false; // ignore
     }
     if (usage.getDetails().isGlobalAssignment()) {
       return false; // ignore global assignments even if they happen locally

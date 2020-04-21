@@ -26,7 +26,7 @@ intellij {
   buildSearchableOptions.enabled = false
 }
 
-version '1.23' // Plugin version
+version '1.24' // Plugin version
 patchPluginXml {
   untilBuild '201.*'
 }

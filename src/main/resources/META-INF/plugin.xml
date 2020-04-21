@@ -18,6 +18,12 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.24</strong><br/>
+      <ul>
+        <li>Grays out unused variables</li>
+        <li>Error message when function has more than 8 params</li>
+        <li>Error message when function has duplicated params</li>
+      </ul>
       <strong>1.23</strong><br/>
       <ul>
         <li>2020.1 Intellij support</li>

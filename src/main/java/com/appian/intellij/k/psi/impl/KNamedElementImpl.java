@@ -148,7 +148,7 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
     return isQSqlColumnDeclaration() || isLiteralColumnDeclaration();
   }
 
-  private Boolean isLiteralColumnDeclaration() {
+  private boolean isLiteralColumnDeclaration() {
     return Optional.of(getParent())
     .filter(KAssignment.class::isInstance)
     .map(PsiElement::getParent)
@@ -165,7 +165,7 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
     .orElse(false);
   }
 
-  private Boolean isQSqlColumnDeclaration() {
+  private boolean isQSqlColumnDeclaration() {
     return Optional.of(getParent())
         .filter(KAssignment.class::isInstance)
         .map(PsiElement::getParent)

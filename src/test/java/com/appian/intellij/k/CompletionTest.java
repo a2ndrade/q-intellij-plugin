@@ -3,9 +3,9 @@ package com.appian.intellij.k;
 import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-public class CompletionTest extends LightCodeInsightFixtureTestCase {
+public class CompletionTest extends BasePlatformTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();

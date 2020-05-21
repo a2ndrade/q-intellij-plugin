@@ -19,6 +19,7 @@ import com.appian.intellij.k.psi.KGroupOrList;
 import com.appian.intellij.k.psi.KLambdaParams;
 import com.appian.intellij.k.psi.KNamedElement;
 import com.appian.intellij.k.psi.KNamespaceDeclaration;
+import com.appian.intellij.k.psi.KQSql;
 import com.appian.intellij.k.psi.KUserId;
 import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.lang.ASTNode;
@@ -144,19 +145,32 @@ public abstract class KNamedElementImpl extends KAstWrapperPsiElement implements
   }
 
   public boolean isColumnDeclaration() {
+    return isQSqlColumnDeclaration() || isLiteralColumnDeclaration();
+  }
+
+  private boolean isLiteralColumnDeclaration() {
+    return Optional.of(getParent())
+    .filter(KAssignment.class::isInstance)
+    .map(PsiElement::getParent)
+    .map(PsiElement::getParent)
+    .filter(KGroupOrList.class::isInstance)
+    .map(KGroupOrList.class::cast)
+    .map(group -> {
+      // it needs at list two items to be a table e.g. ([] a:...)
+      if (group.getExpressionList().isEmpty()) {
+        return false;
+      }
+      return !group.getExpressionList().get(0).getArgsList().isEmpty();
+    })
+    .orElse(false);
+  }
+
+  private boolean isQSqlColumnDeclaration() {
     return Optional.of(getParent())
         .filter(KAssignment.class::isInstance)
         .map(PsiElement::getParent)
         .map(PsiElement::getParent)
-        .filter(KGroupOrList.class::isInstance)
-        .map(KGroupOrList.class::cast)
-        .map(group -> {
-          // it needs at list two items to be a table e.g. ([] a:...)
-          if (group.getExpressionList().isEmpty()) {
-            return false;
-          }
-          return !group.getExpressionList().get(0).getArgsList().isEmpty();
-        })
+        .map(KQSql.class::isInstance)
         .orElse(false);
   }
 

@@ -10,6 +10,7 @@ import com.appian.intellij.k.psi.KUserId;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 
 public class KRenamePsiElementProcessor extends RenamePsiElementProcessor {
@@ -21,7 +22,8 @@ public class KRenamePsiElementProcessor extends RenamePsiElementProcessor {
 
   @NotNull
   @Override
-  public Collection<PsiReference> findReferences(@NotNull PsiElement element) {
+  public Collection<PsiReference> findReferences(
+      @NotNull PsiElement element, @NotNull SearchScope searchScope, boolean searchInCommentsAndStrings) {
     final Collection<PsiReference> additionalRefs = new ArrayList<>();
     if (element instanceof KUserId) {
       final String text = element.getText();
@@ -36,7 +38,7 @@ public class KRenamePsiElementProcessor extends RenamePsiElementProcessor {
       }
     }
     List<PsiReference> all = new ArrayList<>();
-    all.addAll(super.findReferences(element));
+    all.addAll(super.findReferences(element, searchScope, searchInCommentsAndStrings));
     all.addAll(additionalRefs);
     return all;
   }

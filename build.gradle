@@ -15,18 +15,16 @@ plugins {
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'org.jetbrains.grammarkit'
-apply plugin: 'java'
 
 intellij {
   // see https://www.jetbrains.com/intellij-repository/releases
   version 'IC-2019.2'
   pluginName 'q'
-  plugins = ['java']
   // see https://github.com/JetBrains/gradle-intellij-plugin/issues/391
   buildSearchableOptions.enabled = false
 }
 
-version '1.24' // Plugin version
+version '1.25' // Plugin version
 patchPluginXml {
   untilBuild '201.*'
 }

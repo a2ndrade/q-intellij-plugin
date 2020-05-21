@@ -6,10 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.Test;
 
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixture4TestCase;
 
-abstract class RenameTestBase extends LightCodeInsightFixtureTestCase {
+abstract class RenameTestBase extends LightPlatformCodeInsightFixture4TestCase {
 
   private final int totalCarets;
   private final int currentCaret;
@@ -17,7 +18,6 @@ abstract class RenameTestBase extends LightCodeInsightFixtureTestCase {
   RenameTestBase(int totalCarets, int currentCaret) {
     this.totalCarets = totalCarets;
     this.currentCaret = currentCaret;
-    setName("testRename");
   }
 
   @Override
@@ -30,6 +30,7 @@ abstract class RenameTestBase extends LightCodeInsightFixtureTestCase {
     return String.format("<caret#%d>", currentCaret);
   }
 
+  @Test
   public void testRename() throws IOException {
     doRename("global2");
     doRename("ns.global");

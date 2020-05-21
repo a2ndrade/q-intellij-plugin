@@ -1,29 +1,36 @@
 package com.appian.intellij.k;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
 import com.appian.intellij.k.psi.KSymbol;
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixture4TestCase;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+@RunWith(Parameterized.class)
+public class RenameSymbolTest extends LightPlatformCodeInsightFixture4TestCase {
 
-public class RenameSymbolTest extends LightCodeInsightFixtureTestCase {
-
-  public static Test suite() {
-    final TestSuite suite = new TestSuite();
+  @Parameterized.Parameters(name = "{0}.k")
+  public static Collection<Object[]> suite() {
+    final List<Object[]> testData = new ArrayList<>();
     for (String ns : new String[] {"", "other_ns_"}) {
       for (String toType : new String[] {"local", "global"}) {
         for (String from : new String[] {"def", "usage"}) {
           final String fileNamePrefix = ns + "local_to_" + toType + "_from_" + from;
           final String renameTo = "local".equals(toType) ? "test2" : ".g.test";
-          suite.addTest(new RenameSymbolTest(fileNamePrefix, renameTo, "usage".equals(from)));
+          testData.add(new Object[]{fileNamePrefix, renameTo, "usage".equals(from)});
         }
       }
     }
-    return suite;
+    return testData;
   }
 
   private final String fileNamePrefix;
@@ -34,7 +41,6 @@ public class RenameSymbolTest extends LightCodeInsightFixtureTestCase {
     this.fileNamePrefix = fileNamePrefix;
     this.targetName = targetName;
     this.fromUsage = fromUsage;
-    setName("testRename");
   }
 
   @Override
@@ -42,11 +48,7 @@ public class RenameSymbolTest extends LightCodeInsightFixtureTestCase {
     return "src/test/resources/" + getClass().getName().replace('.', '/');
   }
 
-  @Override
-  public String getName() {
-    return fileNamePrefix + ".k";
-  }
-
+  @Test
   public void testRename() {
     final String inputFileName = fileNamePrefix + ".k";
     final String outputFileName = fileNamePrefix + "_after.k";

@@ -18,6 +18,12 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.25</strong><br/>
+      <ul>
+        <li>Support for all JetBrains IDEs (#56)</li>
+        <li>Support for custom authentication drivers</li>
+        <li>Fixes grayed-out columns within KSQL templates</li>
+      </ul>
       <strong>1.24</strong><br/>
       <ul>
         <li>Grays out unused variables</li>
@@ -200,7 +206,6 @@
   </change-notes>
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.modules.lang</depends>
-  <depends>com.intellij.modules.java</depends>
   <project-components>
     <component>
       <implementation-class>com.appian.intellij.k.KProjectComponent</implementation-class>

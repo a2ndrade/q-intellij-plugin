@@ -1,21 +1,29 @@
 package com.appian.intellij.k;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import static org.junit.runners.Parameterized.Parameters;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+@RunWith(Parameterized.class)
 public class RenameUnderRoot_ManyDeclarationsTest extends RenameTestBase {
 
   public RenameUnderRoot_ManyDeclarationsTest(int totalCarets, int currentCaret) {
     super(totalCarets, currentCaret);
   }
 
-  public static Test suite() {
-    final TestSuite suite = new TestSuite();
+  @Parameters(name = "<caret#{1}")
+  public static Collection<Object[]> suite() {
+    final List<Object[]> testData = new ArrayList<>();
     final int total = 18;
     for (int i = 1; i <= total; i++) {
-      suite.addTest(new RenameUnderRoot_ManyDeclarationsTest(total, i));
+      testData.add(new Object[]{total, i});
     }
-    return suite;
+    return testData;
   }
 
   @Override

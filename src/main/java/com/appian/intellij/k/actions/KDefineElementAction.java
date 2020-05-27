@@ -1,6 +1,5 @@
 package com.appian.intellij.k.actions;
 
-import static com.appian.intellij.k.KUtil.getFqnOrName;
 import static com.appian.intellij.k.actions.KActionUtil.getSelectedFunctionDefinition;
 import static com.appian.intellij.k.actions.KActionUtil.promptForNewServer;
 import static com.appian.intellij.k.actions.KActionUtil.showRunContent;
@@ -49,7 +48,7 @@ public class KDefineElementAction extends AnAction {
     }
 
     if (serverId == null) {
-      promptForNewServer().ifPresent(newServer -> {
+      promptForNewServer(event.getProject()).ifPresent(newServer -> {
         KSettingsService.getInstance().updateSettings(settings -> settings.cloneWithNewServer(newServer));
         execute(newServer.getId(), f.get());
       });
@@ -69,7 +68,7 @@ public class KDefineElementAction extends AnAction {
       // then use fully qualified version to send to the server
       KUserId userId = (KUserId)element.getFirstChild().getFirstChild();
       PsiElement copy = element.copy();
-      ((LeafPsiElement)copy.getFirstChild().getFirstChild().getFirstChild()).replaceWithText(getFqnOrName(userId));
+      ((LeafPsiElement)copy.getFirstChild().getFirstChild().getFirstChild()).replaceWithText(userId.getDetails().getFqn());
 
       processHandler.execute(project, console, copy.getText());
     }

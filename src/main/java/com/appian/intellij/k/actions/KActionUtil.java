@@ -4,6 +4,7 @@ import static com.appian.intellij.k.KUtil.cast;
 import static com.appian.intellij.k.KUtil.first;
 import static com.intellij.openapi.actionSystem.CommonDataKeys.PSI_FILE;
 import static com.intellij.openapi.progress.ProgressIndicatorProvider.getGlobalProgressIndicator;
+import static java.util.stream.Collectors.toList;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
@@ -12,12 +13,14 @@ import java.util.Optional;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.KIcons;
 import com.appian.intellij.k.KUtil;
+import com.appian.intellij.k.settings.KAuthDriverSpec;
 import com.appian.intellij.k.settings.KServerDialog;
+import com.appian.intellij.k.settings.KServerDialogDescriptor;
 import com.appian.intellij.k.settings.KServerSpec;
-import com.appian.intellij.k.settings.KSettings;
 import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.execution.ExecutionManager;
@@ -118,13 +121,25 @@ class KActionUtil {
     return runDescriptor;
   }
 
-  static Optional<KServerSpec> promptForNewServer() {
-    KSettings settings = KSettingsService.getInstance().getSettings();
-    KServerDialog dialog = new KServerDialog(
-        n -> settings.getServers().stream().anyMatch(s -> s.getName().equals(n)) ? new ValidationInfo(
-            "Server named " + n + "' already exists") : null);
+  static Optional<KServerSpec> promptForNewServer(Project project) {
+    KServerDialogDescriptor descriptor = new KServerDialogDescriptor(KActionUtil::validateNewServerName,
+        () -> KSettingsService.getInstance()
+            .getSettings()
+            .getAuthDrivers()
+            .stream()
+            .sorted()
+            .collect(toList()),
+        newAuthDriver-> KSettingsService.getInstance().updateSettings(settings->settings.cloneWithNewAuthDriver(newAuthDriver)));
+    KServerDialog dialog = new KServerDialog(project, descriptor);
+    dialog.reset(new KServerSpec());
+    return dialog.showAndGet() ? Optional.of(dialog.getServerSpec()) : Optional.empty();
+  }
 
-    return dialog.showAndGet() ? Optional.of(dialog.getConnectionSpec()) : Optional.empty();
+  @Nullable
+  private static ValidationInfo validateNewServerName(String n) {
+    return KSettingsService.getInstance().getSettings().getServers().stream().anyMatch(s -> s.getName().equals(n))
+        ? new ValidationInfo("Server named " + n + "' already exists")
+        : null;
   }
 
   static Optional<PsiElement> getElementAtCaret(DataContext dataContext) {
@@ -184,7 +199,6 @@ class KActionUtil {
 
   @NotNull
   static Optional<PsiElement> getSelectedFunctionDefinition(DataContext dataContext) {
-    //noinspection SimplifyOptionalCallChains
     return Optional.ofNullable(getElementAtCaret(dataContext).flatMap(KUtil::getTopLevelFunctionDefinition)
         .orElseGet(
             () -> getNavigableSelectionElement(dataContext).flatMap(KUtil::getTopLevelFunctionDefinition).orElse(null)));

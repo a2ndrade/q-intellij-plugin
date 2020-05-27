@@ -49,7 +49,7 @@ public class KEvalAction extends AnAction {
       }
 
       if (serverId == null) {
-        promptForNewServer().ifPresent(newServer -> {
+        promptForNewServer(e.getProject()).ifPresent(newServer -> {
           KSettingsService.getInstance().updateSettings(settings -> settings.cloneWithNewServer(newServer));
           execute(newServer.getId(), t);
         });

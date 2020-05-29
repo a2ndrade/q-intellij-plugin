@@ -11,6 +11,7 @@ import com.intellij.ui.RowIcon;
 
 public final class KIcons {
   public static final Icon FILE = IconLoader.getIcon("q.png");
+  public static final Icon KEY = IconLoader.getIcon("key.png");
 
   public static final Icon PUBLIC_FUNCTION = new RowIcon(AllIcons.Nodes.Function, AllIcons.Nodes.C_public);
   public static final Icon PRIVATE_FUNCTION = new RowIcon(AllIcons.Nodes.Function, AllIcons.Nodes.C_private);
@@ -19,6 +20,8 @@ public final class KIcons {
   public static final Icon PRIVATE_VARIABLE = new RowIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.C_private);
 
   public static final Icon QSERVER =  layer(AllIcons.Webreferences.Server, FILE);
+  public static final Icon QAUTHDRIVER =  layer(FILE, KEY);
+
   public static final Icon RUN_SELECTION = AllIcons.RunConfigurations.TestState.Run;
   public static final Icon DEFINE_SELECTION = AllIcons.Actions.Upload;
 

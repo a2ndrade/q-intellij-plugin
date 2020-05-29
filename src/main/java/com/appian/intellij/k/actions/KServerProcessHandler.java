@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.Nullable;
 
 import com.appian.intellij.k.settings.KServerSpec;
+import com.appian.intellij.k.settings.KSettings;
 import com.appian.intellij.k.settings.KSettingsService;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.process.ProcessHandler;
@@ -71,15 +72,16 @@ public class KServerProcessHandler extends ProcessHandler {
   }
 
   private c getConnection() throws IOException, c.KException {
-    KServerSpec spec = KSettingsService.getInstance()
-        .getSettings()
+    KSettings settings = KSettingsService.getInstance().getSettings();
+    KServerSpec server = settings
         .getServers()
         .stream()
         .filter(s -> s.getId().equals(serverId))
         .findFirst()
         .orElseThrow(() -> new RuntimeException(
-            "Connection details for server " + serverId + " not found, please close console and try again"));
-    return spec.createConnection();
+            "Connection details for server " + serverId + " not found, please close the console and try again"));
+
+    return server.createConnection(settings.getAuthenticator(server.getAuthDriverName()));
   }
 
   void execute(Project project, ConsoleView console, String q) {

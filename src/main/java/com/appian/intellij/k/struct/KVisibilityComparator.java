@@ -31,7 +31,6 @@ public class KVisibilityComparator implements Comparator {
     if (element instanceof KStructureViewElement) {
       return ((KStructureViewElement)element).getAccessLevel();
     }
-
     if (element instanceof KUserId) {
       return ((KUserId)element).getAccessLevel();
     }

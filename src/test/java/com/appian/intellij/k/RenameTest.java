@@ -1,30 +1,39 @@
 package com.appian.intellij.k;
 
+import static org.junit.runners.Parameterized.Parameters;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
 import com.appian.intellij.k.psi.KUserId;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixture4TestCase;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+@RunWith(Parameterized.class)
+public class RenameTest extends LightPlatformCodeInsightFixture4TestCase {
 
-public class RenameTest extends LightCodeInsightFixtureTestCase {
-
-  public static Test suite() {
-    final TestSuite suite = new TestSuite();
+  @Parameters(name = "{0}.k")
+  public static Collection<Object[]> suite() {
+    final List<Object[]> testData = new ArrayList<>();
     for (String context : new String[] {"top", "fn"}) {
       for (String fromType : new String[] {"local"}) {
         for (String toType : new String[] {"local", "global"}) {
           for (String from : new String[] {"def", "usage"}) {
             final String fileNamePrefix = context + "_" + fromType + "_to_" + toType + "_from_" + from;
             final String renameTo = "local".equals(toType) ? "test2" : ".g.test";
-            suite.addTest(new RenameTest(fileNamePrefix, renameTo));
+            testData.add(new Object[]{fileNamePrefix, renameTo});
           }
         }
       }
     }
-    return suite;
+    return testData;
   }
 
   private final String fileNamePrefix;
@@ -33,7 +42,6 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
   public RenameTest(String fileNamePrefix, String targetName) {
     this.fileNamePrefix = fileNamePrefix;
     this.targetName = targetName;
-    setName("testRename");
   }
 
   @Override
@@ -41,11 +49,7 @@ public class RenameTest extends LightCodeInsightFixtureTestCase {
     return "src/test/resources/" + getClass().getName().replace('.', '/');
   }
 
-  @Override
-  public String getName() {
-    return fileNamePrefix + ".k";
-  }
-
+  @Test
   public void testRename() {
     final String inputFileName = fileNamePrefix + ".k";
     final String outputFileName = fileNamePrefix + "_after.k";

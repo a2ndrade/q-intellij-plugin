@@ -4,14 +4,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Test;
+
 import com.appian.intellij.k.psi.KAssignment;
 import com.appian.intellij.k.psi.KUserId;
 import com.google.common.collect.ImmutableMap;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixture4TestCase;
 
-public class ReferenceTest extends LightCodeInsightFixtureTestCase {
+public class ReferenceTest extends LightPlatformCodeInsightFixture4TestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -22,62 +24,77 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
     return "src/test/resources/" + getClass().getName().replace('.', '/');
   }
 
+  @Test
   public void testNoNs() {
     assertExactlyOneDeclarationFound("usage_no_ns.k", "noNs", "noNs");
   }
 
+  @Test
   public void testUsageUnderNs() {
     assertNoDeclarationFound("usage_under_ns.k");
   }
 
+  @Test
   public void testImplicitNs() {
     assertExactlyOneDeclarationFound("usage_implicit_ns.k", "implicitNs", ".a.b.implicitNs");
   }
 
+  @Test
   public void testExplicitNs() {
     assertExactlyOneDeclarationFound("usage_explicit_ns.k", ".a.b.explicitNs", ".a.b.explicitNs");
   }
 
+  @Test
   public void testOtherExplicitNs() {
     assertExactlyOneDeclarationFound("usage_other_explicit_ns.k", ".x._otherExplicitNs", ".x._otherExplicitNs");
   }
 
+  @Test
   public void testOtherImplicitNs() {
     assertExactlyOneDeclarationFound("usage_other_implicit_ns.k", "otherImplicitNs", ".x.otherImplicitNs");
   }
 
+  @Test
   public void testExplicitRootNs() {
     assertExactlyOneDeclarationFound("usage_explicit_root_ns.k", ".explicitRootNs", ".explicitRootNs");
   }
 
+  @Test
   public void testImplicitRootNs() {
     assertExactlyOneDeclarationFound("usage_implicit_root_ns.k", "implicitRootNs", "implicitRootNs");
   }
 
+  @Test
   public void testOtherNoNs() {
     assertExactlyOneDeclarationFound("usage_other_no_ns.k", "otherNoNs", "otherNoNs");
   }
 
+  @Test
   public void testNotFound() {
     assertNoDeclarationFound("usage_only_ns_found.k");
   }
 
+  @Test
   public void testDefWithImplicitNs() {
     assertExactlyOneDeclarationFound("def_with_implicit_ns.k", "noNs", ".same.file.noNs", "def_with_implicit_ns.k");
   }
 
+  @Test
   public void testLocallyDefinedGlobal_Namespaced() {
     assertExactlyOneDeclarationFound("usage_locally_defined_global_namespaced.q", "inside.fn.relative", ".a.b.inside.fn.relative");
   }
 
+  @Test
   public void testLocallyDefinedGlobal_Absolute() {
     assertExactlyOneDeclarationFound("usage_locally_defined_global_absolute.q", ".inside.fn.absolute", ".inside.fn.absolute");
   }
 
+  @Test
   public void testLocallyDefinedGlobal_Amend() {
     assertExactlyOneDeclarationFound("usage_locally_defined_global_amend.q", "globalAmend", ".c.globalAmend");
   }
 
+  @Test
   public void testFound_Performance() throws Exception {
     final String[] input = TestInputFiles.asFilesPaths();
     if (input.length == 0) {
@@ -92,6 +109,7 @@ public class ReferenceTest extends LightCodeInsightFixtureTestCase {
     }
   }
 
+  @Test
   public void testNotFound_Performance() throws Exception {
     final String[] input = TestInputFiles.asFilesPaths();
     if (input.length == 0) {

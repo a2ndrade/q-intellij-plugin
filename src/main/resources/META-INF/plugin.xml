@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.26</strong><br/>
+      <ul>
+        <li>2020.2 Intellij support</li>
+      </ul>
       <strong>1.25</strong><br/>
       <ul>
         <li>Support for all JetBrains IDEs (#56)</li>

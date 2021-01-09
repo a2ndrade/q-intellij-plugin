@@ -14,6 +14,9 @@ This plugin supports q/k4 syntax. Features include:
 - Go to symbol
 - Color settings
 - Code folding
+- Remote code evaluation
+- Remote function/global definition
+- Custom authentication to remote Q instances
 
 ## Installation
 

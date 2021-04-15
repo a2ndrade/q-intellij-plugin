@@ -24,9 +24,9 @@ intellij {
   buildSearchableOptions.enabled = false
 }
 
-version '1.27' // Plugin version
+version '1.28' // Plugin version
 patchPluginXml {
-  untilBuild '203.*'
+  untilBuild '999.*'
 }
 
 grammarKit {

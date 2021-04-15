@@ -18,6 +18,10 @@
       </ul>
   ]]></description>
   <change-notes><![CDATA[
+      <strong>1.28</strong><br/>
+      <ul>
+        <li>2021+ Intellij support</li>
+      </ul>
       <strong>1.27</strong><br/>
       <ul>
         <li>2020.3 Intellij support</li>
